@@ -1,0 +1,63 @@
+{
+  "spanFt": 90,
+  "geometry": {
+    "name": "AASHTO Type III",
+    "depth": 45,
+    "topFlangeWidth": 20,
+    "topFlangeThickness": 7,
+    "webThickness": 7,
+    "bottomFlangeWidth": 26,
+    "bottomFlangeThickness": 8
+  },
+  "materials": {
+    "fcPsi": 8000,
+    "fyPsi": 60000,
+    "fpuKsi": 270
+  },
+  "prestress": {
+    "strandType": "0.600",
+    "nStrands": 34,
+    "jackingStressKsi": 202,
+    "longTermLossPercent": 22,
+    "dp": 40,
+    "fpuKsi": 270
+  },
+  "reinforcement": {
+    "topLongitudinal": { "barSize": 6, "count": 4, "depth": 4 },
+    "bottomLongitudinal": { "barSize": 8, "count": 8, "depth": 41.5 },
+    "stirrups": { "barSize": 4, "legs": 2, "spacing": 12 }
+  },
+  "loads": {
+    "dead": {
+      "selfWeightKipPerFt": 0.70,
+      "deckCompositeKipPerFt": 0.55,
+      "wearingSurfaceKipPerFt": 0.12,
+      "superimposedKipPerFt": 0.08
+    },
+    "live": {
+      "designTruckCode": "AASHTO",
+      "hl93RearSpacingFt": 14,
+      "legalTruckCode": "NC_SNAGGRS4",
+      "permitTruck": {
+        "axles": [
+          { "weight": 12, "position": 0 },
+          { "weight": 24, "position": 10 },
+          { "weight": 24, "position": 18 },
+          { "weight": 24, "position": 30 },
+          { "weight": 24, "position": 38 }
+        ]
+      },
+      "laneLoadKipPerFt": 0.64,
+      "permitLaneLoadKipPerFt": 0.2,
+      "impact": 0.33,
+      "distributionFactor": 0.62
+    }
+  },
+  "deterioration": {
+    "loss_rebar": 15,
+    "loss_stirrup": 10,
+    "loss_strand": 8,
+    "loss_structural_steel": 5,
+    "prestress_stress_reduction": 7
+  }
+}

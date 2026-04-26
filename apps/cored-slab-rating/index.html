@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prestressed Cored Slab Load Rating</title>
+  <link rel="stylesheet" href="../bridge-load-rating/styles.css">
+</head>
+<body>
+  <header>
+    <h1>Prestressed Cored Slab Load Rating</h1>
+    <p class="subtitle">LRFR / LFR / ASR per AASHTO MBE</p>
+  </header>
+
+  <main>
+    <div class="panel input-panel">
+      <div class="tabs">
+        <button class="tab active" data-tab="geometry">Geometry</button>
+        <button class="tab" data-tab="prestressing">Prestressing</button>
+        <button class="tab" data-tab="deadloads">Dead Loads</button>
+        <button class="tab" data-tab="liveload">Live Load</button>
+      </div>
+
+      <!-- Geometry Tab -->
+      <div class="tab-content active" id="tab-geometry">
+        <section class="input-section">
+          <h3>Span</h3>
+          <div class="form-row">
+            <label for="spanLength">Span Length (ft):</label>
+            <input type="number" id="spanLength" value="40" min="5" max="200" step="0.5">
+          </div>
+        </section>
+        <section class="input-section">
+          <h3>Cored Slab Cross Section</h3>
+          <div class="form-row">
+            <label for="slabWidth">Slab Width, b (in):</label>
+            <input type="number" id="slabWidth" value="48" min="12" max="120" step="0.5">
+          </div>
+          <div class="form-row">
+            <label for="slabDepth">Slab Depth, h (in):</label>
+            <input type="number" id="slabDepth" value="21" min="8" max="48" step="0.5">
+          </div>
+          <div class="form-row">
+            <label for="nVoids">Number of Voids:</label>
+            <input type="number" id="nVoids" value="5" min="0" max="12" step="1">
+          </div>
+          <div class="form-row">
+            <label for="voidDiameter">Void Diameter (in):</label>
+            <input type="number" id="voidDiameter" value="10" min="0" max="36" step="0.5">
+          </div>
+          <div class="form-row">
+            <label for="girderSpacing">Girder Spacing (ft):</label>
+            <input type="number" id="girderSpacing" value="4" min="1" max="16" step="0.25">
+          </div>
+        </section>
+        <section class="input-section">
+          <h3>Material Properties</h3>
+          <div class="form-row">
+            <label for="fc">f'<sub>c</sub> (psi):</label>
+            <input type="number" id="fc" value="5000" min="3000" max="10000" step="100">
+          </div>
+        </section>
+        <section class="input-section">
+          <h3>Rating Parameters</h3>
+          <div class="form-row">
+            <label for="conditionFactor">Condition Factor, &phi;<sub>c</sub>:</label>
+            <select id="conditionFactor">
+              <option value="1.00">Good (1.00)</option>
+              <option value="0.95">Fair (0.95)</option>
+              <option value="0.85">Poor (0.85)</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label for="systemFactor">System Factor, &phi;<sub>s</sub>:</label>
+            <select id="systemFactor">
+              <option value="1.00">Redundant (1.00)</option>
+              <option value="0.85">Non-redundant (0.85)</option>
+            </select>
+          </div>
+        </section>
+      </div>
+
+      <!-- Prestressing Tab -->
+      <div class="tab-content" id="tab-prestressing">
+        <section class="input-section">
+          <h3>Prestressing Strands</h3>
+          <div class="form-row">
+            <label for="strandType">Strand Size:</label>
+            <select id="strandType">
+              <option value="0.375">3/8" dia (0.085 in&sup2;)</option>
+              <option value="0.500" selected>1/2" dia (0.153 in&sup2;)</option>
+              <option value="0.500S">1/2" dia special (0.167 in&sup2;)</option>
+              <option value="0.600">0.6" dia (0.217 in&sup2;)</option>
+              <option value="0.620">0.62" dia (0.231 in&sup2;)</option>
+              <option value="0.700">0.7" dia (0.294 in&sup2;)</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label for="nStrands">Number of Strands:</label>
+            <input type="number" id="nStrands" value="16" min="1" max="60" step="1">
+          </div>
+          <div class="form-row">
+            <label for="strandDepth">Depth to Strand CG, d<sub>p</sub> (in):</label>
+            <input type="number" id="strandDepth" value="18" min="1" max="48" step="0.25">
+          </div>
+          <div class="form-row">
+            <label for="fpu">f<sub>pu</sub> (ksi):</label>
+            <input type="number" id="fpu" value="270" min="150" max="300" step="10">
+          </div>
+          <div class="form-row">
+            <label for="fpyRatio">f<sub>py</sub>/f<sub>pu</sub>:</label>
+            <select id="fpyRatio">
+              <option value="0.90" selected>Low-relaxation (0.90)</option>
+              <option value="0.85">Stress-relieved (0.85)</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label for="fpe">Effective Prestress, f<sub>pe</sub> (ksi):</label>
+            <input type="number" id="fpe" value="150" min="50" max="250" step="5">
+          </div>
+          <div class="form-row">
+            <label for="strandLoss">Strand Section Loss (%):</label>
+            <input type="number" id="strandLoss" value="0" min="0" max="100" step="1">
+          </div>
+        </section>
+
+        <section class="input-section">
+          <h3>Mild Steel Reinforcement (Optional)</h3>
+          <p class="help-text">Additional mild steel at the tension face, if present.</p>
+          <div class="form-row">
+            <label for="mildBarSize">Bar Size:</label>
+            <select id="mildBarSize">
+              <option value="0">None</option>
+              <option value="3">#3</option>
+              <option value="4">#4</option>
+              <option value="5">#5</option>
+              <option value="6">#6</option>
+              <option value="7">#7</option>
+              <option value="8">#8</option>
+              <option value="9">#9</option>
+              <option value="10">#10</option>
+              <option value="11">#11</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label for="mildBarCount">Number of Bars:</label>
+            <input type="number" id="mildBarCount" value="0" min="0" max="20" step="1">
+          </div>
+          <div class="form-row">
+            <label for="mildBarDepth">Depth to CG (in):</label>
+            <input type="number" id="mildBarDepth" value="18" min="1" max="48" step="0.25">
+          </div>
+          <div class="form-row">
+            <label for="mildFy">f<sub>y</sub> (psi):</label>
+            <input type="number" id="mildFy" value="60000" min="33000" max="100000" step="1000">
+          </div>
+        </section>
+
+        <section class="input-section">
+          <h3>Shear Reinforcement</h3>
+          <div class="form-row">
+            <label for="stirrupSize">Stirrup Bar Size:</label>
+            <select id="stirrupSize">
+              <option value="3">#3</option>
+              <option value="4" selected>#4</option>
+              <option value="5">#5</option>
+              <option value="6">#6</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label for="stirrupLegs">Number of Legs:</label>
+            <input type="number" id="stirrupLegs" value="2" min="1" max="6" step="1">
+          </div>
+          <div class="form-row">
+            <label for="stirrupSpacing">Spacing, s (in):</label>
+            <input type="number" id="stirrupSpacing" value="12" min="2" max="48" step="0.5">
+          </div>
+          <div class="form-row">
+            <label for="stirrupLoss">Stirrup Section Loss (%):</label>
+            <input type="number" id="stirrupLoss" value="0" min="0" max="100" step="1">
+          </div>
+          <div class="form-row">
+            <label for="stirrupFy">Stirrup f<sub>y</sub> (psi):</label>
+            <input type="number" id="stirrupFy" value="60000" min="33000" max="100000" step="1000">
+          </div>
+        </section>
+      </div>
+
+      <!-- Dead Loads Tab -->
+      <div class="tab-content" id="tab-deadloads">
+        <section class="input-section">
+          <h3>Dead Load Components (DC)</h3>
+          <div class="form-row">
+            <label for="dcSelfWeight">Self-Weight (auto-computed):</label>
+            <span id="dcSelfWeight" class="computed-val">--</span>
+          </div>
+          <div class="form-row">
+            <label for="dcAdditional">Additional DC (kip/ft):</label>
+            <input type="number" id="dcAdditional" value="0" min="0" step="0.01">
+          </div>
+        </section>
+        <section class="input-section">
+          <h3>Wearing Surface (DW)</h3>
+          <div class="form-row">
+            <label for="dwThickness">Wearing Surface Thickness (in):</label>
+            <input type="number" id="dwThickness" value="2" min="0" max="6" step="0.25">
+          </div>
+          <div class="form-row">
+            <label for="dwUnitWeight">Unit Weight (pcf):</label>
+            <input type="number" id="dwUnitWeight" value="140" min="100" max="160" step="5">
+          </div>
+          <div class="form-row">
+            <label for="dwComputed">DW (auto-computed):</label>
+            <span id="dwComputed" class="computed-val">--</span>
+          </div>
+        </section>
+        <section class="input-section">
+          <h3>Concrete Unit Weight</h3>
+          <div class="form-row">
+            <label for="concUnitWeight">Unit Weight (pcf):</label>
+            <input type="number" id="concUnitWeight" value="150" min="100" max="160" step="5">
+          </div>
+        </section>
+      </div>
+
+      <!-- Live Load Tab -->
+      <div class="tab-content" id="tab-liveload">
+        <section class="input-section">
+          <h3>Live Load Configuration</h3>
+          <div class="form-row">
+            <label for="stateCode">Design Vehicle:</label>
+            <select id="stateCode">
+              <option value="AASHTO">AASHTO HL-93</option>
+              <option value="NC">North Carolina (NCDOT)</option>
+              <option value="SC">South Carolina (SCDOT)</option>
+            </select>
+          </div>
+          <div id="truckInfo" class="truck-info"></div>
+          <div class="form-row">
+            <label for="impactFactor">Dynamic Load Allowance (IM):</label>
+            <input type="number" id="impactFactor" value="0.33" min="0" max="1" step="0.01">
+          </div>
+          <div class="form-row">
+            <label for="laneLoad">Lane Load (kip/ft):</label>
+            <input type="number" id="laneLoad" value="0.64" min="0" step="0.01">
+          </div>
+          <div class="form-row">
+            <label for="distFactor">Distribution Factor (g):</label>
+            <input type="number" id="distFactor" value="0.6" min="0.1" max="2" step="0.01">
+          </div>
+          <div class="form-row">
+            <label for="legalGammaLL">LRFR Legal Load &gamma;<sub>LL</sub>:</label>
+            <input type="number" id="legalGammaLL" value="1.80" min="1.30" max="1.80" step="0.05">
+            <span class="help-text" style="font-size:0.8em; margin-left:0.5em;">MBE Table 6A.4.5.4.2a-1 (1.80 = ADTT &gt; 5000)</span>
+          </div>
+        </section>
+        <section class="input-section">
+          <h3>Rating Methods</h3>
+          <div class="form-row">
+            <label><input type="checkbox" id="doLRFR" checked> LRFR</label>
+          </div>
+          <div class="form-row">
+            <label><input type="checkbox" id="doLFR" checked> LFR</label>
+          </div>
+          <div class="form-row">
+            <label><input type="checkbox" id="doASR" checked> ASR</label>
+          </div>
+        </section>
+      </div>
+
+      <div class="actions">
+        <button id="rateBtn" onclick="runRating()">Rate Bridge</button>
+        <button id="clearBtn" onclick="clearResults()">Clear</button>
+      </div>
+    </div>
+
+    <div class="panel results-panel">
+      <h2>Rating Results</h2>
+      <div id="summaryBox" class="summary-box hidden"></div>
+      <div id="resultsContainer"></div>
+    </div>
+  </main>
+
+  <footer>
+    <p>Bridge Engineering Tools &mdash; Prestressed Cored Slab Load Rating v1.0</p>
+  </footer>
+
+  <script src="../bridge-live-load/trucks.js"></script>
+  <script src="../bridge-live-load/analysis.js"></script>
+  <script src="rating-engine.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

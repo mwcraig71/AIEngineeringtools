@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bridge Live Load Analysis</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>Bridge Live Load Analysis</h1>
+    <p class="subtitle">Moment &amp; Shear Diagram Generator</p>
+  </header>
+
+  <main>
+    <div class="panel input-panel">
+      <h2>Bridge Configuration</h2>
+
+      <section class="input-section">
+        <h3>Span Definition</h3>
+        <div class="form-row">
+          <label for="spanType">Span Type:</label>
+          <select id="spanType">
+            <option value="simple">Simple Span</option>
+            <option value="continuous">Continuous (Multi-Span)</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label for="numSpans">Number of Spans:</label>
+          <input type="number" id="numSpans" value="1" min="1" max="10" step="1">
+        </div>
+        <div id="spanLengthsContainer">
+          <div class="form-row span-length-row">
+            <label>Span 1 Length (ft):</label>
+            <input type="number" class="span-length" value="60" min="1" max="500" step="0.1">
+          </div>
+        </div>
+      </section>
+
+      <section class="input-section">
+        <h3>Dead Loads</h3>
+        <div class="form-row">
+          <label for="deadLoad">Uniform Dead Load (kip/ft):</label>
+          <input type="number" id="deadLoad" value="1.0" min="0" step="0.01">
+        </div>
+        <div class="form-row">
+          <label for="wearingSurface">Wearing Surface Load (kip/ft):</label>
+          <input type="number" id="wearingSurface" value="0.025" min="0" step="0.001">
+        </div>
+      </section>
+
+      <section class="input-section">
+        <h3>Live Load Configuration</h3>
+        <div class="form-row">
+          <label for="stateCode">State Design Vehicle:</label>
+          <select id="stateCode">
+            <optgroup label="Design Vehicles (HL-93)">
+              <option value="AASHTO">AASHTO HL-93</option>
+              <option value="NC">North Carolina (NCDOT) HL-93</option>
+              <option value="SC">South Carolina (SCDOT) HL-93</option>
+            </optgroup>
+            <optgroup label="NC Legal Loads — Single Vehicle (Fig 6-147)">
+              <option value="NC_SNSH">SNSH (N01) — 27K, 2-Axle</option>
+              <option value="NC_SNGARBS2">SNGARBS2 (N02) — 40K, 2-Axle</option>
+              <option value="NC_SNAGRIS2">SNAGRIS2 (N03) — 44K, 2-Axle</option>
+              <option value="NC_SNCOTTS3">SNCOTTS3 (N04) — 54.5K, 3-Axle</option>
+              <option value="NC_SNAGGRS4">SNAGGRS4 (N05) — 69.85K, 4-Axle</option>
+              <option value="NC_SNS5A">SNS5A (N06) — 71.1K, 5-Axle</option>
+              <option value="NC_SNS6A">SNS6A (N07) — 79.9K, 6-Axle</option>
+              <option value="NC_SNS7B">SNS7B (N08) — 84K, 7-Axle</option>
+            </optgroup>
+            <optgroup label="NC Legal Loads — Tractor Semi-Trailer (Fig 6-147)">
+              <option value="NC_TNAGRIT3">TNAGRIT3 (N09) — 66K, 3-Axle</option>
+              <option value="NC_TNT4A">TNT4A (N10) — 66.15K, 4-Axle</option>
+              <option value="NC_TNT6A">TNT6A (N11) — 83.2K, 6-Axle</option>
+              <option value="NC_TNT7A">TNT7A (N12) — 84K, 7-Axle</option>
+              <option value="NC_TNT7B">TNT7B (N13) — 84K, 7-Axle</option>
+              <option value="NC_TNAGRIT4">TNAGRIT4 (N14) — 86K, 4-Axle</option>
+              <option value="NC_TNAGT5A">TNAGT5A (N15) — 90K, 5-Axle</option>
+              <option value="NC_TNAGT5B">TNAGT5B (N16) — 90K, 5-Axle</option>
+            </optgroup>
+            <optgroup label="NC Legal Loads — FAST Act Emergency Vehicles">
+              <option value="NC_EV2">EV2 — 57.5K, 2-Axle</option>
+              <option value="NC_EV3">EV3 — 86K, 3-Axle</option>
+            </optgroup>
+            <optgroup label="NC Interstate Legal Loads — Single Vehicle (Fig 6-146)">
+              <option value="NC_I_SH">SH (IO1) — 25K, 2-Axle</option>
+              <option value="NC_I_S3C">S3C (IO2) — 43K, 3-Axle</option>
+              <option value="NC_I_S3A">S3A (IO3) — 45.5K, 3-Axle</option>
+              <option value="NC_I_S4A">S4A (IO4) — 53.5K, 4-Axle</option>
+              <option value="NC_I_S5A">S5A (IO5) — 61K, 5-Axle</option>
+              <option value="NC_I_S6A">S6A (IO6) — 69K, 6-Axle</option>
+              <option value="NC_I_S7B">S7B (IO7) — 77K, 7-Axle</option>
+              <option value="NC_I_S7A">S7A (IO8) — 80K, 7-Axle</option>
+            </optgroup>
+            <optgroup label="NC Interstate Legal Loads — Tractor Semi-Trailer (Fig 6-146)">
+              <option value="NC_I_T4A">T4A (IO9) — 56.5K, 4-Axle</option>
+              <option value="NC_I_T5B">T5B (I10) — 64K, 5-Axle</option>
+              <option value="NC_I_T6A">T6A (I11) — 72K, 6-Axle</option>
+              <option value="NC_I_T7A">T7A (I12) — 80K, 7-Axle</option>
+              <option value="NC_I_T7B">T7B (I13) — 80K, 7-Axle</option>
+            </optgroup>
+          </select>
+        </div>
+        <div id="truckInfo" class="truck-info"></div>
+        <div class="form-row">
+          <label for="impactFactor">Dynamic Load Allowance (IM):</label>
+          <input type="number" id="impactFactor" value="0.33" min="0" max="1" step="0.01">
+        </div>
+        <div class="form-row">
+          <label for="laneLoad">Lane Load (kip/ft):</label>
+          <input type="number" id="laneLoad" value="0.64" min="0" step="0.01">
+        </div>
+      </section>
+
+      <div class="actions">
+        <button id="analyzeBtn" onclick="runAnalysis()">Analyze</button>
+        <button id="clearBtn" onclick="clearResults()">Clear</button>
+      </div>
+    </div>
+
+    <div class="panel results-panel">
+      <h2>Results</h2>
+      <div id="summaryBox" class="summary-box hidden"></div>
+      <div class="diagram-container">
+        <h3>Moment Diagram</h3>
+        <canvas id="momentCanvas" width="900" height="300"></canvas>
+      </div>
+      <div class="diagram-container">
+        <h3>Shear Diagram</h3>
+        <canvas id="shearCanvas" width="900" height="300"></canvas>
+      </div>
+      <div class="diagram-container">
+        <h3>Bridge Geometry &amp; Loading</h3>
+        <canvas id="bridgeCanvas" width="900" height="200"></canvas>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>Bridge Engineering Tools &mdash; Live Load Analysis v1.1 (Unfactored / Service-Level)</p>
+  </footer>
+
+  <script src="trucks.js"></script>
+  <script src="analysis.js"></script>
+  <script src="diagrams.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

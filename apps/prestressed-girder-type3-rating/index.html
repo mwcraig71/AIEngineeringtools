@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AASHTO Type III Prestressed Girder Rating</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main>
+    <h1>AASHTO Type III Prestressed Girder Rating</h1>
+    <p class="subtitle">LRFR, LFR, and ASR for simple-span prestressed Type III girders with deterioration sensitivity.</p>
+
+    <section class="notes">
+      <h2>Method Notes</h2>
+      <ul>
+        <li>Simple-span demand model with truck envelope plus lane load and impact.</li>
+        <li>Flexural capacity uses effective prestress force and reduced steel areas for deterioration.</li>
+        <li>Shear capacity uses concrete plus stirrup contribution with independent stirrup loss.</li>
+        <li>Results report baseline (0% loss) and deteriorated case in one run.</li>
+      </ul>
+    </section>
+
+    <form id="ratingForm">
+      <section>
+        <h2>Geometry (Type III Preset + Overrides)</h2>
+        <div class="grid">
+          <label>Span, ft <input id="spanFt" type="number" step="0.1" /></label>
+          <label>Depth, in <input id="depth" type="number" step="0.1" /></label>
+          <label>Top flange width, in <input id="topFlangeWidth" type="number" step="0.1" /></label>
+          <label>Top flange thickness, in <input id="topFlangeThickness" type="number" step="0.1" /></label>
+          <label>Web thickness, in <input id="webThickness" type="number" step="0.1" /></label>
+          <label>Bottom flange width, in <input id="bottomFlangeWidth" type="number" step="0.1" /></label>
+          <label>Bottom flange thickness, in <input id="bottomFlangeThickness" type="number" step="0.1" /></label>
+        </div>
+      </section>
+
+      <section>
+        <h2>Materials + Prestress</h2>
+        <div class="grid">
+          <label>f'c, psi <input id="fcPsi" type="number" step="1" /></label>
+          <label>fy, psi <input id="fyPsi" type="number" step="1" /></label>
+          <label>fpu, ksi <input id="fpuKsi" type="number" step="0.1" /></label>
+          <label>Strand type
+            <select id="strandType">
+              <option value="0.500">0.500 in</option>
+              <option value="0.500S">0.500S in</option>
+              <option value="0.600">0.600 in</option>
+              <option value="0.620">0.620 in</option>
+              <option value="0.700">0.700 in</option>
+            </select>
+          </label>
+          <label>Number of strands <input id="nStrands" type="number" step="1" /></label>
+          <label>Jacking stress, ksi <input id="jackingStressKsi" type="number" step="0.1" /></label>
+          <label>Long-term prestress loss, % <input id="longTermLossPercent" type="number" step="0.1" /></label>
+          <label>dp to strand CG, in <input id="dp" type="number" step="0.1" /></label>
+        </div>
+      </section>
+
+      <section>
+        <h2>Mild Reinforcement</h2>
+        <div class="grid">
+          <label>Top bar size # <input id="topBarSize" type="number" step="1" /></label>
+          <label>Top bar count <input id="topBarCount" type="number" step="1" /></label>
+          <label>Top bar depth, in <input id="topBarDepth" type="number" step="0.1" /></label>
+          <label>Bottom bar size # <input id="bottomBarSize" type="number" step="1" /></label>
+          <label>Bottom bar count <input id="bottomBarCount" type="number" step="1" /></label>
+          <label>Bottom bar depth, in <input id="bottomBarDepth" type="number" step="0.1" /></label>
+          <label>Stirrup size # <input id="stirrupSize" type="number" step="1" /></label>
+          <label>Stirrup legs <input id="stirrupLegs" type="number" step="1" /></label>
+          <label>Stirrup spacing, in <input id="stirrupSpacing" type="number" step="0.1" /></label>
+        </div>
+      </section>
+
+      <section>
+        <h2>Dead Loads (kip/ft)</h2>
+        <div class="grid">
+          <label>Girder self weight <input id="selfWeightKipPerFt" type="number" step="0.01" /></label>
+          <label>Deck/composite <input id="deckCompositeKipPerFt" type="number" step="0.01" /></label>
+          <label>Wearing surface <input id="wearingSurfaceKipPerFt" type="number" step="0.01" /></label>
+          <label>Superimposed dead <input id="superimposedKipPerFt" type="number" step="0.01" /></label>
+        </div>
+      </section>
+
+      <section>
+        <h2>Live Loads</h2>
+        <div class="grid">
+          <label>Design truck <select id="designTruckCode"></select></label>
+          <label>HL-93 rear spacing, ft <input id="hl93RearSpacingFt" type="number" step="0.1" /></label>
+          <label>Legal truck <select id="legalTruckCode"></select></label>
+          <label>Lane load, kip/ft <input id="laneLoadKipPerFt" type="number" step="0.01" /></label>
+          <label>Permit lane load, kip/ft <input id="permitLaneLoadKipPerFt" type="number" step="0.01" /></label>
+          <label>Impact factor <input id="impact" type="number" step="0.01" /></label>
+          <label>Distribution factor <input id="distributionFactor" type="number" step="0.01" /></label>
+        </div>
+        <label>Permit truck axles JSON (array of {weight, position})
+          <textarea id="permitAxlesJson" rows="6"></textarea>
+        </label>
+      </section>
+
+      <section>
+        <h2>Deterioration Inputs</h2>
+        <div class="grid">
+          <label>loss_rebar, % <input id="loss_rebar" type="number" step="0.1" /></label>
+          <label>loss_stirrup, % <input id="loss_stirrup" type="number" step="0.1" /></label>
+          <label>loss_strand, % <input id="loss_strand" type="number" step="0.1" /></label>
+          <label>loss_structural_steel, % <input id="loss_structural_steel" type="number" step="0.1" /></label>
+          <label>prestress_stress_reduction, % <input id="prestress_stress_reduction" type="number" step="0.1" /></label>
+        </div>
+      </section>
+
+      <div class="actions">
+        <button type="button" id="btnDefaults">Load Type III Example</button>
+        <button type="submit">Run Rating</button>
+      </div>
+    </form>
+
+    <section id="output"></section>
+  </main>
+
+  <script src="../bridge-live-load/trucks.js"></script>
+  <script src="../bridge-live-load/analysis.js"></script>
+  <script src="rating-engine.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

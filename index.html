@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bridge Engineering Tools</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, sans-serif;
+      background: #f8f9fa;
+      color: #1a1a2e;
+      line-height: 1.6;
+    }
+    header {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      color: #fff;
+      padding: 3rem 1.5rem;
+      text-align: center;
+    }
+    header h1 { font-size: 2.2rem; font-weight: 700; margin-bottom: 0.5rem; }
+    header p { font-size: 1.1rem; opacity: 0.85; max-width: 600px; margin: 0 auto; }
+    main { max-width: 960px; margin: 2rem auto; padding: 0 1.5rem; }
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.25rem;
+    }
+    .tool-card {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 1.5rem;
+      text-decoration: none;
+      color: inherit;
+      transition: box-shadow 0.15s, transform 0.15s;
+      display: flex;
+      flex-direction: column;
+    }
+    .tool-card:hover {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transform: translateY(-2px);
+    }
+    .tool-card h2 { font-size: 1.1rem; margin-bottom: 0.5rem; color: #0f3460; }
+    .tool-card p { font-size: 0.9rem; color: #555; flex: 1; }
+    .tool-card .tag {
+      display: inline-block;
+      margin-top: 0.75rem;
+      font-size: 0.75rem;
+      background: #e8f4f8;
+      color: #0f3460;
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      align-self: flex-start;
+    }
+    footer {
+      text-align: center;
+      padding: 2rem 1.5rem;
+      font-size: 0.85rem;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Bridge Engineering Tools</h1>
+    <p>Browser-based structural engineering applications for bridge analysis, load rating, and design per AASHTO standards.</p>
+  </header>
+  <main>
+    <div class="tools-grid">
+      <a class="tool-card" href="apps/bridge-live-load/index.html">
+        <h2>Live Load Analysis</h2>
+        <p>Moment and shear diagram generator for simple and continuous spans under AASHTO HL-93 and custom truck configurations.</p>
+        <span class="tag">Analysis</span>
+      </a>
+      <a class="tool-card" href="apps/bridge-load-rating/index.html">
+        <h2>Bridge Load Rating</h2>
+        <p>General bridge load rating tool supporting inventory and operating level ratings per AASHTO MBE LRFR methodology.</p>
+        <span class="tag">Load Rating</span>
+      </a>
+      <a class="tool-card" href="apps/composite-steel-girder/index.html">
+        <h2>Composite Steel Girder</h2>
+        <p>Analysis and load rating for composite steel girder bridges including section properties and capacity calculations.</p>
+        <span class="tag">Load Rating</span>
+      </a>
+      <a class="tool-card" href="apps/steel-girder-rating/index.html">
+        <h2>Steel Girder Rating</h2>
+        <p>Load rating for steel girder bridges with deterioration and section loss support.</p>
+        <span class="tag">Load Rating</span>
+      </a>
+      <a class="tool-card" href="apps/cored-slab-rating/index.html">
+        <h2>Cored Slab Rating</h2>
+        <p>Prestressed cored slab bridge load rating with AASHTO LRFR compliance and deterioration modeling.</p>
+        <span class="tag">Load Rating</span>
+      </a>
+      <a class="tool-card" href="apps/prestressed-girder-type3-rating/index.html">
+        <h2>Prestressed Girder Type III Rating</h2>
+        <p>Load rating for AASHTO Type III prestressed concrete girder bridges.</p>
+        <span class="tag">Load Rating</span>
+      </a>
+      <a class="tool-card" href="apps/rc-flat-slab-rating/index.html">
+        <h2>RC Flat Slab Rating</h2>
+        <p>Reinforced concrete flat slab bridge load rating with deterioration and section loss support.</p>
+        <span class="tag">Load Rating</span>
+      </a>
+      <a class="tool-card" href="apps/cmp-culvert-rating/index.html">
+        <h2>CMP Culvert Rating</h2>
+        <p>Corrugated metal pipe culvert load rating over variable fill heights with baseline and deteriorated section-loss comparison.</p>
+        <span class="tag">Load Rating</span>
+      </a>
+    </div>
+  </main>
+  <footer>
+    &copy; 2026 Structural Engineering Tools. All rights reserved.
+  </footer>
+</body>
+</html>

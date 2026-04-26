@@ -1,0 +1,36 @@
+{
+  "libraryVersion": "1.0.0",
+  "tools": [
+    {
+      "id": "prestressed-girder-type3-rating",
+      "name": "AASHTO Type III Prestressed Girder Rating",
+      "status": "completed",
+      "category": "bridge-load-rating",
+      "entry": "/apps/prestressed-girder-type3-rating/index.html",
+      "engine": "/apps/prestressed-girder-type3-rating/rating-engine.js",
+      "test": "node apps/prestressed-girder-type3-rating/test-rating-engine.js",
+      "sampleInput": "/apps/prestressed-girder-type3-rating/examples/type3-sample-input.json",
+      "notes": "Supports LRFR/LFR/ASR with baseline vs deteriorated sensitivity and explicit section-loss inputs."
+    },
+    {
+      "id": "rc-flat-slab-rating",
+      "name": "RC Flat Slab Bridge Load Rating",
+      "status": "completed",
+      "category": "bridge-load-rating",
+      "entry": "/apps/rc-flat-slab-rating/index.html",
+      "engine": "/apps/rc-flat-slab-rating/rating-engine.js",
+      "test": "node apps/rc-flat-slab-rating/test-rating-engine.js",
+      "notes": "One-way strip equivalent RC flat slab rating with inventory/operating RFs, varying-width CFRP strip retrofit support, and explicit rebar/steel/prestress deterioration handling."
+    },
+    {
+      "id": "cmp-culvert-rating",
+      "name": "CMP Culvert Load Rating",
+      "status": "completed",
+      "category": "bridge-load-rating",
+      "entry": "/apps/cmp-culvert-rating/index.html",
+      "engine": "/apps/cmp-culvert-rating/rating-engine.js",
+      "test": "node apps/cmp-culvert-rating/test-rating-engine.js",
+      "notes": "Fill-height sweep for circular CMP culverts with ring compression, bending, buckling, seam, and serviceability checks plus explicit steel/rebar/prestress section-loss modeling (baseline vs deteriorated)."
+    }
+  ]
+}

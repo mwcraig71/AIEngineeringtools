@@ -1,0 +1,8 @@
+node_modules/
+.pm2/
+.agents/
+*.log
+.DS_Store
+serve.js
+keepalive.sh
+package-lock.json
