@@ -149,6 +149,63 @@ assert(pgResult.governingResult.governingRF > 0, `Plate girder RF > 0 (got ${pgR
 console.log(`  Governing RF = ${pgResult.governingResult.governingRF.toFixed(3)}`);
 console.log(`  Governing: ${pgResult.governingResult.governingLabel}`);
 
+// Test 9: Analysis model + unit guards
+console.log('\n=== Analysis model + unit guards ===');
+let threw = false;
+try {
+  runSteelRating({
+    sectionType: 'rolled',
+    rolledSection: 'W33x130',
+    analysisModel: 'two-span-continuous',
+    Fy: 50,
+    spanFt: 60,
+    Lb: 20,
+    Cb: 1.0,
+    stiffenerSpacing: 0,
+    checkPoints: [],
+    dcW: 0.5,
+    dwW: 0.05,
+    truckDef: TRUCKS.AASHTO,
+    impactFactor: 0.33,
+    laneLoad: 0.64,
+    distFactor: 0.6,
+    phiC: 1.0,
+    phiS: 1.0,
+    methods: { lrfr: true, lfr: true, asr: true },
+    legalGammaLL: 1.80
+  });
+} catch (err) {
+  threw = /simple-span/i.test(err.message);
+}
+assert(threw, 'Unsupported analysisModel throws actionable simple-span error');
+
+threw = false;
+try {
+  runSteelRating({
+    sectionType: 'rolled',
+    rolledSection: 'W33x130',
+    Fy: 50000,
+    spanFt: 60,
+    Lb: 20,
+    Cb: 1.0,
+    stiffenerSpacing: 0,
+    checkPoints: [],
+    dcW: 0.5,
+    dwW: 0.05,
+    truckDef: TRUCKS.AASHTO,
+    impactFactor: 0.33,
+    laneLoad: 0.64,
+    distFactor: 0.6,
+    phiC: 1.0,
+    phiS: 1.0,
+    methods: { lrfr: true, lfr: true, asr: true },
+    legalGammaLL: 1.80
+  });
+} catch (err) {
+  threw = /ksi/i.test(err.message);
+}
+assert(threw, 'Unit guard catches Fy entered in psi instead of ksi');
+
 // Summary
 console.log(`\n=== Results: ${passed} passed, ${failed} failed ===`);
 process.exit(failed > 0 ? 1 : 0);

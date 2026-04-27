@@ -4,99 +4,108 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>CMP Culvert Load Rating</title>
+  <link rel="stylesheet" href="../../shared/ui/rating-ui-kit.css" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <main>
+  <header>
     <h1>CMP Culvert Load Rating</h1>
     <p class="subtitle">Circular corrugated metal pipe culvert rating over variable fill heights with baseline vs deteriorated checks.</p>
+  </header>
 
-    <section class="notes">
-      <h2>Method Notes</h2>
-      <ul>
-        <li>Runs fill-height sweep in one analysis pass and reports inventory/operating RFs by fill depth.</li>
-        <li>Evaluates ring compression, bending, buckling, seam, and serviceability deflection limit states.</li>
-        <li>Deterioration explicitly models steel wall-thickness loss (uniform or segmented crown/springline/invert).</li>
-        <li>Optional reinforced/prestressed composite contributions include explicit rebar and prestress section loss.</li>
-      </ul>
-    </section>
-
-    <form id="ratingForm">
-      <section>
-        <h2>Fill Heights</h2>
-        <label>Fill heights (ft, comma-separated)
-          <input id="fillHeightsFt" type="text" />
-        </label>
+  <main>
+    <div class="panel input-panel">
+      <h2>Input Screen</h2>
+      <section class="notes">
+        <h3>Method Notes</h3>
+        <ul>
+          <li>Runs fill-height sweep in one analysis pass and reports inventory/operating RFs by fill depth.</li>
+          <li>Evaluates ring compression, bending, buckling, seam, and serviceability deflection limit states.</li>
+          <li>Deterioration explicitly models steel wall-thickness loss (uniform or segmented crown/springline/invert).</li>
+          <li>Optional reinforced/prestressed composite contributions include explicit rebar and prestress section loss.</li>
+        </ul>
       </section>
 
-      <section>
-        <h2>Geometry</h2>
-        <div class="grid">
-          <label>Shape
-            <select id="shape">
-              <option value="circular">Circular</option>
-            </select>
+      <form id="ratingForm">
+        <section class="input-section">
+          <h3>Fill Heights</h3>
+          <label>Fill heights (ft, comma-separated)
+            <input id="fillHeightsFt" type="text" />
           </label>
-          <label>Diameter, ft <input id="diameterFt" type="number" step="0.01" /></label>
-          <label>Wall thickness, in <input id="wallThicknessIn" type="number" step="0.001" /></label>
-          <label>Seam efficiency <input id="seamEfficiency" type="number" step="0.01" /></label>
-          <label>Bedding factor <input id="beddingFactor" type="number" step="0.01" /></label>
+        </section>
+
+        <section class="input-section">
+          <h3>Geometry</h3>
+          <div class="grid">
+            <label>Shape
+              <select id="shape">
+                <option value="circular">Circular</option>
+              </select>
+            </label>
+            <label>Diameter, ft <input id="diameterFt" type="number" step="0.01" /></label>
+            <label>Wall thickness, in <input id="wallThicknessIn" type="number" step="0.001" /></label>
+            <label>Seam efficiency <input id="seamEfficiency" type="number" step="0.01" /></label>
+            <label>Bedding factor <input id="beddingFactor" type="number" step="0.01" /></label>
+          </div>
+        </section>
+
+        <section class="input-section">
+          <h3>Materials + Composite Components</h3>
+          <div class="grid">
+            <label>Steel Fy, ksi <input id="steelFyKsi" type="number" step="0.1" /></label>
+            <label>Steel E, ksi <input id="steelEKsi" type="number" step="1" /></label>
+            <label>Poisson ratio <input id="poisson" type="number" step="0.01" /></label>
+            <label>Rebar Fy, ksi <input id="rebarFyKsi" type="number" step="0.1" /></label>
+            <label>Prestress effective stress, ksi <input id="prestressEffectiveStressKsi" type="number" step="0.1" /></label>
+            <label>Composite rebar area, in^2/ft <input id="rebarAreaIn2PerFt" type="number" step="0.001" /></label>
+            <label>Composite prestress area, in^2/ft <input id="prestressAreaIn2PerFt" type="number" step="0.001" /></label>
+            <label>Composite lever arm, in <input id="leverArmIn" type="number" step="0.1" /></label>
+          </div>
+        </section>
+
+        <section class="input-section">
+          <h3>Loads + Serviceability</h3>
+          <div class="grid">
+            <label>Soil unit weight, pcf <input id="soilUnitWeightPcf" type="number" step="1" /></label>
+            <label>Live surface intensity, ksf <input id="liveSurfaceIntensityKsf" type="number" step="0.01" /></label>
+            <label>Live depth exponent <input id="liveDepthExponent" type="number" step="0.01" /></label>
+            <label>Impact factor <input id="impactFactor" type="number" step="0.01" /></label>
+            <label>Construction surcharge, ksf <input id="constructionSurchargeKsf" type="number" step="0.01" /></label>
+            <label>Allowable deflection, % <input id="allowableDeflectionPercent" type="number" step="0.1" /></label>
+            <label>Deflection constant <input id="deflectionConstant" type="number" step="0.001" /></label>
+          </div>
+        </section>
+
+        <section class="input-section">
+          <h3>Deterioration</h3>
+          <div class="grid">
+            <label>Use segmented steel loss
+              <select id="useSegmentedLoss">
+                <option value="true">true</option>
+                <option value="false">false</option>
+              </select>
+            </label>
+            <label>Steel uniform loss, % <input id="uniformLossPercent" type="number" step="0.1" /></label>
+            <label>Steel crown loss, % <input id="crownLossPercent" type="number" step="0.1" /></label>
+            <label>Steel springline loss, % <input id="springlineLossPercent" type="number" step="0.1" /></label>
+            <label>Steel invert loss, % <input id="invertLossPercent" type="number" step="0.1" /></label>
+            <label>Rebar loss, % <input id="rebarLossPercent" type="number" step="0.1" /></label>
+            <label>Prestress loss, % <input id="prestressLossPercent" type="number" step="0.1" /></label>
+          </div>
+        </section>
+
+        <div class="actions">
+          <button type="button" id="btnDefaults">Load Example</button>
+          <button type="submit" id="rateBtn">Run Rating</button>
+          <button type="button" id="btnDownload" disabled>Download JSON</button>
         </div>
-      </section>
+      </form>
+    </div>
 
-      <section>
-        <h2>Materials + Composite Components</h2>
-        <div class="grid">
-          <label>Steel Fy, ksi <input id="steelFyKsi" type="number" step="0.1" /></label>
-          <label>Steel E, ksi <input id="steelEKsi" type="number" step="1" /></label>
-          <label>Poisson ratio <input id="poisson" type="number" step="0.01" /></label>
-          <label>Rebar Fy, ksi <input id="rebarFyKsi" type="number" step="0.1" /></label>
-          <label>Prestress effective stress, ksi <input id="prestressEffectiveStressKsi" type="number" step="0.1" /></label>
-          <label>Composite rebar area, in^2/ft <input id="rebarAreaIn2PerFt" type="number" step="0.001" /></label>
-          <label>Composite prestress area, in^2/ft <input id="prestressAreaIn2PerFt" type="number" step="0.001" /></label>
-          <label>Composite lever arm, in <input id="leverArmIn" type="number" step="0.1" /></label>
-        </div>
-      </section>
-
-      <section>
-        <h2>Loads + Serviceability</h2>
-        <div class="grid">
-          <label>Soil unit weight, pcf <input id="soilUnitWeightPcf" type="number" step="1" /></label>
-          <label>Live surface intensity, ksf <input id="liveSurfaceIntensityKsf" type="number" step="0.01" /></label>
-          <label>Live depth exponent <input id="liveDepthExponent" type="number" step="0.01" /></label>
-          <label>Impact factor <input id="impactFactor" type="number" step="0.01" /></label>
-          <label>Construction surcharge, ksf <input id="constructionSurchargeKsf" type="number" step="0.01" /></label>
-          <label>Allowable deflection, % <input id="allowableDeflectionPercent" type="number" step="0.1" /></label>
-          <label>Deflection constant <input id="deflectionConstant" type="number" step="0.001" /></label>
-        </div>
-      </section>
-
-      <section>
-        <h2>Deterioration</h2>
-        <div class="grid">
-          <label>Use segmented steel loss
-            <select id="useSegmentedLoss">
-              <option value="true">true</option>
-              <option value="false">false</option>
-            </select>
-          </label>
-          <label>Steel uniform loss, % <input id="uniformLossPercent" type="number" step="0.1" /></label>
-          <label>Steel crown loss, % <input id="crownLossPercent" type="number" step="0.1" /></label>
-          <label>Steel springline loss, % <input id="springlineLossPercent" type="number" step="0.1" /></label>
-          <label>Steel invert loss, % <input id="invertLossPercent" type="number" step="0.1" /></label>
-          <label>Rebar loss, % <input id="rebarLossPercent" type="number" step="0.1" /></label>
-          <label>Prestress loss, % <input id="prestressLossPercent" type="number" step="0.1" /></label>
-        </div>
-      </section>
-
-      <div class="actions">
-        <button type="button" id="btnDefaults">Load Example</button>
-        <button type="submit">Run Rating</button>
-        <button type="button" id="btnDownload" disabled>Download JSON</button>
-      </div>
-    </form>
-
-    <section id="output"></section>
+    <div class="panel results-panel">
+      <h2>Report Screen</h2>
+      <section id="output" class="report-host"></section>
+    </div>
   </main>
 
   <script src="rating-engine.js"></script>

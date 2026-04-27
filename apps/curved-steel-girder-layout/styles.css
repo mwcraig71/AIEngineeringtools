@@ -1,0 +1,143 @@
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", Tahoma, sans-serif;
+  background: #f3f7fb;
+  color: #1f2a37;
+}
+
+header {
+  background: linear-gradient(135deg, #14304a, #1c5877);
+  color: #fff;
+  padding: 2rem 1.25rem;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 1.8rem;
+}
+
+.subtitle {
+  margin-top: 0.5rem;
+  opacity: 0.9;
+  max-width: 860px;
+}
+
+main {
+  max-width: 980px;
+  margin: 1.25rem auto 2rem;
+  padding: 0 1rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.panel {
+  background: #fff;
+  border: 1px solid #d5dee8;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.panel h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1.1rem;
+  color: #14304a;
+}
+
+.grid {
+  display: grid;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.two-col { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+.three-col { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+.one-col { grid-template-columns: 1fr; }
+
+label {
+  font-size: 0.9rem;
+  color: #34495e;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+input, select, textarea, button {
+  font: inherit;
+}
+
+input, select {
+  border: 1px solid #c4d0dd;
+  border-radius: 6px;
+  padding: 0.45rem 0.55rem;
+  background: #fff;
+}
+
+textarea {
+  width: 100%;
+  resize: vertical;
+  border: 1px solid #c4d0dd;
+  border-radius: 6px;
+  padding: 0.7rem;
+  min-height: 260px;
+  font-family: Consolas, "Liberation Mono", monospace;
+  font-size: 0.86rem;
+  line-height: 1.4;
+  background: #fcfeff;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+button {
+  border: 1px solid #1c5877;
+  background: #1c5877;
+  color: #fff;
+  border-radius: 6px;
+  padding: 0.45rem 0.9rem;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #174a64;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.status {
+  margin: 0.75rem 0 0;
+  font-size: 0.9rem;
+  color: #1f2a37;
+}
+
+.summary-block {
+  font-family: Consolas, "Liberation Mono", monospace;
+  font-size: 0.9rem;
+  background: #f7fafc;
+  border: 1px solid #e2eaf3;
+  border-radius: 6px;
+  padding: 0.75rem;
+  white-space: pre-wrap;
+}
+
+.preview-svg {
+  width: 100%;
+  min-height: 260px;
+  border: 1px solid #d2ddea;
+  border-radius: 6px;
+  background: #f8fbff;
+}
+
+.station-labels {
+  margin: 0.65rem 0 0;
+  font-size: 0.88rem;
+  color: #2a3e52;
+}

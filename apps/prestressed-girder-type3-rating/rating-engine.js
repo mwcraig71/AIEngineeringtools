@@ -33,6 +33,44 @@ const TYPE_III_PRESET = {
   bottomFlangeThickness: 8
 };
 
+function ensureSimpleSpanModel(analysisModel, engineName) {
+  const model = analysisModel || 'simple-span';
+  if (model !== 'simple-span') {
+    throw new Error(`${engineName} currently supports simple-span analysis only. Set analysisModel to "simple-span" for this app.`);
+  }
+}
+
+function validateUnitConsistency(input) {
+  const mat = input.materials || {};
+  const prestress = input.prestress || {};
+  const live = ((input.loads || {}).live) || {};
+  const dead = ((input.loads || {}).dead) || {};
+
+  if ((mat.fcPsi || 0) > 0 && mat.fcPsi < 500) {
+    throw new Error('fcPsi appears to be entered in ksi. Enter concrete strength in psi (e.g., 8000).');
+  }
+  if ((mat.fyPsi || 0) > 0 && mat.fyPsi < 1000) {
+    throw new Error('fyPsi appears to be entered in ksi. Enter steel yield strength in psi (e.g., 60000).');
+  }
+  if ((mat.fpuKsi || 0) > 400) {
+    throw new Error('fpuKsi appears to be entered in psi. Enter fpu in ksi (e.g., 270).');
+  }
+  if ((prestress.jackingStressKsi || 0) > 400) {
+    throw new Error('jackingStressKsi appears to be entered in psi. Enter jacking stress in ksi.');
+  }
+  if ((live.impact || 0) > 1) {
+    throw new Error('Impact factor must be a decimal (e.g., 0.33), not a percent.');
+  }
+  if ((dead.selfWeightKipPerFt || 0) > 20 ||
+      (dead.deckCompositeKipPerFt || 0) > 20 ||
+      (dead.wearingSurfaceKipPerFt || 0) > 20 ||
+      (dead.superimposedKipPerFt || 0) > 20 ||
+      (live.laneLoadKipPerFt || 0) > 20 ||
+      (live.permitLaneLoadKipPerFt || 0) > 20) {
+    throw new Error('Distributed loads look too large for kip/ft inputs. Verify lane/dead-load units.');
+  }
+}
+
 function clampPercent(v) {
   const n = Number(v) || 0;
   if (n < 0) return 0;
@@ -528,6 +566,9 @@ function getGoverningRF(resultSet) {
 }
 
 function runTypeIIIRating(input) {
+  ensureSimpleSpanModel(input.analysisModel, 'prestressed-girder-type3-rating');
+  validateUnitConsistency(input);
+
   const deterioration = {
     loss_rebar: clampPercent(input.deterioration.loss_rebar),
     loss_stirrup: clampPercent(input.deterioration.loss_stirrup),

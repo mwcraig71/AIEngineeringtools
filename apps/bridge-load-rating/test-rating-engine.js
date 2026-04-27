@@ -933,6 +933,54 @@ console.log('\n=== 26. ASR Steel Tension Check ===');
 }
 
 // =================================================================
+// 27. ANALYSIS MODEL + UNIT GUARDS
+// =================================================================
+console.log('\n=== 27. Analysis model + unit guards ===');
+
+{
+  const guardFixture = {
+    spanFt: 40,
+    bf: 48,
+    hf: 7,
+    bw: 14,
+    h: 30,
+    fc: 3000,
+    fy: 60000,
+    rebarLayers: [{ barSize: 8, count: 4, depth: 27, lossPercent: 0 }],
+    stirrupSize: 4,
+    stirrupLegs: 2,
+    stirrupSpacing: 12,
+    stirrupLoss: 0,
+    dcW: 0.5,
+    dwW: 0.1,
+    truckDef: TRUCKS.AASHTO,
+    impactFactor: 0.33,
+    laneLoad: 0.64,
+    distFactor: 0.6,
+    phiC: 1.0,
+    phiS: 1.0,
+    methods: { lrfr: true, lfr: true, asr: true },
+    legalGammaLL: 1.8
+  };
+
+  let threw = false;
+  try {
+    runLoadRating({ ...guardFixture, analysisModel: 'two-span-continuous' });
+  } catch (err) {
+    threw = /simple-span/i.test(err.message);
+  }
+  assert(threw, 'Unsupported analysisModel throws actionable simple-span error');
+
+  threw = false;
+  try {
+    runLoadRating({ ...guardFixture, fc: 5 });
+  } catch (err) {
+    threw = /psi/i.test(err.message);
+  }
+  assert(threw, 'Unit guard catches concrete strength entered in ksi instead of psi');
+}
+
+// =================================================================
 // SUMMARY
 // =================================================================
 console.log('\n' + '='.repeat(60));

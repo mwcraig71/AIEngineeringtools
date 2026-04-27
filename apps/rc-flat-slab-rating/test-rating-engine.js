@@ -164,5 +164,28 @@ console.log('\n=== End-to-end realistic fixture and expected RF ranges ===');
   assert(permitGov > -1.5 && permitGov < 5.5, `Permit governing RF in documented range (-1.5, 5.5): ${permitGov.toFixed(3)}`);
 }
 
+console.log('\n=== Analysis model + unit guards ===');
+{
+  let threw = false;
+  const badModel = createDefaultFlatSlabInput();
+  badModel.analysisModel = 'two-span-continuous';
+  try {
+    runRCFlatSlabRating(badModel);
+  } catch (err) {
+    threw = /simple-span/i.test(err.message);
+  }
+  assert(threw, 'Unsupported analysisModel throws actionable simple-span error');
+
+  threw = false;
+  const badUnits = createDefaultFlatSlabInput();
+  badUnits.materials.fcPsi = 5; // mistaken ksi value
+  try {
+    runRCFlatSlabRating(badUnits);
+  } catch (err) {
+    threw = /psi/i.test(err.message);
+  }
+  assert(threw, 'Unit guard catches fcPsi entered in ksi instead of psi');
+}
+
 console.log(`\nResults: ${passed} passed, ${failed} failed`);
 process.exit(failed > 0 ? 1 : 0);

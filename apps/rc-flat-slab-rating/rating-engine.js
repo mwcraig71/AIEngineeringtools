@@ -40,6 +40,43 @@ function validateLossPercent(name, value) {
   return n;
 }
 
+function ensureSimpleSpanModel(analysisModel, engineName) {
+  const model = analysisModel || 'simple-span';
+  if (model !== 'simple-span') {
+    throw new Error(`${engineName} currently supports simple-span analysis only. Set analysisModel to "simple-span" for this app.`);
+  }
+}
+
+function validateUnitConsistency(input) {
+  const mat = input.materials || {};
+  const prestress = input.prestress || {};
+  const steel = input.retrofitSteel || {};
+  const dead = ((input.loads || {}).dead) || {};
+  const live = ((input.loads || {}).live) || {};
+
+  if ((mat.fcPsi || 0) > 0 && mat.fcPsi < 500) {
+    throw new Error('fcPsi appears to be entered in ksi. Enter concrete strength in psi (e.g., 5000).');
+  }
+  if ((mat.fyPsi || 0) > 0 && mat.fyPsi < 1000) {
+    throw new Error('fyPsi appears to be entered in ksi. Enter steel yield strength in psi (e.g., 60000).');
+  }
+  if ((prestress.effectiveStressPsi || 0) > 0 && prestress.effectiveStressPsi < 10000) {
+    throw new Error('prestressStressPsi appears to be entered in ksi. Enter prestress stress in psi.');
+  }
+  if ((steel.yieldPsi || 0) > 0 && steel.yieldPsi < 1000) {
+    throw new Error('steelYieldPsi appears to be entered in ksi. Enter structural steel yield in psi.');
+  }
+  if ((live.impact || 0) > 1) {
+    throw new Error('Impact factor must be a decimal (e.g., 0.33), not a percent.');
+  }
+  if ((dead.dcKipPerFt || 0) > 20 ||
+      (dead.dwKipPerFt || 0) > 20 ||
+      (live.laneLoadKipPerFt || 0) > 20 ||
+      (live.permitLaneLoadKipPerFt || 0) > 20) {
+    throw new Error('Distributed loads look too large for kip/ft inputs. Verify lane/dead-load units.');
+  }
+}
+
 function computeBeta1(fcPsi) {
   if (fcPsi <= 4000) return 0.85;
   if (fcPsi >= 8000) return 0.65;
@@ -429,6 +466,9 @@ function summarizeGoverning(limitStates) {
 }
 
 function runRCFlatSlabRating(input) {
+  ensureSimpleSpanModel(input.analysisModel, 'rc-flat-slab-rating');
+  validateUnitConsistency(input);
+
   const section = computeSectionProperties(input);
   const effective = computeEffectiveMaterials(input);
 

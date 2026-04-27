@@ -26,6 +26,16 @@
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: 1.25rem;
     }
+    .notice {
+      border: 1px solid #d0dbe7;
+      border-left: 4px solid #0f3460;
+      background: #f1f6fb;
+      padding: 0.85rem 1rem;
+      margin-bottom: 1.25rem;
+      border-radius: 6px;
+      font-size: 0.92rem;
+      color: #1f334d;
+    }
     .tool-card {
       background: #fff;
       border: 1px solid #e2e8f0;
@@ -67,6 +77,9 @@
     <p>Browser-based structural engineering applications for bridge analysis, load rating, and design per AASHTO standards.</p>
   </header>
   <main>
+    <div class="notice">
+      Engineering use note: each rating app relies on model assumptions and user-supplied demand factors. Validate section-loss inputs for structural steel, rebar, and prestressing (where present) before final stamping decisions.
+    </div>
     <div class="tools-grid">
       <a class="tool-card" href="apps/bridge-live-load/index.html">
         <h2>Live Load Analysis</h2>
@@ -107,6 +120,11 @@
         <h2>CMP Culvert Rating</h2>
         <p>Corrugated metal pipe culvert load rating over variable fill heights with baseline and deteriorated section-loss comparison.</p>
         <span class="tag">Load Rating</span>
+      </a>
+      <a class="tool-card" href="apps/curved-steel-girder-layout/index.html">
+        <h2>Curved Steel Girder Layout</h2>
+        <p>Build concentric curved girder geometry and emit MDX-ready layout payloads for downstream bridge documentation apps.</p>
+        <span class="tag">Geometry</span>
       </a>
     </div>
   </main>

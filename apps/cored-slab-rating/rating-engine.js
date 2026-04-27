@@ -38,6 +38,103 @@ const REBAR_AREAS = {
   8: 0.79, 9: 1.00, 10: 1.27, 11: 1.56, 14: 2.25, 18: 4.00
 };
 
+function ensureSimpleSpanModel(analysisModel, engineName) {
+  const model = analysisModel || 'simple-span';
+  if (model !== 'simple-span') {
+    throw new Error(`${engineName} currently supports simple-span analysis only. Set analysisModel to "simple-span" for this app.`);
+  }
+}
+
+function validateUnitConsistency(params) {
+  if (params.fc > 0 && params.fc < 500) {
+    throw new Error('f\'c appears to be entered in ksi. Enter concrete strength in psi (e.g., 5000).');
+  }
+  if (params.fpu > 0 && params.fpu < 10000) {
+    throw new Error('fpu appears to be entered in ksi. Enter fpu in psi (e.g., 270000).');
+  }
+  if (params.fpe > 0 && params.fpe < 10000) {
+    throw new Error('fpe appears to be entered in ksi. Enter effective prestress in psi (e.g., 150000).');
+  }
+  if ((params.mildFy || 0) > 0 && params.mildFy < 1000) {
+    throw new Error('Mild steel fy appears to be entered in ksi. Enter mild steel fy in psi.');
+  }
+  if ((params.stirrupFy || 0) > 0 && params.stirrupFy < 1000) {
+    throw new Error('Stirrup fy appears to be entered in ksi. Enter stirrup fy in psi.');
+  }
+  if (params.impactFactor !== undefined && params.impactFactor > 1) {
+    throw new Error('Impact factor must be a decimal (e.g., 0.33), not a percent.');
+  }
+  if ((params.dcW || 0) > 20 || (params.dwW || 0) > 20 || (params.laneLoad || 0) > 20) {
+    throw new Error('Distributed loads look too large for kip/ft inputs. Check unit conversion for dcW/dwW/laneLoad.');
+  }
+}
+
+function computeWeightedDp(rows, apsKey) {
+  let apsSum = 0;
+  let momentSum = 0;
+  for (const row of rows) {
+    const aps = row[apsKey] || 0;
+    apsSum += aps;
+    momentSum += aps * row.depth;
+  }
+  return apsSum > 0 ? (momentSum / apsSum) : 0;
+}
+
+function computeStrandLayoutProperties({
+  strandType, nStrands, dp, strandLayout, strandLoss, spanFt, h
+}) {
+  const apsPerStrand = STRAND_AREAS[strandType] || 0.153;
+  const lossFactor = 1 - (strandLoss || 0) / 100;
+  const spanIn = Math.max((spanFt || 0) * 12, 0);
+  const xMoment = spanIn / 2;
+  const xShear = Math.max(h || 0, 12);
+
+  const normalizedRows = (Array.isArray(strandLayout) && strandLayout.length > 0)
+    ? strandLayout.map((row, idx) => ({
+      row: idx + 1,
+      count: Math.max(0, row.count || 0),
+      depth: Math.max(0, row.depth || 0),
+      debondLengthFt: Math.max(0, row.debondLengthFt || 0)
+    }))
+    : [{
+      row: 1,
+      count: Math.max(0, nStrands || 0),
+      depth: Math.max(0, dp || 0),
+      debondLengthFt: 0
+    }];
+
+  for (const row of normalizedRows) {
+    const debondIn = row.debondLengthFt * 12;
+    row.originalAps = row.count * apsPerStrand;
+    row.effectiveAps = row.originalAps * lossFactor;
+    row.momentActive = debondIn < xMoment;
+    row.shearActive = debondIn < xShear;
+    row.effectiveApsMoment = row.momentActive ? row.effectiveAps : 0;
+    row.effectiveApsShear = row.shearActive ? row.effectiveAps : 0;
+  }
+
+  const originalAps = normalizedRows.reduce((s, r) => s + r.originalAps, 0);
+  const effectiveAps = normalizedRows.reduce((s, r) => s + r.effectiveAps, 0);
+  const effectiveApsMoment = normalizedRows.reduce((s, r) => s + r.effectiveApsMoment, 0);
+  const effectiveApsShear = normalizedRows.reduce((s, r) => s + r.effectiveApsShear, 0);
+  const dpAll = computeWeightedDp(normalizedRows, 'effectiveAps');
+  const dpMoment = effectiveApsMoment > 0 ? computeWeightedDp(normalizedRows, 'effectiveApsMoment') : dpAll;
+  const dpShear = effectiveApsShear > 0 ? computeWeightedDp(normalizedRows, 'effectiveApsShear') : dpAll;
+
+  return {
+    apsPerStrand,
+    nStrands: normalizedRows.reduce((s, r) => s + r.count, 0),
+    originalAps,
+    effectiveAps,
+    effectiveApsMoment: effectiveApsMoment > 0 ? effectiveApsMoment : effectiveAps,
+    effectiveApsShear: effectiveApsShear > 0 ? effectiveApsShear : effectiveAps,
+    dp: dpAll > 0 ? dpAll : (dp || 0),
+    dpMoment: dpMoment > 0 ? dpMoment : (dp || 0),
+    dpShear: dpShear > 0 ? dpShear : (dp || 0),
+    layout: normalizedRows
+  };
+}
+
 // ============================================================
 // Section property computation -- cored slab
 // ============================================================
@@ -627,35 +724,45 @@ function computeASR(sectionProps, fc, bw, dv, deadLoads, liveLoads, impactFactor
 function runLoadRating(params) {
   const {
     spanFt, b, h, nVoids, dVoid, fc,
-    strandType, nStrands, dp, fpu, fpyRatio, fpe, strandLoss,
-    mildAs, mildFy, mildD,
+    strandType, nStrands, dp, strandLayout, fpu, fpyRatio, fpe, strandLoss,
+    mildAs, mildFy, mildLoss, mildD,
     stirrupSize, stirrupLegs, stirrupSpacing, stirrupLoss, stirrupFy,
     dcW, dwW, truckDef, impactFactor, laneLoad, distFactor,
-    phiC, phiS, methods, legalGammaLL
+    phiC, phiS, methods, legalGammaLL, analysisModel
   } = params;
+
+  ensureSimpleSpanModel(analysisModel, 'cored-slab-rating');
+  validateUnitConsistency({ fc, fpu, fpe, mildFy, stirrupFy, impactFactor, dcW, dwW, laneLoad });
 
   // 1. Section properties
   const section = computeCoredSlabSection(b, h, nVoids, dVoid);
 
   // 2. Effective prestressing steel
-  const apsPerStrand = STRAND_AREAS[strandType] || 0.153;
-  const totalAps = apsPerStrand * nStrands * (1 - strandLoss / 100);
-  const originalAps = apsPerStrand * nStrands;
+  const strandInfo = computeStrandLayoutProperties({
+    strandType,
+    nStrands,
+    dp,
+    strandLayout,
+    strandLoss,
+    spanFt,
+    h
+  });
 
   // 3. Stress in prestressing steel at ultimate
-  const fpsResult = computeFps(fpu, fpyRatio, fc, b, h, totalAps, dp,
-    mildAs || 0, mildFy || 0, mildD || dp, nVoids, dVoid);
+  const effectiveMildAs = (mildAs || 0) * (1 - (mildLoss || 0) / 100);
+  const fpsResult = computeFps(fpu, fpyRatio, fc, b, h, strandInfo.effectiveApsMoment, strandInfo.dpMoment,
+    effectiveMildAs || 0, mildFy || 0, mildD || strandInfo.dpMoment, nVoids, dVoid);
 
   // 4. Flexural capacity
-  const moment = computeMn(fc, b, h, totalAps, fpsResult.fps, dp,
-    mildAs || 0, mildFy || 0, mildD || dp,
+  const moment = computeMn(fc, b, h, strandInfo.effectiveApsMoment, fpsResult.fps, strandInfo.dpMoment,
+    effectiveMildAs || 0, mildFy || 0, mildD || strandInfo.dpMoment,
     fpsResult.a, fpsResult.c, nVoids, dVoid);
   const phiMn = moment.phi * moment.Mn;
 
   // 5. Shear capacity
   const avPerBar = REBAR_AREAS[stirrupSize] || 0;
   const Av = avPerBar * stirrupLegs * (1 - stirrupLoss / 100);
-  const shear = computeVn(fc, section.bw, dp, h, Av, stirrupSpacing, stirrupFy || 60000, fpsResult.a);
+  const shear = computeVn(fc, section.bw, strandInfo.dpShear, h, Av, stirrupSpacing, stirrupFy || 60000, fpsResult.a);
   const phiVn = shear.phi * shear.Vn;
 
   // 6. Dead load demand
@@ -669,18 +776,7 @@ function runLoadRating(params) {
 
   const result = {
     section,
-    strandInfo: {
-      strandType,
-      apsPerStrand,
-      nStrands,
-      originalAps,
-      effectiveAps: totalAps,
-      strandLoss,
-      fpu,
-      fpe,
-      fps: fpsResult.fps,
-      dp
-    },
+    strandInfo: { ...strandInfo, strandType, strandLoss, fpu, fpe, fps: fpsResult.fps },
     fpsResult,
     moment,
     phiMn,
@@ -689,7 +785,9 @@ function runLoadRating(params) {
     deadLoads,
     liveLoads,
     capacity,
-    mildSteel: (mildAs && mildAs > 0) ? { As: mildAs, fy: mildFy, d: mildD } : null
+    mildSteel: (mildAs && mildAs > 0)
+      ? { originalAs: mildAs, As: effectiveMildAs, lossPercent: (mildLoss || 0), fy: mildFy, d: mildD }
+      : null
   };
 
   if (methods.lrfr) {
@@ -700,7 +798,7 @@ function runLoadRating(params) {
   }
   if (methods.asr) {
     result.asr = computeASR(section, fc, section.bw, shear.dv, deadLoads, liveLoads, impactFactor,
-      spanFt, truckDef, totalAps, fpe, dp, Av, stirrupSpacing, stirrupFy || 60000);
+      spanFt, truckDef, strandInfo.effectiveApsMoment, fpe, strandInfo.dpMoment, Av, stirrupSpacing, stirrupFy || 60000);
   }
 
   return result;

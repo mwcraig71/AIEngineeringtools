@@ -52,6 +52,43 @@
     document.getElementById('dwComputed').textContent = dwW.toFixed(3) + ' kip/ft';
   }
 
+  function parseStrandLayout(layoutText, fallbackCount, fallbackDepth) {
+    const rows = [];
+    const lines = (layoutText || '').split('\n');
+
+    for (const rawLine of lines) {
+      const line = rawLine.trim();
+      if (!line) continue;
+
+      const parts = line.split('@').map(s => s.trim()).filter(Boolean);
+      if (parts.length < 2 || parts.length > 3) {
+        return { ok: false, error: `Invalid strand layout row "${line}". Use count@depth or count@depth@debond-ft.` };
+      }
+
+      const count = parseInt(parts[0], 10);
+      const depth = parseFloat(parts[1]);
+      const debondLengthFt = parts.length === 3 ? parseFloat(parts[2]) : 0;
+
+      if (!Number.isFinite(count) || count <= 0) {
+        return { ok: false, error: `Invalid strand count in row "${line}".` };
+      }
+      if (!Number.isFinite(depth) || depth <= 0) {
+        return { ok: false, error: `Invalid strand depth in row "${line}".` };
+      }
+      if (!Number.isFinite(debondLengthFt) || debondLengthFt < 0) {
+        return { ok: false, error: `Invalid debond length in row "${line}".` };
+      }
+
+      rows.push({ count, depth, debondLengthFt });
+    }
+
+    if (rows.length === 0) {
+      rows.push({ count: fallbackCount, depth: fallbackDepth, debondLengthFt: 0 });
+    }
+
+    return { ok: true, rows };
+  }
+
   // ---- Gather inputs ----
   function getInputs() {
     const spanFt = parseFloat(document.getElementById('spanLength').value) || 40;
@@ -70,6 +107,8 @@
     const strandType = document.getElementById('strandType').value;
     const nStrands = parseInt(document.getElementById('nStrands').value) || 16;
     const dp = parseFloat(document.getElementById('strandDepth').value) || 18;
+    const strandLayoutText = document.getElementById('strandLayout').value;
+    const strandLayoutParsed = parseStrandLayout(strandLayoutText, nStrands, dp);
     const fpu = parseFloat(document.getElementById('fpu').value) * 1000 || 270000; // ksi to psi
     const fpyRatio = parseFloat(document.getElementById('fpyRatio').value) || 0.90;
     const fpe = parseFloat(document.getElementById('fpe').value) * 1000 || 150000; // ksi to psi
@@ -80,6 +119,7 @@
     const mildBarCount = parseInt(document.getElementById('mildBarCount').value) || 0;
     const mildBarDepth = parseFloat(document.getElementById('mildBarDepth').value) || dp;
     const mildFy = parseFloat(document.getElementById('mildFy').value) || 60000;
+    const mildLoss = parseFloat(document.getElementById('mildLoss').value) || 0;
     const mildAs = mildBarSize > 0 && mildBarCount > 0
       ? (REBAR_AREAS[mildBarSize] || 0) * mildBarCount
       : 0;
@@ -119,8 +159,11 @@
 
     return {
       spanFt, b, h, nVoids, dVoid, fc, girderSpacing,
-      strandType, nStrands, dp, fpu, fpyRatio, fpe, strandLoss,
-      mildAs, mildFy, mildD: mildAs > 0 ? mildBarDepth : 0,
+      strandType, nStrands, dp, strandLayoutText,
+      strandLayout: strandLayoutParsed.ok ? strandLayoutParsed.rows : [],
+      strandLayoutError: strandLayoutParsed.ok ? '' : strandLayoutParsed.error,
+      fpu, fpyRatio, fpe, strandLoss,
+      mildAs, mildFy, mildLoss, mildD: mildAs > 0 ? mildBarDepth : 0,
       stirrupSize, stirrupLegs, stirrupSpacing, stirrupLoss, stirrupFy,
       dcW, dwW, truckDef, impactFactor, laneLoad, distFactor,
       phiC, phiS, methods, legalGammaLL
@@ -145,6 +188,20 @@
     if (inputs.dp > inputs.h) {
       alert('Strand depth exceeds slab depth.');
       return;
+    }
+    if (inputs.strandLayoutError) {
+      alert(inputs.strandLayoutError);
+      return;
+    }
+    for (const row of inputs.strandLayout) {
+      if (row.depth > inputs.h) {
+        alert(`Strand layout depth ${row.depth} in exceeds slab depth ${inputs.h} in.`);
+        return;
+      }
+      if (row.debondLengthFt > inputs.spanFt / 2) {
+        alert(`Debond length ${row.debondLengthFt} ft is longer than half-span (${(inputs.spanFt / 2).toFixed(2)} ft).`);
+        return;
+      }
     }
     if (!inputs.methods.lrfr && !inputs.methods.lfr && !inputs.methods.asr) {
       alert('Select at least one rating method.');
@@ -201,7 +258,7 @@
         <strong>&phi;Mn:</strong> <span class="val">${r.phiMn.toFixed(1)} kip-ft</span> |
         <strong>&phi;Vn:</strong> <span class="val">${r.phiVn.toFixed(1)} kip</span><br>
         <strong>Aps (effective):</strong> ${r.strandInfo.effectiveAps.toFixed(3)} in&sup2; |
-        <strong>fps:</strong> ${(r.strandInfo.fps / 1000).toFixed(1)} ksi at dp = ${r.strandInfo.dp} in<br>
+        <strong>fps:</strong> ${(r.strandInfo.fps / 1000).toFixed(1)} ksi at d<sub>p,m</sub> = ${r.strandInfo.dpMoment.toFixed(3)} in<br>
         <strong>DC Moment:</strong> ${r.deadLoads.dcMoment.toFixed(1)} kip-ft |
         <strong>DW Moment:</strong> ${r.deadLoads.dwMoment.toFixed(1)} kip-ft<br>
         <strong>LL+IM Moment:</strong> ${r.liveLoads.maxMoment.toFixed(1)} kip-ft |
@@ -235,19 +292,41 @@
         <tr><td>Original Aps</td><td>${r.strandInfo.originalAps.toFixed(3)} in&sup2;</td></tr>
         <tr><td>Section Loss</td><td>${r.strandInfo.strandLoss}%</td></tr>
         <tr><td>Effective Aps</td><td>${r.strandInfo.effectiveAps.toFixed(3)} in&sup2;</td></tr>
-        <tr><td>Depth to CG, dp</td><td>${r.strandInfo.dp} in</td></tr>
+        <tr><td>Depth to CG, d<sub>p,all</sub></td><td>${r.strandInfo.dp.toFixed(3)} in</td></tr>
+        <tr><td>Flexure d<sub>p,m</sub> / A<sub>ps,m</sub></td><td>${r.strandInfo.dpMoment.toFixed(3)} in / ${r.strandInfo.effectiveApsMoment.toFixed(3)} in&sup2;</td></tr>
+        <tr><td>Shear d<sub>p,v</sub> / A<sub>ps,v</sub></td><td>${r.strandInfo.dpShear.toFixed(3)} in / ${r.strandInfo.effectiveApsShear.toFixed(3)} in&sup2;</td></tr>
         <tr><td>fpu</td><td>${(r.strandInfo.fpu / 1000).toFixed(0)} ksi</td></tr>
         <tr><td>fpe (after losses)</td><td>${(r.strandInfo.fpe / 1000).toFixed(0)} ksi</td></tr>
         <tr><td>fps (at ultimate)</td><td>${(r.strandInfo.fps / 1000).toFixed(1)} ksi</td></tr>
       </table>
     </div>`;
+    if (r.strandInfo.layout && r.strandInfo.layout.length) {
+      html += `<div class="result-section">
+        <h3>Strand Layout</h3>
+        <table class="result-table">
+          <tr><th>Row</th><th>Count</th><th>Depth (in)</th><th>Debond (ft)</th><th>Effective Aps (in&sup2;)</th><th>Used for Mn</th><th>Used for Vn</th></tr>`;
+      for (const row of r.strandInfo.layout) {
+        html += `<tr>
+          <td>${row.row}</td>
+          <td>${row.count}</td>
+          <td>${row.depth.toFixed(3)}</td>
+          <td>${row.debondLengthFt.toFixed(2)}</td>
+          <td>${row.effectiveAps.toFixed(3)}</td>
+          <td>${row.momentActive ? 'Yes' : 'No'}</td>
+          <td>${row.shearActive ? 'Yes' : 'No'}</td>
+        </tr>`;
+      }
+      html += `</table></div>`;
+    }
 
     // Mild steel (if present)
     if (r.mildSteel) {
       html += `<div class="result-section">
         <h3>Mild Steel Reinforcement</h3>
         <table class="result-table">
-          <tr><td>As</td><td>${r.mildSteel.As.toFixed(2)} in&sup2;</td></tr>
+          <tr><td>As (effective)</td><td>${r.mildSteel.As.toFixed(2)} in&sup2;</td></tr>
+          <tr><td>As (original)</td><td>${r.mildSteel.originalAs.toFixed(2)} in&sup2;</td></tr>
+          <tr><td>Section Loss</td><td>${r.mildSteel.lossPercent}%</td></tr>
           <tr><td>fy</td><td>${(r.mildSteel.fy / 1000).toFixed(0)} ksi</td></tr>
           <tr><td>Depth, d</td><td>${r.mildSteel.d} in</td></tr>
         </table>

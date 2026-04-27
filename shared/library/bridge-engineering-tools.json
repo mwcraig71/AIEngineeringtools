@@ -1,6 +1,66 @@
 {
-  "libraryVersion": "1.0.0",
+  "libraryVersion": "1.2.0",
   "tools": [
+    {
+      "id": "bridge-live-load",
+      "name": "Bridge Live-Load Analysis",
+      "status": "completed",
+      "category": "bridge-analysis",
+      "entry": "/apps/bridge-live-load/index.html",
+      "engine": "/apps/bridge-live-load/analysis.js",
+      "test": "node apps/bridge-live-load/test-analysis.js",
+      "notes": "Simple and continuous-span envelopes for truck, tandem, and lane-pattern loading with AASHTO variable spacing support."
+    },
+    {
+      "id": "bridge-load-rating",
+      "name": "RC Tee Beam Load Rating",
+      "status": "completed",
+      "category": "bridge-load-rating",
+      "entry": "/apps/bridge-load-rating/index.html",
+      "engine": "/apps/bridge-load-rating/rating-engine.js",
+      "test": "node apps/bridge-load-rating/test-rating-engine.js",
+      "notes": "RC tee-beam LRFR/LFR/ASR rating with deterioration sensitivity and detailed rebar/stirrup loss handling."
+    },
+    {
+      "id": "cmp-culvert-rating",
+      "name": "CMP Culvert Load Rating",
+      "status": "completed",
+      "category": "bridge-load-rating",
+      "entry": "/apps/cmp-culvert-rating/index.html",
+      "engine": "/apps/cmp-culvert-rating/rating-engine.js",
+      "test": "node apps/cmp-culvert-rating/test-rating-engine.js",
+      "notes": "Fill-height sweep for circular CMP culverts with ring compression, bending, buckling, seam, and serviceability checks plus explicit steel/rebar/prestress section-loss modeling (baseline vs deteriorated)."
+    },
+    {
+      "id": "composite-steel-girder",
+      "name": "Composite Steel Girder Rating",
+      "status": "completed",
+      "category": "bridge-load-rating",
+      "entry": "/apps/composite-steel-girder/index.html",
+      "engine": "/apps/composite-steel-girder/composite-rating-engine.js",
+      "test": "node apps/composite-steel-girder/test-composite-engine.js",
+      "notes": "Composite section-property, strength, and rating workflow including staged loads and section-loss checks."
+    },
+    {
+      "id": "cored-slab-rating",
+      "name": "Prestressed Cored Slab Rating",
+      "status": "completed",
+      "category": "bridge-load-rating",
+      "entry": "/apps/cored-slab-rating/index.html",
+      "engine": "/apps/cored-slab-rating/rating-engine.js",
+      "test": "node apps/cored-slab-rating/test-rating-engine.js",
+      "notes": "Prestressed cored slab rating with strand layout/debond handling and deterioration-aware flexure/shear checks."
+    },
+    {
+      "id": "curved-steel-girder-layout",
+      "name": "Curved Steel Girder MDX Software Input Tool",
+      "status": "completed",
+      "category": "bridge-layout",
+      "entry": "/apps/curved-steel-girder-layout/index.html",
+      "engine": "/apps/curved-steel-girder-layout/layout-engine.js",
+      "test": "node apps/curved-steel-girder-layout/test-layout-engine.js",
+      "notes": "Deterministic curved-girder station geometry with MDX Software ASCII input export/import round-trip, golden-byte fixture checks, 2D preview, and deterioration metadata handoff."
+    },
     {
       "id": "prestressed-girder-type3-rating",
       "name": "AASHTO Type III Prestressed Girder Rating",
@@ -23,14 +83,14 @@
       "notes": "One-way strip equivalent RC flat slab rating with inventory/operating RFs, varying-width CFRP strip retrofit support, and explicit rebar/steel/prestress deterioration handling."
     },
     {
-      "id": "cmp-culvert-rating",
-      "name": "CMP Culvert Load Rating",
+      "id": "steel-girder-rating",
+      "name": "Steel Girder Rating",
       "status": "completed",
       "category": "bridge-load-rating",
-      "entry": "/apps/cmp-culvert-rating/index.html",
-      "engine": "/apps/cmp-culvert-rating/rating-engine.js",
-      "test": "node apps/cmp-culvert-rating/test-rating-engine.js",
-      "notes": "Fill-height sweep for circular CMP culverts with ring compression, bending, buckling, seam, and serviceability checks plus explicit steel/rebar/prestress section-loss modeling (baseline vs deteriorated)."
+      "entry": "/apps/steel-girder-rating/index.html",
+      "engine": "/apps/steel-girder-rating/steel-rating-engine.js",
+      "test": "node apps/steel-girder-rating/test-steel-engine.js",
+      "notes": "Rolled-shape and plate-girder rating workflow with section-loss and limit-state checks."
     }
   ]
 }

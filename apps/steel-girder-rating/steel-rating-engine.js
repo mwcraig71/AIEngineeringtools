@@ -16,6 +16,25 @@
 
 const E_STEEL = 29000; // ksi (modulus of elasticity)
 
+function ensureSimpleSpanModel(analysisModel, engineName) {
+  const model = analysisModel || 'simple-span';
+  if (model !== 'simple-span') {
+    throw new Error(`${engineName} currently supports simple-span analysis only. Set analysisModel to "simple-span" for this app.`);
+  }
+}
+
+function validateUnitConsistency(params) {
+  if ((params.Fy || 0) > 200) {
+    throw new Error('Fy appears to be entered in psi. Enter steel yield strength in ksi (e.g., 50).');
+  }
+  if ((params.impactFactor || 0) > 1) {
+    throw new Error('Impact factor must be a decimal (e.g., 0.33), not a percent.');
+  }
+  if ((params.dcW || 0) > 20 || (params.dwW || 0) > 20 || (params.laneLoad || 0) > 20) {
+    throw new Error('Distributed loads look too large for kip/ft inputs. Check unit conversion for dcW/dwW/laneLoad.');
+  }
+}
+
 // ============================================================
 // Section property computation for I-shaped steel sections
 // ============================================================
@@ -752,8 +771,11 @@ function runSteelRating(params) {
     Fy, spanFt, Lb, Cb, stiffenerSpacing,
     checkPoints,
     dcW, dwW, truckDef, impactFactor, laneLoad, distFactor,
-    phiC, phiS, methods, legalGammaLL
+    phiC, phiS, methods, legalGammaLL, analysisModel
   } = params;
+
+  ensureSimpleSpanModel(analysisModel, 'steel-girder-rating');
+  validateUnitConsistency({ Fy, impactFactor, dcW, dwW, laneLoad });
 
   // 1. Base section parameters
   let baseSectionParams;

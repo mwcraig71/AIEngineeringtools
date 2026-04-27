@@ -17,6 +17,32 @@
 const E_STEEL = 29000; // ksi
 const UNIT_WEIGHT_CONCRETE = 0.150; // kcf (normal weight)
 
+function ensureSimpleSpanModel(analysisModel, engineName) {
+  const model = analysisModel || 'simple-span';
+  if (model !== 'simple-span') {
+    throw new Error(`${engineName} currently supports simple-span analysis only. Set analysisModel to "simple-span" for this app.`);
+  }
+}
+
+function validateUnitConsistency(params) {
+  const deck = params.deck || {};
+  if ((params.Fy || 0) > 200) {
+    throw new Error('Fy appears to be entered in psi. Enter steel yield strength in ksi (e.g., 50).');
+  }
+  if ((deck.fc || 0) > 25) {
+    throw new Error('Deck concrete f\'c appears to be entered in psi. Enter deck.fc in ksi (e.g., 4).');
+  }
+  if ((params.impactFactor || 0) > 1) {
+    throw new Error('Impact factor must be a decimal (e.g., 0.33), not a percent.');
+  }
+  if ((params.dc1W || 0) > 20 ||
+      (params.dc2W || 0) > 20 ||
+      (params.dwW || 0) > 20 ||
+      (params.laneLoad || 0) > 20) {
+    throw new Error('Distributed loads look too large for kip/ft inputs. Verify lane/dead-load units.');
+  }
+}
+
 // ============================================================
 // Steel section property computation (reused from non-composite)
 // ============================================================
@@ -948,9 +974,12 @@ function runCompositeRating(params) {
     checkPoints,
     dc1W, dc2W, dwW,
     truckDef, impactFactor, laneLoad, distFactor,
-    phiC, phiS, methods, legalGammaLL,
+    phiC, phiS, methods, legalGammaLL, analysisModel,
     deck, studs
   } = params;
+
+  ensureSimpleSpanModel(analysisModel, 'composite-steel-girder');
+  validateUnitConsistency({ Fy, impactFactor, dc1W, dc2W, dwW, laneLoad, deck });
 
   // 1. Base steel section
   let baseSectionParams;

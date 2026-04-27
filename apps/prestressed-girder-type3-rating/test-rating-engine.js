@@ -182,5 +182,28 @@ console.log('\n=== 5. Deterministic regression checks ===');
   );
 }
 
+console.log('\n=== 6. Analysis model + unit guards ===');
+{
+  let threw = false;
+  const badModel = createDefaultTypeIIIInput();
+  badModel.analysisModel = 'two-span-continuous';
+  try {
+    runTypeIIIRating(badModel);
+  } catch (err) {
+    threw = /simple-span/i.test(err.message);
+  }
+  assert(threw, 'Unsupported analysisModel throws actionable simple-span error');
+
+  threw = false;
+  const badUnits = createDefaultTypeIIIInput();
+  badUnits.materials.fcPsi = 8; // mistaken ksi value
+  try {
+    runTypeIIIRating(badUnits);
+  } catch (err) {
+    threw = /psi/i.test(err.message);
+  }
+  assert(threw, 'Unit guard catches fcPsi entered in ksi instead of psi');
+}
+
 console.log(`\nResult: ${pass} passed, ${fail} failed`);
 if (fail > 0) process.exit(1);

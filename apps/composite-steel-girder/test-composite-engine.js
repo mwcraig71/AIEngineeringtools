@@ -281,6 +281,71 @@ assert(plasticDeep.Dp > 0, 'Dp > 0 for ductility test');
 const dpdt = plasticDeep.Dp / plasticDeep.Dt;
 console.log(`  Dp = ${plasticDeep.Dp.toFixed(2)}, Dt = ${plasticDeep.Dt.toFixed(2)}, Dp/Dt = ${dpdt.toFixed(4)}`);
 
+// ============================================================
+// Test 14: Analysis model + unit guards
+// ============================================================
+console.log('\n=== Analysis model + unit guards ===');
+let threw = false;
+try {
+  runCompositeRating({
+    sectionType: 'rolled',
+    rolledSection: 'W33x130',
+    analysisModel: 'two-span-continuous',
+    Fy: 50,
+    spanFt: 60,
+    Lb: 20,
+    Cb: 1.0,
+    stiffenerSpacing: 0,
+    checkPoints: [],
+    dc1W: 0.80,
+    dc2W: 0.10,
+    dwW: 0.05,
+    truckDef: TRUCKS.AASHTO,
+    impactFactor: 0.33,
+    laneLoad: 0.64,
+    distFactor: 0.6,
+    phiC: 1.0,
+    phiS: 1.0,
+    methods: { lrfr: true, lfr: true, asr: true },
+    legalGammaLL: 1.80,
+    deck: { ts: 8, fc: 4.0, haunch: 2, girderSpacing: 96, beffOverride: 0 },
+    studs: { diameter: 0.75, Fu: 60, perRow: 2 }
+  });
+} catch (err) {
+  threw = /simple-span/i.test(err.message);
+}
+assert(threw, 'Unsupported analysisModel throws actionable simple-span error');
+
+threw = false;
+try {
+  runCompositeRating({
+    sectionType: 'rolled',
+    rolledSection: 'W33x130',
+    Fy: 50,
+    spanFt: 60,
+    Lb: 20,
+    Cb: 1.0,
+    stiffenerSpacing: 0,
+    checkPoints: [],
+    dc1W: 0.80,
+    dc2W: 0.10,
+    dwW: 0.05,
+    truckDef: TRUCKS.AASHTO,
+    impactFactor: 0.33,
+    laneLoad: 0.64,
+    distFactor: 0.6,
+    phiC: 1.0,
+    phiS: 1.0,
+    methods: { lrfr: true, lfr: true, asr: true },
+    legalGammaLL: 1.80,
+    deck: { ts: 8, fc: 4000, haunch: 2, girderSpacing: 96, beffOverride: 0 },
+    studs: { diameter: 0.75, Fu: 60, perRow: 2 }
+  });
+} catch (err) {
+  threw = /ksi/i.test(err.message);
+}
+assert(threw, 'Unit guard catches deck.fc entered in psi instead of ksi');
+
 // Summary
 console.log(`\n=== Results: ${passed} passed, ${failed} failed ===`);
 process.exit(failed > 0 ? 1 : 0);

@@ -23,6 +23,28 @@ const REBAR_DIAMETERS = {
   8: 1.000, 9: 1.128, 10: 1.270, 11: 1.410, 14: 1.693, 18: 2.257
 };
 
+function ensureSimpleSpanModel(analysisModel, engineName) {
+  const model = analysisModel || 'simple-span';
+  if (model !== 'simple-span') {
+    throw new Error(`${engineName} currently supports simple-span analysis only. Set analysisModel to "simple-span" for this app.`);
+  }
+}
+
+function validateUnitConsistency(params) {
+  if (params.fc > 0 && params.fc < 500) {
+    throw new Error('f\'c appears to be entered in ksi. Enter concrete strength in psi (e.g., 5000).');
+  }
+  if (params.fy > 0 && params.fy < 1000) {
+    throw new Error('fy appears to be entered in ksi. Enter steel yield strength in psi (e.g., 60000).');
+  }
+  if (params.impactFactor !== undefined && params.impactFactor > 1) {
+    throw new Error('Impact factor must be a decimal (e.g., 0.33), not a percent.');
+  }
+  if ((params.dcW || 0) > 20 || (params.dwW || 0) > 20 || (params.laneLoad || 0) > 20) {
+    throw new Error('Distributed loads look too large for kip/ft inputs. Check unit conversion for dcW/dwW/laneLoad.');
+  }
+}
+
 // ============================================================
 // Section property computation
 // ============================================================
@@ -590,8 +612,11 @@ function runLoadRating(params) {
     spanFt, bf, hf, bw, h, fc, fy,
     rebarLayers, stirrupSize, stirrupLegs, stirrupSpacing, stirrupLoss,
     dcW, dwW, truckDef, impactFactor, laneLoad, distFactor,
-    phiC, phiS, methods, legalGammaLL
+    phiC, phiS, methods, legalGammaLL, analysisModel
   } = params;
+
+  ensureSimpleSpanModel(analysisModel, 'bridge-load-rating');
+  validateUnitConsistency({ fc, fy, impactFactor, dcW, dwW, laneLoad });
 
   // 1. Section properties
   const section = computeGrossSection(bf, hf, bw, h);
