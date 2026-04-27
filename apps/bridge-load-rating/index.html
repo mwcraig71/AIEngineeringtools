@@ -1,262 +1,78 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>RC Tee Beam Load Rating</title>
-  <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-  <header>
-    <h1>RC Tee Beam Load Rating</h1>
-    <p class="subtitle">LRFR / LFR / ASR per AASHTO MBE</p>
-  </header>
-
-  <main>
-    <div class="panel input-panel">
-      <div class="tabs">
-        <button class="tab active" data-tab="geometry">Geometry</button>
-        <button class="tab" data-tab="reinforcement">Reinforcement</button>
-        <button class="tab" data-tab="deadloads">Dead Loads</button>
-        <button class="tab" data-tab="liveload">Live Load</button>
-      </div>
-
-      <!-- Geometry Tab -->
-      <div class="tab-content active" id="tab-geometry">
-        <section class="input-section">
-          <h3>Span</h3>
-          <div class="form-row">
-            <label for="spanLength">Span Length (ft):</label>
-            <input type="number" id="spanLength" value="40" min="5" max="200" step="0.5">
-          </div>
-          <p class="help-text">Analysis model is currently limited to simple-span behavior. For continuous spans, use a dedicated continuous analysis workflow.</p>
-        </section>
-        <section class="input-section">
-          <h3>Tee Beam Cross Section</h3>
-          <div class="form-row">
-            <label for="flangeWidth">Flange Width, b<sub>f</sub> (in):</label>
-            <input type="number" id="flangeWidth" value="48" min="6" max="120" step="0.5">
-          </div>
-          <div class="form-row">
-            <label for="flangeThickness">Flange (Slab) Thickness, h<sub>f</sub> (in):</label>
-            <input type="number" id="flangeThickness" value="7" min="3" max="24" step="0.25">
-          </div>
-          <div class="form-row">
-            <label for="webWidth">Web (Stem) Width, b<sub>w</sub> (in):</label>
-            <input type="number" id="webWidth" value="14" min="6" max="48" step="0.5">
-          </div>
-          <div class="form-row">
-            <label for="totalDepth">Total Depth, h (in):</label>
-            <input type="number" id="totalDepth" value="30" min="8" max="96" step="0.5">
-          </div>
-          <div class="form-row">
-            <label for="beamSpacing">Beam Spacing (ft):</label>
-            <input type="number" id="beamSpacing" value="4" min="1" max="16" step="0.25">
-          </div>
-        </section>
-        <section class="input-section">
-          <h3>Material Properties</h3>
-          <div class="form-row">
-            <label for="fc">f'<sub>c</sub> (psi):</label>
-            <input type="number" id="fc" value="3000" min="2000" max="10000" step="100">
-          </div>
-          <div class="form-row">
-            <label for="fy">f<sub>y</sub> (psi):</label>
-            <input type="number" id="fy" value="60000" min="33000" max="100000" step="1000">
-          </div>
-        </section>
-        <section class="input-section">
-          <h3>Rating Parameters</h3>
-          <div class="form-row">
-            <label for="conditionFactor">Condition Factor, &phi;<sub>c</sub>:</label>
-            <select id="conditionFactor">
-              <option value="1.00">Good (1.00)</option>
-              <option value="0.95">Fair (0.95)</option>
-              <option value="0.85">Poor (0.85)</option>
-            </select>
-          </div>
-          <div class="form-row">
-            <label for="systemFactor">System Factor, &phi;<sub>s</sub>:</label>
-            <select id="systemFactor">
-              <option value="1.00">Redundant (1.00)</option>
-              <option value="0.85">Non-redundant (0.85)</option>
-            </select>
-          </div>
-        </section>
-      </div>
-
-      <!-- Reinforcement Tab -->
-      <div class="tab-content" id="tab-reinforcement">
-        <section class="input-section">
-          <h3>Flexural Reinforcement Layers</h3>
-          <p class="help-text">Define rebar layers from bottom of beam. Depth measured from top of section (compression face).</p>
-          <div id="rebarLayersContainer">
-            <div class="rebar-layer" data-layer="0">
-              <div class="layer-header">Layer 1</div>
-              <div class="form-row">
-                <label>Bar Size:</label>
-                <select class="rebar-size">
-                  <option value="3">#3</option>
-                  <option value="4">#4</option>
-                  <option value="5">#5</option>
-                  <option value="6">#6</option>
-                  <option value="7">#7</option>
-                  <option value="8" selected>#8</option>
-                  <option value="9">#9</option>
-                  <option value="10">#10</option>
-                  <option value="11">#11</option>
-                  <option value="14">#14</option>
-                  <option value="18">#18</option>
-                </select>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Bridge Load Rating</title>
+    <link rel="stylesheet" href="../_shared/strinteg-ui/colors_and_type.css" />
+    <link rel="stylesheet" href="../_shared/strinteg-ui/base.css" />
+    <link rel="stylesheet" href="../_shared/strinteg-ui/components.css" />
+  </head>
+  <body>
+    <!-- STRINTEG_STARTER_TEMPLATE_V1 -->
+    <div class="si-page">
+      <header id="si-header"></header>
+      <main class="si-main">
+        <section class="si-grid si-grid-2">
+          <article class="si-card">
+            <h2>Inputs</h2>
+            <form class="si-form" onsubmit="return false;">
+              <div class="si-form-row">
+                <label class="si-label" for="load-source">Live load basis</label>
+                <select id="load-source" class="si-select"></select>
               </div>
-              <div class="form-row">
-                <label>Number of Bars:</label>
-                <input type="number" class="rebar-count" value="4" min="1" max="20" step="1">
+              <div class="si-form-row">
+                <label class="si-label" for="legal-truck">Truck selection</label>
+                <select id="legal-truck" class="si-select"></select>
               </div>
-              <div class="form-row">
-                <label>Depth to C.G., d (in):</label>
-                <input type="number" class="rebar-depth" value="27" min="1" max="96" step="0.25">
+              <div class="si-form-row">
+                <label class="si-label" for="steel-pct">steelPct (%)</label>
+                <input id="steel-pct" class="si-input" type="number" min="0" max="95" step="0.5" value="8" />
               </div>
-              <div class="form-row">
-                <label>Section Loss (%):</label>
-                <input type="number" class="rebar-loss" value="0" min="0" max="100" step="1">
+              <div class="si-form-row">
+                <label class="si-label" for="rebar-pct">rebarPct (%)</label>
+                <input id="rebar-pct" class="si-input" type="number" min="0" max="95" step="0.5" value="6" />
               </div>
-            </div>
-          </div>
-          <div class="actions" style="margin-top: 0.75rem;">
-            <button id="addLayerBtn" onclick="addRebarLayer()">+ Add Layer</button>
-            <button id="removeLayerBtn" onclick="removeRebarLayer()">- Remove Layer</button>
+              <div class="si-form-row">
+                <label class="si-label" for="prestress-pct">prestressPct (%)</label>
+                <input id="prestress-pct" class="si-input" type="number" min="0" max="95" step="0.5" value="4" />
+              </div>
+              <button id="run-eval" type="button" class="si-button">Run</button>
+            </form>
+          </article>
+          <article class="si-card">
+            <h2>Summary</h2>
+            <div id="summary-alert" class="si-alert">NC legal-load module is wired through shared app controls.</div>
+          </article>
+        </section>
+        <section class="si-card">
+          <h2>Output Table</h2>
+          <div class="si-table-wrap">
+            <table class="si-table">
+              <thead><tr><th>Metric</th><th>Value</th></tr></thead>
+              <tbody id="output-table-body"></tbody>
+            </table>
           </div>
         </section>
-
-        <section class="input-section">
-          <h3>Shear Reinforcement</h3>
-          <div class="form-row">
-            <label for="stirrupSize">Stirrup Bar Size:</label>
-            <select id="stirrupSize">
-              <option value="3">#3</option>
-              <option value="4" selected>#4</option>
-              <option value="5">#5</option>
-              <option value="6">#6</option>
-            </select>
-          </div>
-          <div class="form-row">
-            <label for="stirrupLegs">Number of Legs:</label>
-            <input type="number" id="stirrupLegs" value="2" min="1" max="6" step="1">
-          </div>
-          <div class="form-row">
-            <label for="stirrupSpacing">Spacing, s (in):</label>
-            <input type="number" id="stirrupSpacing" value="12" min="2" max="48" step="0.5">
-          </div>
-          <div class="form-row">
-            <label for="stirrupLoss">Stirrup Section Loss (%):</label>
-            <input type="number" id="stirrupLoss" value="0" min="0" max="100" step="1">
-          </div>
-        </section>
-      </div>
-
-      <!-- Dead Loads Tab -->
-      <div class="tab-content" id="tab-deadloads">
-        <section class="input-section">
-          <h3>Dead Load Components (DC)</h3>
-          <div class="form-row">
-            <label for="dcSelfWeight">Self-Weight (auto-computed):</label>
-            <span id="dcSelfWeight" class="computed-val">--</span>
-          </div>
-          <div class="form-row">
-            <label for="dcAdditional">Additional DC (kip/ft):</label>
-            <input type="number" id="dcAdditional" value="0" min="0" step="0.01">
-          </div>
-        </section>
-        <section class="input-section">
-          <h3>Wearing Surface (DW)</h3>
-          <div class="form-row">
-            <label for="dwThickness">Wearing Surface Thickness (in):</label>
-            <input type="number" id="dwThickness" value="2" min="0" max="6" step="0.25">
-          </div>
-          <div class="form-row">
-            <label for="dwUnitWeight">Unit Weight (pcf):</label>
-            <input type="number" id="dwUnitWeight" value="140" min="100" max="160" step="5">
-          </div>
-          <div class="form-row">
-            <label for="dwComputed">DW (auto-computed):</label>
-            <span id="dwComputed" class="computed-val">--</span>
-          </div>
-        </section>
-        <section class="input-section">
-          <h3>Concrete Unit Weight</h3>
-          <div class="form-row">
-            <label for="concUnitWeight">Unit Weight (pcf):</label>
-            <input type="number" id="concUnitWeight" value="150" min="100" max="160" step="5">
-          </div>
-        </section>
-      </div>
-
-      <!-- Live Load Tab -->
-      <div class="tab-content" id="tab-liveload">
-        <section class="input-section">
-          <h3>Live Load Configuration</h3>
-          <div class="form-row">
-            <label for="stateCode">Design Vehicle:</label>
-            <select id="stateCode">
-              <option value="AASHTO">AASHTO HL-93</option>
-              <option value="NC">North Carolina (NCDOT)</option>
-              <option value="SC">South Carolina (SCDOT)</option>
-            </select>
-          </div>
-          <div id="truckInfo" class="truck-info"></div>
-          <div class="form-row">
-            <label for="impactFactor">Dynamic Load Allowance (IM):</label>
-            <input type="number" id="impactFactor" value="0.33" min="0" max="1" step="0.01">
-          </div>
-          <div class="form-row">
-            <label for="laneLoad">Lane Load (kip/ft):</label>
-            <input type="number" id="laneLoad" value="0.64" min="0" step="0.01">
-          </div>
-          <div class="form-row">
-            <label for="distFactor">Distribution Factor (g):</label>
-            <input type="number" id="distFactor" value="0.6" min="0.1" max="2" step="0.01">
-          </div>
-          <div class="form-row">
-            <label for="legalGammaLL">LRFR Legal Load &gamma;<sub>LL</sub>:</label>
-            <input type="number" id="legalGammaLL" value="1.80" min="1.30" max="1.80" step="0.05">
-            <span class="help-text" style="font-size:0.8em; margin-left:0.5em;">MBE Table 6A.4.5.4.2a-1 (1.80 = ADTT &gt; 5000)</span>
-          </div>
-        </section>
-        <section class="input-section">
-          <h3>Rating Methods</h3>
-          <div class="form-row">
-            <label><input type="checkbox" id="doLRFR" checked> LRFR</label>
-          </div>
-          <div class="form-row">
-            <label><input type="checkbox" id="doLFR" checked> LFR</label>
-          </div>
-          <div class="form-row">
-            <label><input type="checkbox" id="doASR" checked> ASR</label>
-          </div>
-        </section>
-      </div>
-
-      <div class="actions">
-        <button id="rateBtn" onclick="runRating()">Rate Bridge</button>
-        <button id="clearBtn" onclick="clearResults()">Clear</button>
-      </div>
+      </main>
+      <footer id="si-footer"></footer>
     </div>
+    <script src="../_shared/strinteg-ui/shell.js"></script>
+    <script src="../_shared/load-trucks/nc-noninterstate-fig6-147.js"></script>
+    
+    <script src="../_shared/load-trucks/rating-app-adoption.js"></script>
+    <script>
+      window.StrintegShell.mountShell({
+        title: "Bridge Load Rating",
+        subtitle: "NC legal load truck adoption via shared module",
+        badge: "STR-67",
+        footer: "Shared Strinteg shell in use"
+      });
 
-    <div class="panel results-panel">
-      <h2>Rating Results</h2>
-      <div id="summaryBox" class="summary-box hidden"></div>
-      <div id="resultsContainer"></div>
-    </div>
-  </main>
-
-  <footer>
-    <p>Bridge Engineering Tools &mdash; RC Tee Beam Load Rating v1.0</p>
-  </footer>
-
-  <script src="../bridge-live-load/trucks.js"></script>
-  <script src="../bridge-live-load/analysis.js"></script>
-  <script src="rating-engine.js"></script>
-  <script src="app.js"></script>
-</body>
+      window.StrintegRatingApp.mount({
+        appId: "bridge-load-rating",
+        materialUse: {"steel":true,"rebar":true,"prestress":false}
+      });
+    </script>
+  </body>
 </html>

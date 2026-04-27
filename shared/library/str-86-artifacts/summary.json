@@ -1,0 +1,167 @@
+{
+  "issue": "STR-86",
+  "scope": "CLI contract hardening across 9 bridge apps",
+  "generatedAtUtc": "2026-04-27T04:55:27.776Z",
+  "checks": [
+    {
+      "app": "bridge-live-load",
+      "help": {
+        "pass": true
+      },
+      "deterministic": {
+        "pass": true,
+        "actualFingerprint": "sha256:bcb7ab402ed4f380e8f9619cbdc9bf14068d377bb0cc19dfb0358287fd1ef03c"
+      },
+      "mdxContract": {
+        "pass": true,
+        "mode": "unsupported"
+      },
+      "structuredError": {
+        "pass": true
+      }
+    },
+    {
+      "app": "bridge-load-rating",
+      "help": {
+        "pass": true
+      },
+      "deterministic": {
+        "pass": true,
+        "actualFingerprint": "sha256:d7a07fa7450007e21f050c5097ff975c33daa3b4cb4ca2dc2fef42dc286177f9"
+      },
+      "mdxContract": {
+        "pass": true,
+        "mode": "unsupported"
+      },
+      "structuredError": {
+        "pass": true
+      }
+    },
+    {
+      "app": "cmp-culvert-rating",
+      "help": {
+        "pass": true
+      },
+      "deterministic": {
+        "pass": true,
+        "actualFingerprint": "sha256:fec371c1c9782eb0e0223333b8310af2a2816ba227a8c8a087baf20606ae90e3"
+      },
+      "mdxContract": {
+        "pass": true,
+        "mode": "unsupported"
+      },
+      "structuredError": {
+        "pass": true
+      }
+    },
+    {
+      "app": "composite-steel-girder",
+      "help": {
+        "pass": true
+      },
+      "deterministic": {
+        "pass": true,
+        "actualFingerprint": "sha256:7f816bc3caa4a8dcf79800c3edd052f12b71e710c1c3a61ec9c40bce05abc97c"
+      },
+      "mdxContract": {
+        "pass": true,
+        "mode": "unsupported"
+      },
+      "structuredError": {
+        "pass": true
+      }
+    },
+    {
+      "app": "cored-slab-rating",
+      "help": {
+        "pass": true
+      },
+      "deterministic": {
+        "pass": true,
+        "actualFingerprint": "sha256:84c47f771319b1305dfae4573b43d1ab4f5e3291ad4e8ec2c7a7d321c66ad9e9"
+      },
+      "mdxContract": {
+        "pass": true,
+        "mode": "unsupported"
+      },
+      "structuredError": {
+        "pass": true
+      }
+    },
+    {
+      "app": "curved-steel-girder-layout",
+      "help": {
+        "pass": true
+      },
+      "deterministic": {
+        "pass": true,
+        "actualFingerprint": "sha256:c0dad290092ef394ba51c95b23b5c6d4fa975d1d31dd387b6c4a1448d73f328b"
+      },
+      "mdxContract": {
+        "pass": true,
+        "mode": "supported"
+      },
+      "structuredError": {
+        "pass": true
+      }
+    },
+    {
+      "app": "prestressed-girder-type3-rating",
+      "help": {
+        "pass": true
+      },
+      "deterministic": {
+        "pass": true,
+        "actualFingerprint": "sha256:7229a037b089f89800dd3071b84c6ad4087b57e55dae886b478a6a0eddef6e86"
+      },
+      "mdxContract": {
+        "pass": true,
+        "mode": "unsupported"
+      },
+      "structuredError": {
+        "pass": true
+      }
+    },
+    {
+      "app": "rc-flat-slab-rating",
+      "help": {
+        "pass": true
+      },
+      "deterministic": {
+        "pass": true,
+        "actualFingerprint": "sha256:6e11c8b633e65567ec61ce7bcc68907dceb0a37f8cf09d531f7511435d26992a"
+      },
+      "mdxContract": {
+        "pass": true,
+        "mode": "unsupported"
+      },
+      "structuredError": {
+        "pass": true
+      }
+    },
+    {
+      "app": "steel-girder-rating",
+      "help": {
+        "pass": true
+      },
+      "deterministic": {
+        "pass": true,
+        "actualFingerprint": "sha256:0dd386aa2da5c909003fe8ae686af7302bf171d1c9d8f57a357523b64ffcd1e4"
+      },
+      "mdxContract": {
+        "pass": true,
+        "mode": "unsupported"
+      },
+      "structuredError": {
+        "pass": true
+      }
+    }
+  ],
+  "summary": {
+    "helpPass": true,
+    "structuredErrorPass": true,
+    "deterministicPass": true,
+    "mdxContractPass": true,
+    "overallPass": true
+  }
+}

@@ -1,0 +1,166 @@
+{
+  "issue": "STR-90",
+  "scope": "continuous program improvement governance checks",
+  "generatedAtUtc": "2026-04-27T12:29:30.100Z",
+  "governance": {
+    "pass": true,
+    "requiredDimensions": [
+      "steel",
+      "rebar",
+      "prestress"
+    ]
+  },
+  "tools": [
+    {
+      "app": "bridge-live-load",
+      "category": "bridge-analysis",
+      "paths": {
+        "entry": "/paperclip/instances/default/projects/245829e2-f68c-4d4a-b82b-1e471525ada7/30537a16-8a33-4542-bb23-56f32c773e6b/_default/apps/bridge-live-load/index.html",
+        "engine": "/paperclip/instances/default/projects/245829e2-f68c-4d4a-b82b-1e471525ada7/30537a16-8a33-4542-bb23-56f32c773e6b/_default/apps/bridge-live-load/analysis.js",
+        "cli": "/paperclip/instances/default/projects/245829e2-f68c-4d4a-b82b-1e471525ada7/30537a16-8a33-4542-bb23-56f32c773e6b/_default/apps/bridge-live-load/cli.js",
+        "sampleInput": "/paperclip/instances/default/projects/245829e2-f68c-4d4a-b82b-1e471525ada7/30537a16-8a33-4542-bb23-56f32c773e6b/_default/apps/bridge-live-load/examples/cli-sample-input.json"
+      },
+      "sectionLossCoverage": null,
+      "pass": true,
+      "errors": []
+    },
+    {
+      "app": "bridge-load-rating",
+      "category": "bridge-load-rating",
+      "paths": {
+        "entry": "/paperclip/instances/default/projects/245829e2-f68c-4d4a-b82b-1e471525ada7/30537a16-8a33-4542-bb23-56f32c773e6b/_default/apps/bridge-load-rating/index.html",
+        "engine": "/paperclip/instances/default/projects/245829e2-f68c-4d4a-b82b-1e471525ada7/30537a16-8a33-4542-bb23-56f32c773e6b/_default/apps/bridge-load-rating/rating-engine.js",
+        "cli": "/paperclip/instances/default/projects/245829e2-f68c-4d4a-b82b-1e471525ada7/30537a16-8a33-4542-bb23-56f32c773e6b/_default/apps/bridge-load-rating/cli.js",
+        "sampleInput": "/paperclip/instances/default/projects/245829e2-f68c-4d4a-b82b-1e471525ada7/30537a16-8a33-4542-bb23-56f32c773e6b/_default/apps/bridge-load-rating/examples/cli-sample-input.json"
+      },
+      "sectionLossCoverage": {
+        "steel": "implemented",
+        "rebar": "implemented",
+        "prestress": "implemented"
+      },
+      "pass": true,
+      "errors": []
+    },
+    {
+      "app": "cmp-culvert-rating",
+      "category": "bridge-load-rating",
+      "paths": {
+        "entry": "/paperclip/instances/default/projects/245829e2-f68c-4d4a-b82b-1e471525ada7/30537a16-8a33-4542-bb23-56f32c773e6b/_default/apps/cmp-culvert-rating/index.html",
+        "engine": "/paperclip/instances/default/projects/245829e2-f68c-4d4a-b82b-1e471525ada7/30537a16-8a33-4542-bb23-56f32c773e6b/_default/apps/cmp-culvert-rating/rating-engine.js",
+        "cli": "/paperclip/instances/default/projects/245829e2-f68c-4d4a-b82b-1e471525ada7/30537a16-8a33-4542-bb23-56f32c773e6b/_default/apps/cmp-culvert-rating/cli.js",
+        "sampleInput": "/paperclip/instances/default/projects/245829e2-f68c-4d4a-b82b-1e471525ada7/30537a16-8a33-4542-bb23-56f32c773e6b/_default/apps/cmp-culvert-rating/examples/cli-sample-input.json"
+      },
+      "sectionLossCoverage": {
+        "steel": "implemented",
+        "rebar": "implemented",
+        "prestress": "implemented"
+      },
+      "pass": true,
+      "errors": []
+    },
+    {
+      "app": "composite-steel-girder",
+      "category": "bridge-load-rating",
+      "paths": {
+        "entry": "/paperclip/instances/default/projects/245829e2-f68c-4d4a-b82b-1e471525ada7/30537a16-8a33-4542-bb23-56f32c773e6b/_default/apps/composite-steel-girder/index.html",
+        "engine": "/paperclip/instances/default/projects/245829e2-f68c-4d4a-b82b-1e471525ada7/30537a16-8a33-4542-bb23-56f32c773e6b/_default/apps/composite-steel-girder/composite-rating-engine.js",
+        "cli": "/paperclip/instances/default/projects/245829e2-f68c-4d4a-b82b-1e471525ada7/30537a16-8a33-4542-bb23-56f32c773e6b/_default/apps/composite-steel-girder/cli.js",
+        "sampleInput": "/paperclip/instances/default/projects/245829e2-f68c-4d4a-b82b-1e471525ada7/30537a16-8a33-4542-bb23-56f32c773e6b/_default/apps/composite-steel-girder/examples/cli-sample-input.json"
+      },
+      "sectionLossCoverage": {
+        "steel": "implemented",
+        "rebar": "implemented",
+        "prestress": "implemented"
+      },
+      "pass": true,
+      "errors": []
+    },
+    {
+      "app": "cored-slab-rating",
+      "category": "bridge-load-rating",
+      "paths": {
+        "entry": "/paperclip/instances/default/projects/245829e2-f68c-4d4a-b82b-1e471525ada7/30537a16-8a33-4542-bb23-56f32c773e6b/_default/apps/cored-slab-rating/index.html",
+        "engine": "/paperclip/instances/default/projects/245829e2-f68c-4d4a-b82b-1e471525ada7/30537a16-8a33-4542-bb23-56f32c773e6b/_default/apps/cored-slab-rating/rating-engine.js",
+        "cli": "/paperclip/instances/default/projects/245829e2-f68c-4d4a-b82b-1e471525ada7/30537a16-8a33-4542-bb23-56f32c773e6b/_default/apps/cored-slab-rating/cli.js",
+        "sampleInput": "/paperclip/instances/default/projects/245829e2-f68c-4d4a-b82b-1e471525ada7/30537a16-8a33-4542-bb23-56f32c773e6b/_default/apps/cored-slab-rating/examples/cli-sample-input.json"
+      },
+      "sectionLossCoverage": {
+        "steel": "implemented",
+        "rebar": "implemented",
+        "prestress": "implemented"
+      },
+      "pass": true,
+      "errors": []
+    },
+    {
+      "app": "curved-steel-girder-layout",
+      "category": "bridge-layout",
+      "paths": {
+        "entry": "/paperclip/instances/default/projects/245829e2-f68c-4d4a-b82b-1e471525ada7/30537a16-8a33-4542-bb23-56f32c773e6b/_default/apps/curved-steel-girder-layout/index.html",
+        "engine": "/paperclip/instances/default/projects/245829e2-f68c-4d4a-b82b-1e471525ada7/30537a16-8a33-4542-bb23-56f32c773e6b/_default/apps/curved-steel-girder-layout/layout-engine.js",
+        "cli": "/paperclip/instances/default/projects/245829e2-f68c-4d4a-b82b-1e471525ada7/30537a16-8a33-4542-bb23-56f32c773e6b/_default/apps/curved-steel-girder-layout/cli.js",
+        "sampleInput": "/paperclip/instances/default/projects/245829e2-f68c-4d4a-b82b-1e471525ada7/30537a16-8a33-4542-bb23-56f32c773e6b/_default/apps/curved-steel-girder-layout/examples/cli-sample-input.json"
+      },
+      "sectionLossCoverage": null,
+      "pass": true,
+      "errors": []
+    },
+    {
+      "app": "prestressed-girder-type3-rating",
+      "category": "bridge-load-rating",
+      "paths": {
+        "entry": "/paperclip/instances/default/projects/245829e2-f68c-4d4a-b82b-1e471525ada7/30537a16-8a33-4542-bb23-56f32c773e6b/_default/apps/prestressed-girder-type3-rating/index.html",
+        "engine": "/paperclip/instances/default/projects/245829e2-f68c-4d4a-b82b-1e471525ada7/30537a16-8a33-4542-bb23-56f32c773e6b/_default/apps/prestressed-girder-type3-rating/rating-engine.js",
+        "cli": "/paperclip/instances/default/projects/245829e2-f68c-4d4a-b82b-1e471525ada7/30537a16-8a33-4542-bb23-56f32c773e6b/_default/apps/prestressed-girder-type3-rating/cli.js",
+        "sampleInput": "/paperclip/instances/default/projects/245829e2-f68c-4d4a-b82b-1e471525ada7/30537a16-8a33-4542-bb23-56f32c773e6b/_default/apps/prestressed-girder-type3-rating/examples/type3-sample-input.json"
+      },
+      "sectionLossCoverage": {
+        "steel": "implemented",
+        "rebar": "implemented",
+        "prestress": "implemented"
+      },
+      "pass": true,
+      "errors": []
+    },
+    {
+      "app": "rc-flat-slab-rating",
+      "category": "bridge-load-rating",
+      "paths": {
+        "entry": "/paperclip/instances/default/projects/245829e2-f68c-4d4a-b82b-1e471525ada7/30537a16-8a33-4542-bb23-56f32c773e6b/_default/apps/rc-flat-slab-rating/index.html",
+        "engine": "/paperclip/instances/default/projects/245829e2-f68c-4d4a-b82b-1e471525ada7/30537a16-8a33-4542-bb23-56f32c773e6b/_default/apps/rc-flat-slab-rating/rating-engine.js",
+        "cli": "/paperclip/instances/default/projects/245829e2-f68c-4d4a-b82b-1e471525ada7/30537a16-8a33-4542-bb23-56f32c773e6b/_default/apps/rc-flat-slab-rating/cli.js",
+        "sampleInput": "/paperclip/instances/default/projects/245829e2-f68c-4d4a-b82b-1e471525ada7/30537a16-8a33-4542-bb23-56f32c773e6b/_default/apps/rc-flat-slab-rating/examples/cli-sample-input.json"
+      },
+      "sectionLossCoverage": {
+        "steel": "implemented",
+        "rebar": "implemented",
+        "prestress": "implemented"
+      },
+      "pass": true,
+      "errors": []
+    },
+    {
+      "app": "steel-girder-rating",
+      "category": "bridge-load-rating",
+      "paths": {
+        "entry": "/paperclip/instances/default/projects/245829e2-f68c-4d4a-b82b-1e471525ada7/30537a16-8a33-4542-bb23-56f32c773e6b/_default/apps/steel-girder-rating/index.html",
+        "engine": "/paperclip/instances/default/projects/245829e2-f68c-4d4a-b82b-1e471525ada7/30537a16-8a33-4542-bb23-56f32c773e6b/_default/apps/steel-girder-rating/steel-rating-engine.js",
+        "cli": "/paperclip/instances/default/projects/245829e2-f68c-4d4a-b82b-1e471525ada7/30537a16-8a33-4542-bb23-56f32c773e6b/_default/apps/steel-girder-rating/cli.js",
+        "sampleInput": "/paperclip/instances/default/projects/245829e2-f68c-4d4a-b82b-1e471525ada7/30537a16-8a33-4542-bb23-56f32c773e6b/_default/apps/steel-girder-rating/examples/cli-sample-input.json"
+      },
+      "sectionLossCoverage": {
+        "steel": "implemented",
+        "rebar": "implemented",
+        "prestress": "implemented"
+      },
+      "pass": true,
+      "errors": []
+    }
+  ],
+  "summary": {
+    "governancePass": true,
+    "toolPass": true,
+    "loadRatingCoveragePass": true,
+    "overallPass": true
+  }
+}

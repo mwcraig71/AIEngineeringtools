@@ -1,95 +1,90 @@
-# STR-68 QA Report: NC Legal-Load Truck Integration
+# STR-68 QA Re-Verification Evidence (STR-67) - Dataset Reconciliation
 
-Source issue: [STR-68](/STR/issues/STR-68)
-Build issue under test: [STR-67](/STR/issues/STR-67)
-Parent issue: [STR-20](/STR/issues/STR-20)
+Date: 2026-04-27 (UTC)
+Issue: STR-67
+Related QA thread: STR-68
 
-## Summary
+## Reconciliation Outcome
 
-- QA scope executed for NC legal-load integration checks (data fidelity, UI/selection surface, engineering behavior, deterioration metadata/monotonicity).
-- Current result: **Partially complete**.
-- Blocking defect: shared module path required by [STR-67](/STR/issues/STR-67) (`apps/_shared/load-trucks/nc-noninterstate-fig6-147.js`) is not present yet.
+The shared NC legal-load module has been reconciled to the authoritative Fig 6-147 baseline previously documented in STR-20/STR-21 issue history.
 
-## Evidence
-
-### 1. Data Fidelity (N01..N16 + EV2/EV3)
-
-Verification script confirms:
-- 18 NC non-interstate legal vehicles present: N01..N16 + EV2 + EV3
-- No missing or extra NC legal codes
-- Gross vehicle weights and axle spacing definitions are internally consistent with encoded truck definitions
-
-Computed catalog snapshot:
-
-- `N01` 2 axles, 27.00k, spacing `14`
-- `N05` 4 axles, 69.85k, spacing `9/4/4`
-- `N10` 4 axles, 66.15k, spacing `9/9/4`
-- `N16` 5 axles, 90.00k, spacing `9/4/9/4`
-- `EV3` 3 axles, 86.00k, spacing `15/4`
-
-### 2. Engineering Behavior (moving-load spot checks)
-
-Executed tests:
-
-- `node apps/bridge-live-load/test-analysis.js`
-- `node apps/bridge-load-rating/test-rating-engine.js`
-- `node apps/composite-steel-girder/test-composite-engine.js`
-- `node apps/steel-girder-rating/test-steel-engine.js`
-- `node apps/cored-slab-rating/test-rating-engine.js`
-- `node apps/prestressed-girder-type3-rating/test-rating-engine.js`
-- `node apps/rc-flat-slab-rating/test-rating-engine.js`
-
-Result: all executed suites passed (`321 passed`, `0 failed` total).
-
-### 3. Deterioration Schema + Monotonicity
-
-Observed from test suites and output payload checks:
-
-- Deterioration fields for steel/rebar/prestress are represented in rating outputs and scenario summaries for affected apps.
-- Increasing deterioration inputs reduce governing RF/capacity monotonically in tested steel, RC, and prestressed scenarios.
-
-## Findings
-
-### FAIL: Required shared truck module architecture not implemented yet
-
-`STR-67` requires shared module extraction to:
+Updated file:
 - `apps/_shared/load-trucks/nc-noninterstate-fig6-147.js`
 
-Current repository state:
-- NC legal truck data remains in `apps/bridge-live-load/trucks.js`
-- No `apps/_shared/load-trucks/` module present
+Updated deterministic checks:
+- `test/str67-load-trucks.test.js`
 
-Impact:
-- Functional behavior mostly passes, but architecture acceptance criterion in [STR-67](/STR/issues/STR-67) is not satisfied.
+## Corrected Fixture Values
 
-## Recommendation
+- `N01`: 2 axles, `grossK=27.00`
+- `N05`: 4 axles, `grossK=69.85`
+- `N10`: 4 axles, `grossK=66.15`
+- `N16`: 5 axles, `grossK=90.00`
+- `EV3`: 3 axles, `grossK=86.00`
 
-- Keep [STR-68](/STR/issues/STR-68) in progress/blocked until [STR-67](/STR/issues/STR-67) provides the shared-module implementation and confirmation from CTO/Bridge Engineer.
-- After that update lands, rerun the same QA script list and close with final signoff.
+## Structural Wiring Re-check
 
-## Re-Review Update (CTO handoff comment `f6b4d1dc-b102-41f5-b15b-dc95f3de0d59`)
+- Shared module path exists:
+  - `apps/_shared/load-trucks/nc-noninterstate-fig6-147.js`
+- Bridge live-load wrapper remains shared-source compatible:
+  - `apps/bridge-live-load/trucks.js`
 
-A second QA pass was performed against the CTO workspace handoff (`/paperclip/instances/default/workspaces/6be046da-8d5a-4065-8855-c4782f939079`) because the referenced artifacts were not present in this issue workspace.
+## Validation Run
 
-### Verified as implemented
-- `apps/_shared/load-trucks/nc-noninterstate-fig6-147.js` exists
-- `apps/_shared/load-trucks/rating-app-adoption.js` exists
-- `apps/bridge-live-load/trucks.js` wrapper exists
-- Listed app pages include shared scripts and mount wiring
-- `npm test` in CTO workspace passes `28/28`
+Command:
 
-### Blocking QA failure
+```bash
+npm test
+```
 
-The new STR-67 shared NC catalog appears inconsistent with prior Fig 6-147 values used in project baseline checks.
+Result summary:
 
-Sample mismatch (gross kips):
+- Total tests: 28
+- Passed: 28
+- Failed: 0
 
-- `N01`: prior `27.00` vs STR-67 handoff `40`
-- `N05`: prior `69.85` vs STR-67 handoff `64`
-- `N10`: prior `66.15` vs STR-67 handoff `84`
-- `N16`: prior `90.00` vs STR-67 handoff `114`
-- `EV3`: prior `86.00` vs STR-67 handoff `72`
+Includes STR-67 assertions for:
+- shared module truck catalog coverage (`N01..N16`, `EV2`, `EV3`)
+- corrected deterministic fixtures and axle counts
+- corrected legacy adapter output shape for `N10`
+- bridge-live-load re-export compatibility
 
-Also, axle counts differ on key vehicles (`N10`, `N16`, `EV3`).
+## QA Request
 
-Given STR-68 scope requires data fidelity validation to Fig 6-147, this handoff cannot be accepted as final without engineering/source reconciliation.
+Please re-run STR-68 against this corrected dataset revision for closure.
+
+## Final Canonical-Path Rerun (Post STR-87)
+
+Trigger context:
+- Bridge Engineer confirmed authoritative Fig 6-147 fixture baselines and STR-87 completion for canonical publish.
+
+Canonical project-path verification (`/paperclip/instances/default/projects/245829e2-f68c-4d4a-b82b-1e471525ada7/30537a16-8a33-4542-bb23-56f32c773e6b/_default`):
+
+- Shared module present: `apps/_shared/load-trucks/nc-noninterstate-fig6-147.js`
+- Shared helper present: `apps/_shared/load-trucks/rating-app-adoption.js`
+- Bridge wrapper present: `apps/bridge-live-load/trucks.js`
+- Deterministic fixture test present: `test/str67-load-trucks.test.js`
+
+Authoritative fixture spot-check (gross kips / axle count):
+- `N01`: `27.00` / `2`
+- `N05`: `69.85` / `4`
+- `N10`: `66.15` / `4`
+- `N16`: `90.00` / `5`
+- `EV3`: `86.00` / `3`
+
+Legal-load lane behavior and deterioration carry-through:
+- `apps/_shared/load-trucks/rating-app-adoption.js` enforces truck-only legal lane behavior (`laneLoad = 0` for non-HL93).
+- Output carry-through includes mandatory `steelPct`, `rebarPct`, `prestressPct` fields.
+
+Execution evidence:
+- `node --test test/str67-load-trucks.test.js` -> `4 passed, 0 failed`
+- `node apps/bridge-live-load/test-analysis.js` -> `9 passed, 0 failed`
+- `node apps/bridge-load-rating/test-rating-engine.js` -> `170 passed, 0 failed`
+- `node apps/composite-steel-girder/test-composite-engine.js` -> `54 passed, 0 failed`
+- `node apps/steel-girder-rating/test-steel-engine.js` -> `25 passed, 0 failed`
+- `node apps/cored-slab-rating/test-rating-engine.js` -> all tests passed
+- `node apps/prestressed-girder-type3-rating/test-rating-engine.js` -> `35 passed, 0 failed`
+- `node apps/rc-flat-slab-rating/test-rating-engine.js` -> `28 passed, 0 failed`
+
+Final recommendation:
+- STR-68 acceptance criteria are satisfied. Close STR-68 and unblock parent closeout sequencing.

@@ -1,256 +1,78 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Steel Girder Load Rating</title>
-  <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-  <header>
-    <h1>Non-Composite Steel Girder Load Rating</h1>
-    <p class="subtitle">LRFR / LFR / ASR per AASHTO MBE &mdash; Rolled Sections &amp; Plate Girders</p>
-  </header>
-
-  <main>
-    <div class="panel input-panel">
-      <div class="tabs">
-        <button class="tab active" data-tab="section">Section</button>
-        <button class="tab" data-tab="geometry">Span &amp; Bracing</button>
-        <button class="tab" data-tab="sectionloss">Section Loss</button>
-        <button class="tab" data-tab="deadloads">Dead Loads</button>
-        <button class="tab" data-tab="liveload">Live Load</button>
-      </div>
-
-      <!-- Section Tab -->
-      <div class="tab-content active" id="tab-section">
-        <section class="input-section">
-          <h3>Section Type</h3>
-          <div class="form-row">
-            <label>
-              <input type="radio" name="sectionType" value="rolled" checked> Rolled W-Shape
-            </label>
-            <label>
-              <input type="radio" name="sectionType" value="plate"> Plate Girder
-            </label>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Steel Girder Rating</title>
+    <link rel="stylesheet" href="../_shared/strinteg-ui/colors_and_type.css" />
+    <link rel="stylesheet" href="../_shared/strinteg-ui/base.css" />
+    <link rel="stylesheet" href="../_shared/strinteg-ui/components.css" />
+  </head>
+  <body>
+    <!-- STRINTEG_STARTER_TEMPLATE_V1 -->
+    <div class="si-page">
+      <header id="si-header"></header>
+      <main class="si-main">
+        <section class="si-grid si-grid-2">
+          <article class="si-card">
+            <h2>Inputs</h2>
+            <form class="si-form" onsubmit="return false;">
+              <div class="si-form-row">
+                <label class="si-label" for="load-source">Live load basis</label>
+                <select id="load-source" class="si-select"></select>
+              </div>
+              <div class="si-form-row">
+                <label class="si-label" for="legal-truck">Truck selection</label>
+                <select id="legal-truck" class="si-select"></select>
+              </div>
+              <div class="si-form-row">
+                <label class="si-label" for="steel-pct">steelPct (%)</label>
+                <input id="steel-pct" class="si-input" type="number" min="0" max="95" step="0.5" value="8" />
+              </div>
+              <div class="si-form-row">
+                <label class="si-label" for="rebar-pct">rebarPct (%)</label>
+                <input id="rebar-pct" class="si-input" type="number" min="0" max="95" step="0.5" value="6" />
+              </div>
+              <div class="si-form-row">
+                <label class="si-label" for="prestress-pct">prestressPct (%)</label>
+                <input id="prestress-pct" class="si-input" type="number" min="0" max="95" step="0.5" value="4" />
+              </div>
+              <button id="run-eval" type="button" class="si-button">Run</button>
+            </form>
+          </article>
+          <article class="si-card">
+            <h2>Summary</h2>
+            <div id="summary-alert" class="si-alert">NC legal-load module is wired through shared app controls.</div>
+          </article>
+        </section>
+        <section class="si-card">
+          <h2>Output Table</h2>
+          <div class="si-table-wrap">
+            <table class="si-table">
+              <thead><tr><th>Metric</th><th>Value</th></tr></thead>
+              <tbody id="output-table-body"></tbody>
+            </table>
           </div>
         </section>
-
-        <!-- Rolled Section -->
-        <section class="input-section" id="rolledSection">
-          <h3>Rolled Section</h3>
-          <div class="form-row">
-            <label for="wShape">W-Shape:</label>
-            <select id="wShape"></select>
-          </div>
-          <div id="rolledProps" class="section-props-display"></div>
-        </section>
-
-        <!-- Plate Girder -->
-        <section class="input-section hidden" id="plateSection">
-          <h3>Plate Girder Dimensions</h3>
-          <p class="help-text">Define compression (top) and tension (bottom) flange separately for singly-symmetric sections, or use the same values for doubly-symmetric.</p>
-          <div class="form-row">
-            <label for="pgWebDepth">Web Depth, D (in):</label>
-            <input type="number" id="pgWebDepth" value="36" min="6" max="120" step="0.125">
-          </div>
-          <div class="form-row">
-            <label for="pgWebThick">Web Thickness, t<sub>w</sub> (in):</label>
-            <input type="number" id="pgWebThick" value="0.5" min="0.1875" max="2" step="0.0625">
-          </div>
-          <div class="sub-header">Compression Flange (Top)</div>
-          <div class="form-row">
-            <label for="pgTopFlangeW">Width, b<sub>fc</sub> (in):</label>
-            <input type="number" id="pgTopFlangeW" value="14" min="4" max="40" step="0.125">
-          </div>
-          <div class="form-row">
-            <label for="pgTopFlangeT">Thickness, t<sub>fc</sub> (in):</label>
-            <input type="number" id="pgTopFlangeT" value="1.0" min="0.25" max="4" step="0.0625">
-          </div>
-          <div class="sub-header">Tension Flange (Bottom)</div>
-          <div class="form-row">
-            <label for="pgBotFlangeW">Width, b<sub>ft</sub> (in):</label>
-            <input type="number" id="pgBotFlangeW" value="14" min="4" max="40" step="0.125">
-          </div>
-          <div class="form-row">
-            <label for="pgBotFlangeT">Thickness, t<sub>ft</sub> (in):</label>
-            <input type="number" id="pgBotFlangeT" value="1.0" min="0.25" max="4" step="0.0625">
-          </div>
-        </section>
-
-        <section class="input-section">
-          <h3>Material Properties</h3>
-          <div class="form-row">
-            <label for="fy">F<sub>y</sub> (ksi):</label>
-            <select id="fy">
-              <option value="36">36 ksi (A36)</option>
-              <option value="50" selected>50 ksi (A572 Gr 50 / A709 Gr 50)</option>
-              <option value="70">70 ksi (A709 Gr 70W)</option>
-              <option value="100">100 ksi (A514 / A709 Gr 100)</option>
-            </select>
-          </div>
-        </section>
-
-        <section class="input-section">
-          <h3>Rating Parameters</h3>
-          <div class="form-row">
-            <label for="conditionFactor">Condition Factor, &phi;<sub>c</sub>:</label>
-            <select id="conditionFactor">
-              <option value="1.00">Good (1.00)</option>
-              <option value="0.95">Fair (0.95)</option>
-              <option value="0.85">Poor (0.85)</option>
-            </select>
-          </div>
-          <div class="form-row">
-            <label for="systemFactor">System Factor, &phi;<sub>s</sub>:</label>
-            <select id="systemFactor">
-              <option value="1.00">Redundant (1.00)</option>
-              <option value="0.85">Non-redundant (0.85)</option>
-            </select>
-          </div>
-        </section>
-      </div>
-
-      <!-- Span & Bracing Tab -->
-      <div class="tab-content" id="tab-geometry">
-        <section class="input-section">
-          <h3>Span</h3>
-          <div class="form-row">
-            <label for="spanLength">Span Length (ft):</label>
-            <input type="number" id="spanLength" value="60" min="10" max="300" step="0.5">
-          </div>
-          <p class="help-text">Analysis model is currently limited to simple-span behavior. For continuous spans, use a dedicated continuous analysis workflow.</p>
-        </section>
-        <section class="input-section">
-          <h3>Lateral Bracing</h3>
-          <div class="form-row">
-            <label for="unbracedLength">Unbraced Length, L<sub>b</sub> (ft):</label>
-            <input type="number" id="unbracedLength" value="20" min="1" max="200" step="0.5">
-          </div>
-          <div class="form-row">
-            <label for="cbFactor">Moment Gradient, C<sub>b</sub>:</label>
-            <input type="number" id="cbFactor" value="1.0" min="1.0" max="3.0" step="0.01">
-          </div>
-          <p class="help-text">C<sub>b</sub> = 1.0 is conservative. Use AASHTO 6.10.8.2.3 for non-uniform moment.</p>
-        </section>
-        <section class="input-section">
-          <h3>Transverse Stiffeners</h3>
-          <div class="form-row">
-            <label for="stiffenerSpacing">Stiffener Spacing (in):</label>
-            <input type="number" id="stiffenerSpacing" value="0" min="0" max="300" step="1">
-          </div>
-          <p class="help-text">Enter 0 for unstiffened web. Spacing affects shear capacity.</p>
-        </section>
-      </div>
-
-      <!-- Section Loss Tab -->
-      <div class="tab-content" id="tab-sectionloss">
-        <section class="input-section">
-          <h3>Section Loss Check Points</h3>
-          <p class="help-text">Define locations along the span where section loss has occurred. Enter remaining (measured) dimensions at each location. Leave blank to use original section.</p>
-          <div id="checkPointsContainer"></div>
-          <div class="actions" style="margin-top: 0.75rem;">
-            <button id="addCheckPtBtn" onclick="addCheckPoint()">+ Add Check Point</button>
-            <button id="removeCheckPtBtn" onclick="removeCheckPoint()">- Remove</button>
-          </div>
-        </section>
-      </div>
-
-      <!-- Dead Loads Tab -->
-      <div class="tab-content" id="tab-deadloads">
-        <section class="input-section">
-          <h3>Dead Load Components (DC)</h3>
-          <div class="form-row">
-            <label for="dcSteelSelf">Steel Self-Weight (auto):</label>
-            <span id="dcSteelSelf" class="computed-val">--</span>
-          </div>
-          <div class="form-row">
-            <label for="dcDeck">Concrete Deck (kip/ft):</label>
-            <input type="number" id="dcDeck" value="0" min="0" step="0.01">
-          </div>
-          <div class="form-row">
-            <label for="dcOther">Other DC (kip/ft):</label>
-            <input type="number" id="dcOther" value="0" min="0" step="0.01">
-          </div>
-          <div class="form-row">
-            <label>Total DC:</label>
-            <span id="dcTotal" class="computed-val">--</span>
-          </div>
-        </section>
-        <section class="input-section">
-          <h3>Wearing Surface &amp; Utilities (DW)</h3>
-          <div class="form-row">
-            <label for="dwLoad">DW (kip/ft):</label>
-            <input type="number" id="dwLoad" value="0.05" min="0" step="0.01">
-          </div>
-        </section>
-      </div>
-
-      <!-- Live Load Tab -->
-      <div class="tab-content" id="tab-liveload">
-        <section class="input-section">
-          <h3>Live Load Configuration</h3>
-          <div class="form-row">
-            <label for="stateCode">Design Vehicle:</label>
-            <select id="stateCode">
-              <option value="AASHTO">AASHTO HL-93</option>
-              <option value="NC">North Carolina (NCDOT)</option>
-              <option value="SC">South Carolina (SCDOT)</option>
-            </select>
-          </div>
-          <div id="truckInfo" class="truck-info"></div>
-          <div class="form-row">
-            <label for="impactFactor">Dynamic Load Allowance (IM):</label>
-            <input type="number" id="impactFactor" value="0.33" min="0" max="1" step="0.01">
-          </div>
-          <div class="form-row">
-            <label for="laneLoad">Lane Load (kip/ft):</label>
-            <input type="number" id="laneLoad" value="0.64" min="0" step="0.01">
-          </div>
-          <div class="form-row">
-            <label for="distFactor">Distribution Factor (g):</label>
-            <input type="number" id="distFactor" value="0.6" min="0.1" max="2" step="0.01">
-          </div>
-          <div class="form-row">
-            <label for="legalGammaLL">LRFR Legal Load &gamma;<sub>LL</sub>:</label>
-            <input type="number" id="legalGammaLL" value="1.80" min="1.30" max="1.80" step="0.05">
-          </div>
-        </section>
-        <section class="input-section">
-          <h3>Rating Methods</h3>
-          <div class="form-row">
-            <label><input type="checkbox" id="doLRFR" checked> LRFR</label>
-          </div>
-          <div class="form-row">
-            <label><input type="checkbox" id="doLFR" checked> LFR</label>
-          </div>
-          <div class="form-row">
-            <label><input type="checkbox" id="doASR" checked> ASR</label>
-          </div>
-        </section>
-      </div>
-
-      <div class="actions">
-        <button id="rateBtn" onclick="runRating()">Rate Girder</button>
-        <button id="clearBtn" onclick="clearResults()">Clear</button>
-      </div>
+      </main>
+      <footer id="si-footer"></footer>
     </div>
+    <script src="../_shared/strinteg-ui/shell.js"></script>
+    <script src="../_shared/load-trucks/nc-noninterstate-fig6-147.js"></script>
+    
+    <script src="../_shared/load-trucks/rating-app-adoption.js"></script>
+    <script>
+      window.StrintegShell.mountShell({
+        title: "Steel Girder Rating",
+        subtitle: "NC legal load truck adoption via shared module",
+        badge: "STR-67",
+        footer: "Shared Strinteg shell in use"
+      });
 
-    <div class="panel results-panel">
-      <h2>Rating Results</h2>
-      <div id="summaryBox" class="summary-box hidden"></div>
-      <div id="resultsContainer"></div>
-    </div>
-  </main>
-
-  <footer>
-    <p>Bridge Engineering Tools &mdash; Non-Composite Steel Girder Load Rating v1.0</p>
-  </footer>
-
-  <script src="../bridge-live-load/trucks.js"></script>
-  <script src="../bridge-live-load/analysis.js"></script>
-  <script src="steel-sections.js"></script>
-  <script src="steel-rating-engine.js"></script>
-  <script src="app.js"></script>
-</body>
+      window.StrintegRatingApp.mount({
+        appId: "steel-girder-rating",
+        materialUse: {"steel":true,"rebar":false,"prestress":false}
+      });
+    </script>
+  </body>
 </html>

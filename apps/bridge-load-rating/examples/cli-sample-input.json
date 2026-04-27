@@ -1,0 +1,30 @@
+{
+  "spanFt": 40,
+  "bf": 48,
+  "hf": 7,
+  "bw": 14,
+  "h": 30,
+  "fc": 3000,
+  "fy": 60000,
+  "rebarLayers": [
+    { "barSize": 8, "count": 4, "depth": 27, "lossPercent": 0 }
+  ],
+  "stirrupSize": 4,
+  "stirrupLegs": 2,
+  "stirrupSpacing": 12,
+  "stirrupLoss": 0,
+  "dcW": 0.5,
+  "dwW": 0.1,
+  "truckId": "AASHTO",
+  "impactFactor": 0.33,
+  "laneLoad": 0.64,
+  "distFactor": 0.6,
+  "phiC": 1.0,
+  "phiS": 1.0,
+  "methods": { "lrfr": true, "lfr": true, "asr": true },
+  "deterioration": {
+    "steelPct": 0,
+    "rebarPct": 10,
+    "prestressPct": 0
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "spans": [40],
+  "deadLoadW": 1.0,
+  "wearingSurfaceW": 0.1,
+  "truckId": "AASHTO",
+  "impactFactor": 0.33,
+  "laneLoadW": 0.64
+}

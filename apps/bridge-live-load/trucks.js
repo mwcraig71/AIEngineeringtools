@@ -536,3 +536,63 @@ function getTruckInfoHTML(code) {
   if (t.ncCode) html += `<br>SNBI Code: ${t.ncCode} | Source: NCDOT Fig 6-147`;
   return html;
 }
+
+// Keep legacy TRUCKS surface for existing browser/runtime consumers, while
+// ingesting the shared NC non-interstate dataset when available.
+(function syncSharedNcCatalog(globalScope) {
+  let shared = null;
+  if (globalScope.StrintegLoadTrucks && globalScope.StrintegLoadTrucks.ncNonInterstateFig6147) {
+    shared = globalScope.StrintegLoadTrucks.ncNonInterstateFig6147;
+  } else if (typeof require !== 'undefined') {
+    try {
+      shared = require('../_shared/load-trucks/nc-noninterstate-fig6-147.js');
+    } catch (_) {
+      shared = null;
+    }
+  }
+
+  const map = {
+    N01: 'NC_SNSH',
+    N02: 'NC_SNGARBS2',
+    N03: 'NC_SNAGRIS2',
+    N04: 'NC_SNCOTTS3',
+    N05: 'NC_SNAGGRS4',
+    N06: 'NC_SNS5A',
+    N07: 'NC_SNS6A',
+    N08: 'NC_SNS7B',
+    N09: 'NC_TNAGRIT3',
+    N10: 'NC_TNT4A',
+    N11: 'NC_TNT6A',
+    N12: 'NC_TNT7A',
+    N13: 'NC_TNT7B',
+    N14: 'NC_TNAGRIT4',
+    N15: 'NC_TNAGT5A',
+    N16: 'NC_TNAGT5B',
+    EV2: 'NC_EV2',
+    EV3: 'NC_EV3'
+  };
+
+  if (shared && Array.isArray(shared.trucks) && typeof shared.toLegacyAxleArray === 'function') {
+    for (const t of shared.trucks) {
+      const key = map[t.id];
+      if (!key || !TRUCKS[key]) continue;
+      const legacyAxles = shared.toLegacyAxleArray(t).map((a) => ({ weight: a.weight, position: a.position }));
+      TRUCKS[key].axles = legacyAxles;
+    }
+  }
+
+  const api = {
+    TRUCKS,
+    trucks: shared && Array.isArray(shared.trucks) ? shared.trucks : [],
+    toLegacyAxleArray: shared && typeof shared.toLegacyAxleArray === 'function' ? shared.toLegacyAxleArray : null,
+    getLegacyTruck: shared && typeof shared.getLegacyTruck === 'function' ? shared.getLegacyTruck : null,
+    getTruckAxles,
+    getTandemAxles,
+    getTruckInfoHTML
+  };
+
+  if (typeof module !== 'undefined' && module.exports) {
+    module.exports = api;
+  }
+  globalScope.BridgeLiveLoadTrucks = api;
+})(typeof window !== 'undefined' ? window : globalThis);

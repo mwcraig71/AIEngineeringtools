@@ -1,0 +1,517 @@
+{
+  "issue": "STR-85",
+  "scope": "QA verify STR-83 per-app CLI shims deterministic contract + deterioration monotonicity",
+  "generatedAtUtc": "2026-04-27T03:57:40.070Z",
+  "deterministic": [
+    {
+      "app": "bridge-live-load",
+      "pass": true
+    },
+    {
+      "app": "bridge-load-rating",
+      "pass": true
+    },
+    {
+      "app": "cmp-culvert-rating",
+      "pass": true
+    },
+    {
+      "app": "composite-steel-girder",
+      "pass": true
+    },
+    {
+      "app": "cored-slab-rating",
+      "pass": true
+    },
+    {
+      "app": "curved-steel-girder-layout",
+      "pass": true
+    },
+    {
+      "app": "prestressed-girder-type3-rating",
+      "pass": true
+    },
+    {
+      "app": "rc-flat-slab-rating",
+      "pass": true
+    },
+    {
+      "app": "steel-girder-rating",
+      "pass": true
+    }
+  ],
+  "monotonic": [
+    {
+      "app": "bridge-live-load",
+      "pass": true,
+      "skipped": true,
+      "reason": "no canonical deterioration contract"
+    },
+    {
+      "app": "bridge-load-rating",
+      "pass": true,
+      "skipped": false,
+      "applicability": {
+        "steel": "not_applicable",
+        "rebar": "mapped_to_rebarLayers_and_stirrupLoss",
+        "prestress": "not_applicable"
+      },
+      "series": {
+        "rebar": [
+          {
+            "lossPct": 0,
+            "score": 372.92647058823525
+          },
+          {
+            "lossPct": 20,
+            "score": 300.1033411764706
+          },
+          {
+            "lossPct": 40,
+            "score": 226.39912941176468
+          },
+          {
+            "lossPct": 60,
+            "score": 151.81383529411767
+          },
+          {
+            "lossPct": 80,
+            "score": 76.3474588235294
+          },
+          {
+            "lossPct": 100,
+            "score": 0
+          }
+        ]
+      },
+      "failures": []
+    },
+    {
+      "app": "cmp-culvert-rating",
+      "pass": true,
+      "skipped": false,
+      "applicability": {
+        "steel": "mapped_to_deterioration.steel.*LossPercent",
+        "rebar": "mapped_to_deterioration.rebar.lossPercent",
+        "prestress": "mapped_to_deterioration.prestress.lossPercent"
+      },
+      "series": {
+        "steel": [
+          {
+            "lossPct": 0,
+            "score": 25.121112
+          },
+          {
+            "lossPct": 20,
+            "score": 25.121112
+          },
+          {
+            "lossPct": 40,
+            "score": 25.121112
+          },
+          {
+            "lossPct": 60,
+            "score": 25.121112
+          },
+          {
+            "lossPct": 80,
+            "score": 25.121112
+          },
+          {
+            "lossPct": 100,
+            "score": 25.121112
+          }
+        ],
+        "rebar": [
+          {
+            "lossPct": 0,
+            "score": 25.121112
+          },
+          {
+            "lossPct": 20,
+            "score": 25.121112
+          },
+          {
+            "lossPct": 40,
+            "score": 25.121112
+          },
+          {
+            "lossPct": 60,
+            "score": 25.121112
+          },
+          {
+            "lossPct": 80,
+            "score": 25.121112
+          },
+          {
+            "lossPct": 100,
+            "score": 25.121112
+          }
+        ],
+        "prestress": [
+          {
+            "lossPct": 0,
+            "score": 25.121112
+          },
+          {
+            "lossPct": 20,
+            "score": 25.121112
+          },
+          {
+            "lossPct": 40,
+            "score": 25.121112
+          },
+          {
+            "lossPct": 60,
+            "score": 25.121112
+          },
+          {
+            "lossPct": 80,
+            "score": 25.121112
+          },
+          {
+            "lossPct": 100,
+            "score": 25.121112
+          }
+        ]
+      },
+      "failures": []
+    },
+    {
+      "app": "composite-steel-girder",
+      "pass": true,
+      "skipped": false,
+      "applicability": {
+        "steel": "mapped_to_midspan_checkPoint_remaining_dims",
+        "rebar": "not_applicable",
+        "prestress": "not_applicable"
+      },
+      "series": {
+        "steel": [
+          {
+            "lossPct": 0,
+            "score": 3641.392207283514
+          },
+          {
+            "lossPct": 20,
+            "score": 2748.950230352941
+          },
+          {
+            "lossPct": 40,
+            "score": 1862.3904663613514
+          },
+          {
+            "lossPct": 60,
+            "score": 1096.5182560875003
+          },
+          {
+            "lossPct": 80,
+            "score": 470.81131684223334
+          },
+          {
+            "lossPct": 100,
+            "score": 0.0019482032159276125
+          }
+        ]
+      },
+      "failures": []
+    },
+    {
+      "app": "cored-slab-rating",
+      "pass": true,
+      "skipped": false,
+      "applicability": {
+        "steel": "not_applicable",
+        "rebar": "mapped_to_mildLoss_and_stirrupLoss",
+        "prestress": "mapped_to_strandLoss"
+      },
+      "series": {
+        "rebar": [
+          {
+            "lossPct": 0,
+            "score": 779.6897703916522
+          },
+          {
+            "lossPct": 20,
+            "score": 779.6897703916522
+          },
+          {
+            "lossPct": 40,
+            "score": 779.6897703916522
+          },
+          {
+            "lossPct": 60,
+            "score": 779.6897703916522
+          },
+          {
+            "lossPct": 80,
+            "score": 779.6897703916522
+          },
+          {
+            "lossPct": 100,
+            "score": 779.6897703916522
+          }
+        ],
+        "prestress": [
+          {
+            "lossPct": 0,
+            "score": 853.7146771283104
+          },
+          {
+            "lossPct": 20,
+            "score": 703.3369625555912
+          },
+          {
+            "lossPct": 40,
+            "score": 543.371896336592
+          },
+          {
+            "lossPct": 60,
+            "score": 373.2444345528195
+          },
+          {
+            "lossPct": 80,
+            "score": 192.33974730951726
+          },
+          {
+            "lossPct": 100,
+            "score": 0
+          }
+        ]
+      },
+      "failures": []
+    },
+    {
+      "app": "curved-steel-girder-layout",
+      "pass": true,
+      "skipped": true,
+      "reason": "no canonical deterioration contract"
+    },
+    {
+      "app": "prestressed-girder-type3-rating",
+      "pass": true,
+      "skipped": false,
+      "applicability": {
+        "steel": "mapped_to_deterioration.loss_structural_steel",
+        "rebar": "mapped_to_deterioration.loss_rebar_and_loss_stirrup",
+        "prestress": "mapped_to_deterioration.loss_strand_and_prestress_stress_reduction"
+      },
+      "series": {
+        "steel": [
+          {
+            "lossPct": 0,
+            "score": 0
+          },
+          {
+            "lossPct": 20,
+            "score": 0
+          },
+          {
+            "lossPct": 40,
+            "score": 0
+          },
+          {
+            "lossPct": 60,
+            "score": 0
+          },
+          {
+            "lossPct": 80,
+            "score": 0
+          },
+          {
+            "lossPct": 100,
+            "score": 0
+          }
+        ],
+        "rebar": [
+          {
+            "lossPct": 0,
+            "score": 0
+          },
+          {
+            "lossPct": 20,
+            "score": 0
+          },
+          {
+            "lossPct": 40,
+            "score": 0
+          },
+          {
+            "lossPct": 60,
+            "score": 0
+          },
+          {
+            "lossPct": 80,
+            "score": 0
+          },
+          {
+            "lossPct": 100,
+            "score": 0
+          }
+        ],
+        "prestress": [
+          {
+            "lossPct": 0,
+            "score": 0
+          },
+          {
+            "lossPct": 20,
+            "score": 0
+          },
+          {
+            "lossPct": 40,
+            "score": 0
+          },
+          {
+            "lossPct": 60,
+            "score": 0
+          },
+          {
+            "lossPct": 80,
+            "score": 0
+          },
+          {
+            "lossPct": 100,
+            "score": 0
+          }
+        ]
+      },
+      "failures": []
+    },
+    {
+      "app": "rc-flat-slab-rating",
+      "pass": true,
+      "skipped": false,
+      "applicability": {
+        "steel": "mapped_to_deterioration.steelLossPercent",
+        "rebar": "mapped_to_deterioration.rebarLossPercent",
+        "prestress": "mapped_to_deterioration.prestressLossPercent"
+      },
+      "series": {
+        "steel": [
+          {
+            "lossPct": 0,
+            "score": -0.586511173295229
+          },
+          {
+            "lossPct": 20,
+            "score": -0.586511173295229
+          },
+          {
+            "lossPct": 40,
+            "score": -0.586511173295229
+          },
+          {
+            "lossPct": 60,
+            "score": -0.586511173295229
+          },
+          {
+            "lossPct": 80,
+            "score": -0.586511173295229
+          },
+          {
+            "lossPct": 100,
+            "score": -0.586511173295229
+          }
+        ],
+        "rebar": [
+          {
+            "lossPct": 0,
+            "score": -0.586511173295229
+          },
+          {
+            "lossPct": 20,
+            "score": -0.586511173295229
+          },
+          {
+            "lossPct": 40,
+            "score": -0.586511173295229
+          },
+          {
+            "lossPct": 60,
+            "score": -0.586511173295229
+          },
+          {
+            "lossPct": 80,
+            "score": -0.586511173295229
+          },
+          {
+            "lossPct": 100,
+            "score": -0.586511173295229
+          }
+        ],
+        "prestress": [
+          {
+            "lossPct": 0,
+            "score": -0.586511173295229
+          },
+          {
+            "lossPct": 20,
+            "score": -0.586511173295229
+          },
+          {
+            "lossPct": 40,
+            "score": -0.586511173295229
+          },
+          {
+            "lossPct": 60,
+            "score": -0.586511173295229
+          },
+          {
+            "lossPct": 80,
+            "score": -0.586511173295229
+          },
+          {
+            "lossPct": 100,
+            "score": -0.586511173295229
+          }
+        ]
+      },
+      "failures": []
+    },
+    {
+      "app": "steel-girder-rating",
+      "pass": true,
+      "skipped": false,
+      "applicability": {
+        "steel": "mapped_to_midspan_checkPoint_remaining_dims",
+        "rebar": "not_applicable",
+        "prestress": "not_applicable"
+      },
+      "series": {
+        "steel": [
+          {
+            "lossPct": 0,
+            "score": 1253.3756137128607
+          },
+          {
+            "lossPct": 20,
+            "score": 571.7876625874602
+          },
+          {
+            "lossPct": 40,
+            "score": 181.03855478981063
+          },
+          {
+            "lossPct": 60,
+            "score": 35.80842342101813
+          },
+          {
+            "lossPct": 80,
+            "score": 2.244065383541241
+          },
+          {
+            "lossPct": 100,
+            "score": 1.4117499108087938e-21
+          }
+        ]
+      },
+      "failures": []
+    }
+  ],
+  "summary": {
+    "deterministicPass": true,
+    "monotonicPass": true,
+    "overallPass": true
+  }
+}

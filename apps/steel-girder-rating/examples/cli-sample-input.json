@@ -1,0 +1,25 @@
+{
+  "sectionType": "rolled",
+  "rolledSection": "W33x130",
+  "Fy": 50,
+  "spanFt": 60,
+  "Lb": 20,
+  "Cb": 1,
+  "stiffenerSpacing": 0,
+  "checkPoints": [],
+  "dcW": 0.5,
+  "dwW": 0.05,
+  "truckId": "AASHTO",
+  "impactFactor": 0.33,
+  "laneLoad": 0.64,
+  "distFactor": 0.6,
+  "phiC": 1,
+  "phiS": 1,
+  "methods": { "lrfr": true, "lfr": true, "asr": true },
+  "legalGammaLL": 1.8,
+  "deterioration": {
+    "steelPct": 10,
+    "rebarPct": 0,
+    "prestressPct": 0
+  }
+}

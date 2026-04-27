@@ -1,0 +1,8 @@
+{
+  "useDefaultInput": true,
+  "deterioration": {
+    "steelPct": 12,
+    "rebarPct": 8,
+    "prestressPct": 10
+  }
+}

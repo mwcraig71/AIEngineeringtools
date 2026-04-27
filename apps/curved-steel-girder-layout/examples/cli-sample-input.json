@@ -1,0 +1,16 @@
+{
+  "projectName": "CLI Sample Curved Layout",
+  "mdxSoftwareVersion": "MDX-2025.1-ASSUMED",
+  "generatedAt": "2026-01-15T12:00:00.000Z",
+  "radiusFt": 900,
+  "centralAngleDeg": 45,
+  "girderCount": 4,
+  "girderSpacingFt": 10,
+  "stationIntervalFt": 25,
+  "curveDirection": "left",
+  "deterioration": {
+    "steelSectionLossPercent": 10,
+    "rebarSectionLossPercent": 5,
+    "prestressSectionLossPercent": 2
+  }
+}
