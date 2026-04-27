@@ -1,0 +1,38 @@
+{
+  "sectionType": "rolled",
+  "Fy": 50,
+  "Lb": 20,
+  "Cb": 1,
+  "stiffenerSpacing": 0,
+  "checkPoints": [],
+  "dcW": 0.62,
+  "dwW": 0.09,
+  "truckId": "AASHTO",
+  "impactFactor": 0.33,
+  "laneLoad": 0.64,
+  "distFactor": 0.58,
+  "phiC": 1,
+  "phiS": 1,
+  "methods": {
+    "lrfr": true,
+    "lfr": true,
+    "asr": true
+  },
+  "legalGammaLL": 1.8,
+  "deterioration": {
+    "steelPct": 5,
+    "rebarPct": 2,
+    "prestressPct": 0
+  },
+  "meta": {
+    "structureNumber": "180570026103105",
+    "bridgeDescription": "4-span continuous steel stringer",
+    "inspectionDate": "2024-01-28",
+    "source": "18-057-0261-03-105_RTInsp_2024-01.pdf",
+    "note": "Case-matrix rerun per user direction: no single-size global assumption.",
+    "memberLabel": "reported_member_1",
+    "sectionNote": null
+  },
+  "rolledSection": "W33x130",
+  "spanFt": 72
+}
