@@ -40,3 +40,17 @@ Please perform QA review for STR-93 focused on:
 1. UI regression validation in the 7 listed apps (ensure original input/result views render, including tab controls where expected).
 2. Smoke interaction checks for key inputs/actions in each restored page.
 3. Confirmation that no shared-shell starter-template UI remains on these pages.
+
+## QA Completion Record (2026-04-27)
+
+- QA verified implementation commit on `main`: `4a5e013`.
+- Restored UI files were confirmed as exact matches to pre-regression baseline `bd88b12` for all 7 scoped apps.
+- Engineering-calculation verification completed by rerunning all 7 engine test suites; all passed with zero failures.
+- UI restoration verification completed:
+  - Tabbed layouts are present on the apps that had tabs pre-regression.
+  - Section-based layouts for the remaining apps match pre-regression `bd88b12` (tabs not applicable).
+- Regression marker check completed: no starter-template marker remains in restored pages.
+
+### Final QA Status
+
+- `PASS` — STR-93 acceptance criteria satisfied.
