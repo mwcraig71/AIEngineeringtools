@@ -6,47 +6,182 @@
   <title>Bridge Engineering Tools</title>
   <link rel="stylesheet" href="shared/ui/rating-ui-kit.css">
   <style>
+    body { background: #f5f7fa; }
+
+    header {
+      background: #1a1a2e;
+      padding: 1.25rem 2rem;
+      border-bottom: 3px solid #4a6cf7;
+    }
+    header .brand-row {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+    }
+    header .logo-mark {
+      width: 32px;
+      height: 32px;
+      background: #4a6cf7;
+      border-radius: 6px;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      font-weight: 800;
+      font-size: 0.95rem;
+      letter-spacing: -0.02em;
+    }
+    header h1 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    .hero {
+      background: linear-gradient(180deg, #1a1a2e 0%, #232846 100%);
+      color: #fff;
+      padding: 3.5rem 2rem 3rem;
+    }
+    .hero-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .hero-eyebrow {
+      display: inline-block;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #9bb1ff;
+      background: rgba(74, 108, 247, 0.18);
+      padding: 0.3rem 0.7rem;
+      border-radius: 4px;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+    .hero h2 {
+      font-size: 2.4rem;
+      font-weight: 800;
+      line-height: 1.15;
+      max-width: 720px;
+      letter-spacing: -0.02em;
+      margin-bottom: 1rem;
+    }
+    .hero h2 .accent { color: #6e8eff; }
+    .hero p {
+      font-size: 1.05rem;
+      max-width: 680px;
+      color: #cbd5f1;
+      line-height: 1.55;
+    }
+
+    .stats-band {
+      background: #fff;
+      border-bottom: 1px solid #e8ecf1;
+    }
+    .stats-band-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      padding: 1.4rem 2rem;
+      gap: 1rem;
+    }
+    .stat .num {
+      font-size: 1.7rem;
+      font-weight: 800;
+      color: #1a1a2e;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+    }
+    .stat .num .accent { color: #4a6cf7; }
+    .stat .lbl {
+      font-size: 0.8rem;
+      color: #5a6a8a;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-top: 0.25rem;
+      font-weight: 600;
+    }
+
     main {
       display: block;
       grid-template-columns: none;
       max-width: 1200px;
-      padding: 1.5rem 2rem;
+      padding: 2.5rem 2rem 1rem;
     }
+
     .notice {
       background: #f8fbff;
       border: 1px solid #e1ebfa;
       border-left: 3px solid #4a6cf7;
       border-radius: 6px;
       padding: 0.75rem 1rem;
-      margin-bottom: 1.25rem;
+      margin-bottom: 2rem;
       font-size: 0.85rem;
       color: #2f3e55;
       line-height: 1.5;
     }
+
+    .section-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin: 1.75rem 0 0.85rem;
+      padding-bottom: 0.55rem;
+      border-bottom: 1px solid #e8ecf1;
+    }
+    .section-head h3 {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #5a6a8a;
+      font-weight: 700;
+    }
+    .section-head .count {
+      font-size: 0.78rem;
+      color: #8896ab;
+      font-weight: 600;
+    }
+
     .tools-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: 1rem;
     }
     .tool-card {
+      position: relative;
       background: #fff;
       border-radius: 8px;
       padding: 1.25rem;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+      border: 1px solid #eef1f6;
       text-decoration: none;
       color: inherit;
       display: flex;
       flex-direction: column;
-      transition: box-shadow 0.15s, transform 0.15s;
+      transition: box-shadow 0.15s, transform 0.15s, border-color 0.15s;
     }
     .tool-card:hover {
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+      box-shadow: 0 8px 20px rgba(26, 26, 46, 0.10);
       transform: translateY(-2px);
+      border-color: #c7d4f7;
+    }
+    .tool-card .icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 7px;
+      background: #f0f4ff;
+      display: grid;
+      place-items: center;
+      margin-bottom: 0.85rem;
+      font-size: 1.05rem;
     }
     .tool-card h2 {
-      font-size: 1.05rem;
+      font-size: 1.02rem;
       color: #1a1a2e;
       margin-bottom: 0.4rem;
+      letter-spacing: -0.01em;
     }
     .tool-card p {
       font-size: 0.85rem;
@@ -54,89 +189,179 @@
       line-height: 1.5;
       flex: 1;
     }
-    .tool-card .tag {
-      display: inline-block;
-      align-self: flex-start;
+    .tool-card .meta {
+      display: flex;
+      gap: 0.4rem;
+      align-items: center;
       margin-top: 0.85rem;
       font-size: 0.72rem;
       text-transform: uppercase;
       letter-spacing: 0.05em;
+      font-weight: 600;
+    }
+    .tool-card .tag {
       background: #f0f4ff;
       color: #4a6cf7;
       padding: 0.2rem 0.55rem;
       border-radius: 4px;
-      font-weight: 600;
     }
+    .tool-card .new-badge {
+      background: #ecfdf5;
+      color: #047857;
+      padding: 0.2rem 0.55rem;
+      border-radius: 4px;
+    }
+
     footer {
-      text-align: center;
-      padding: 2rem 1.5rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2.5rem 2rem 2rem;
+      border-top: 1px solid #e8ecf1;
+      margin-top: 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       font-size: 0.8rem;
       color: #8896ab;
     }
-    @media (max-width: 1080px) {
-      main { padding: 1rem; }
+    footer .links a {
+      color: #5a6a8a;
+      text-decoration: none;
+      margin-left: 1rem;
+    }
+    footer .links a:hover { color: #4a6cf7; }
+
+    @media (max-width: 800px) {
+      .hero h2 { font-size: 1.7rem; }
+      .stats-band-inner { grid-template-columns: repeat(2, 1fr); }
+      footer { flex-direction: column; gap: 0.5rem; align-items: flex-start; }
+      main { padding: 1.5rem 1rem 1rem; }
     }
   </style>
 </head>
 <body>
   <header>
-    <h1>Bridge Engineering Tools</h1>
-    <p class="subtitle">Browser-based structural engineering applications for bridge analysis, load rating, and design per AASHTO standards.</p>
+    <div class="brand-row">
+      <div class="logo-mark">SE</div>
+      <h1>Bridge Engineering Tools</h1>
+    </div>
   </header>
+
+  <section class="hero">
+    <div class="hero-inner">
+      <span class="hero-eyebrow">AASHTO MBE LRFR &middot; Browser-based</span>
+      <h2>Production load-rating tools <span class="accent">for the entire bridge inventory.</span></h2>
+      <p>Deterministic, test-covered structural analysis applications &mdash; load rating, geometry layout, and live-load analysis &mdash; calibrated to AASHTO MBE methodology. No installs. Run in any browser, in any field office.</p>
+    </div>
+  </section>
+
+  <section class="stats-band">
+    <div class="stats-band-inner">
+      <div class="stat">
+        <div class="num"><span class="accent">9</span></div>
+        <div class="lbl">Tools shipped</div>
+      </div>
+      <div class="stat">
+        <div class="num">AASHTO</div>
+        <div class="lbl">MBE LRFR / LFR / ASR</div>
+      </div>
+      <div class="stat">
+        <div class="num">100%</div>
+        <div class="lbl">Deterministic outputs</div>
+      </div>
+      <div class="stat">
+        <div class="num">200+</div>
+        <div class="lbl">Automated tests</div>
+      </div>
+    </div>
+  </section>
+
   <main>
     <div class="notice">
-      Engineering use note: each rating app relies on model assumptions and user-supplied demand factors. Validate section-loss inputs for structural steel, rebar, and prestressing (where present) before final stamping decisions.
+      <strong>Engineering use note.</strong> Each rating app relies on model assumptions and user-supplied demand factors. Validate section-loss inputs for structural steel, rebar, and prestressing (where present) before final stamping decisions.
+    </div>
+
+    <div class="section-head">
+      <h3>Load Rating</h3>
+      <span class="count">7 apps</span>
+    </div>
+    <div class="tools-grid">
+      <a class="tool-card" href="apps/bridge-load-rating/index.html">
+        <div class="icon">&#x1F309;</div>
+        <h2>Bridge Load Rating</h2>
+        <p>General bridge load rating supporting inventory and operating ratings per AASHTO MBE LRFR methodology.</p>
+        <div class="meta"><span class="tag">LRFR</span></div>
+      </a>
+      <a class="tool-card" href="apps/composite-steel-girder/index.html">
+        <div class="icon">&#x2696;</div>
+        <h2>Composite Steel Girder</h2>
+        <p>Analysis and load rating for composite steel girder bridges including section properties and capacity calculations.</p>
+        <div class="meta"><span class="tag">LRFR</span></div>
+      </a>
+      <a class="tool-card" href="apps/steel-girder-rating/index.html">
+        <div class="icon">&#x1F527;</div>
+        <h2>Steel Girder Rating</h2>
+        <p>Load rating for steel girder bridges with deterioration and section-loss support.</p>
+        <div class="meta"><span class="tag">LRFR</span></div>
+      </a>
+      <a class="tool-card" href="apps/cored-slab-rating/index.html">
+        <div class="icon">&#x1F4D0;</div>
+        <h2>Cored Slab Rating</h2>
+        <p>Prestressed cored slab load rating with multi-depth strands, AASHTO LRFR compliance, and deterioration modeling.</p>
+        <div class="meta"><span class="tag">LRFR</span></div>
+      </a>
+      <a class="tool-card" href="apps/prestressed-girder-type3-rating/index.html">
+        <div class="icon">&#x1F3D7;</div>
+        <h2>Prestressed Girder Type III</h2>
+        <p>Load rating for AASHTO Type III prestressed concrete girder bridges.</p>
+        <div class="meta"><span class="tag">LRFR</span></div>
+      </a>
+      <a class="tool-card" href="apps/rc-flat-slab-rating/index.html">
+        <div class="icon">&#x25A1;</div>
+        <h2>RC Flat Slab Rating</h2>
+        <p>Reinforced concrete flat slab load rating with deterioration and section-loss support.</p>
+        <div class="meta"><span class="tag">LRFR</span></div>
+      </a>
+      <a class="tool-card" href="apps/cmp-culvert-rating/index.html">
+        <div class="icon">&#x25EF;</div>
+        <h2>CMP Culvert Rating</h2>
+        <p>Corrugated metal pipe culvert load rating across variable fill heights with baseline and deteriorated comparisons.</p>
+        <div class="meta"><span class="tag">LRFR</span></div>
+      </a>
+    </div>
+
+    <div class="section-head">
+      <h3>Analysis</h3>
+      <span class="count">1 app</span>
     </div>
     <div class="tools-grid">
       <a class="tool-card" href="apps/bridge-live-load/index.html">
+        <div class="icon">&#x1F4C8;</div>
         <h2>Live Load Analysis</h2>
         <p>Moment and shear diagram generator for simple and continuous spans under AASHTO HL-93 and custom truck configurations.</p>
-        <span class="tag">Analysis</span>
+        <div class="meta"><span class="tag">Analysis</span></div>
       </a>
-      <a class="tool-card" href="apps/bridge-load-rating/index.html">
-        <h2>Bridge Load Rating</h2>
-        <p>General bridge load rating tool supporting inventory and operating level ratings per AASHTO MBE LRFR methodology.</p>
-        <span class="tag">Load Rating</span>
-      </a>
-      <a class="tool-card" href="apps/composite-steel-girder/index.html">
-        <h2>Composite Steel Girder</h2>
-        <p>Analysis and load rating for composite steel girder bridges including section properties and capacity calculations.</p>
-        <span class="tag">Load Rating</span>
-      </a>
-      <a class="tool-card" href="apps/steel-girder-rating/index.html">
-        <h2>Steel Girder Rating</h2>
-        <p>Load rating for steel girder bridges with deterioration and section loss support.</p>
-        <span class="tag">Load Rating</span>
-      </a>
-      <a class="tool-card" href="apps/cored-slab-rating/index.html">
-        <h2>Cored Slab Rating</h2>
-        <p>Prestressed cored slab bridge load rating with AASHTO LRFR compliance and deterioration modeling.</p>
-        <span class="tag">Load Rating</span>
-      </a>
-      <a class="tool-card" href="apps/prestressed-girder-type3-rating/index.html">
-        <h2>Prestressed Girder Type III Rating</h2>
-        <p>Load rating for AASHTO Type III prestressed concrete girder bridges.</p>
-        <span class="tag">Load Rating</span>
-      </a>
-      <a class="tool-card" href="apps/rc-flat-slab-rating/index.html">
-        <h2>RC Flat Slab Rating</h2>
-        <p>Reinforced concrete flat slab bridge load rating with deterioration and section loss support.</p>
-        <span class="tag">Load Rating</span>
-      </a>
-      <a class="tool-card" href="apps/cmp-culvert-rating/index.html">
-        <h2>CMP Culvert Rating</h2>
-        <p>Corrugated metal pipe culvert load rating over variable fill heights with baseline and deteriorated section-loss comparison.</p>
-        <span class="tag">Load Rating</span>
-      </a>
+    </div>
+
+    <div class="section-head">
+      <h3>Geometry &amp; Layout</h3>
+      <span class="count">1 app</span>
+    </div>
+    <div class="tools-grid">
       <a class="tool-card" href="apps/curved-steel-girder-layout/index.html">
+        <div class="icon">&#x27B0;</div>
         <h2>Curved Steel Girder Layout</h2>
         <p>Build concentric curved girder geometry and emit MDX Software ASCII keyword input for downstream load-rating workflows.</p>
-        <span class="tag">Geometry</span>
+        <div class="meta"><span class="tag">Geometry</span><span class="new-badge">New</span></div>
       </a>
     </div>
   </main>
+
   <footer>
-    &copy; 2026 Structural Engineering Tools. All rights reserved.
+    <div>&copy; 2026 Structural Engineering Tools</div>
+    <div class="links">
+      <a href="https://github.com/mwcraig71/AIEngineeringtools">Source on GitHub</a>
+    </div>
   </footer>
 </body>
 </html>
