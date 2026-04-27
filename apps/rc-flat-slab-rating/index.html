@@ -1,78 +1,119 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Rc Flat Slab Rating</title>
-    <link rel="stylesheet" href="../_shared/strinteg-ui/colors_and_type.css" />
-    <link rel="stylesheet" href="../_shared/strinteg-ui/base.css" />
-    <link rel="stylesheet" href="../_shared/strinteg-ui/components.css" />
-  </head>
-  <body>
-    <!-- STRINTEG_STARTER_TEMPLATE_V1 -->
-    <div class="si-page">
-      <header id="si-header"></header>
-      <main class="si-main">
-        <section class="si-grid si-grid-2">
-          <article class="si-card">
-            <h2>Inputs</h2>
-            <form class="si-form" onsubmit="return false;">
-              <div class="si-form-row">
-                <label class="si-label" for="load-source">Live load basis</label>
-                <select id="load-source" class="si-select"></select>
-              </div>
-              <div class="si-form-row">
-                <label class="si-label" for="legal-truck">Truck selection</label>
-                <select id="legal-truck" class="si-select"></select>
-              </div>
-              <div class="si-form-row">
-                <label class="si-label" for="steel-pct">steelPct (%)</label>
-                <input id="steel-pct" class="si-input" type="number" min="0" max="95" step="0.5" value="8" />
-              </div>
-              <div class="si-form-row">
-                <label class="si-label" for="rebar-pct">rebarPct (%)</label>
-                <input id="rebar-pct" class="si-input" type="number" min="0" max="95" step="0.5" value="6" />
-              </div>
-              <div class="si-form-row">
-                <label class="si-label" for="prestress-pct">prestressPct (%)</label>
-                <input id="prestress-pct" class="si-input" type="number" min="0" max="95" step="0.5" value="4" />
-              </div>
-              <button id="run-eval" type="button" class="si-button">Run</button>
-            </form>
-          </article>
-          <article class="si-card">
-            <h2>Summary</h2>
-            <div id="summary-alert" class="si-alert">NC legal-load module is wired through shared app controls.</div>
-          </article>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>RC Flat Slab Bridge Rating</title>
+  <link rel="stylesheet" href="../../shared/ui/rating-ui-kit.css" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <h1>RC Flat Slab Bridge Load Rating</h1>
+    <p class="subtitle">One-way strip equivalent LRFR-style rating with explicit rebar, structural steel, prestress, and CFRP strip reinforcement inputs.</p>
+  </header>
+
+  <main>
+    <div class="panel input-panel">
+      <h2>Input Screen</h2>
+      <form id="ratingForm">
+        <section class="input-section">
+          <h3>Geometry</h3>
+          <div class="grid">
+            <label>Span (ft)<input id="spanFt" type="number" step="0.1" /></label>
+            <label>Strip width (in)<input id="stripWidthIn" type="number" step="0.1" /></label>
+            <label>Slab thickness (in)<input id="slabThicknessIn" type="number" step="0.1" /></label>
+          </div>
+          <p class="note">Analysis model is currently limited to simple-span behavior. For continuous spans, use a dedicated continuous analysis workflow.</p>
         </section>
-        <section class="si-card">
-          <h2>Output Table</h2>
-          <div class="si-table-wrap">
-            <table class="si-table">
-              <thead><tr><th>Metric</th><th>Value</th></tr></thead>
-              <tbody id="output-table-body"></tbody>
-            </table>
+
+        <section class="input-section">
+          <h3>Materials</h3>
+          <div class="grid">
+            <label>f'c (psi)<input id="fcPsi" type="number" step="1" /></label>
+            <label>fy (psi)<input id="fyPsi" type="number" step="1" /></label>
           </div>
         </section>
-      </main>
-      <footer id="si-footer"></footer>
-    </div>
-    <script src="../_shared/strinteg-ui/shell.js"></script>
-    <script src="../_shared/load-trucks/nc-noninterstate-fig6-147.js"></script>
-    
-    <script src="../_shared/load-trucks/rating-app-adoption.js"></script>
-    <script>
-      window.StrintegShell.mountShell({
-        title: "Rc Flat Slab Rating",
-        subtitle: "NC legal load truck adoption via shared module",
-        badge: "STR-67",
-        footer: "Shared Strinteg shell in use"
-      });
 
-      window.StrintegRatingApp.mount({
-        appId: "rc-flat-slab-rating",
-        materialUse: {"steel":false,"rebar":true,"prestress":false}
-      });
-    </script>
-  </body>
+        <section class="input-section">
+          <h3>Reinforcement</h3>
+          <div class="grid">
+            <label>Top bar size #<input id="topBarSize" type="number" step="1" /></label>
+            <label>Top bar count<input id="topBarCount" type="number" step="1" /></label>
+            <label>Top steel depth from top (in)<input id="topBarDepthIn" type="number" step="0.1" /></label>
+            <label>Bottom bar size #<input id="bottomBarSize" type="number" step="1" /></label>
+            <label>Bottom bar count<input id="bottomBarCount" type="number" step="1" /></label>
+            <label>Bottom steel depth from top (in)<input id="bottomBarDepthIn" type="number" step="0.1" /></label>
+            <label>Stirrup size #<input id="stirrupBarSize" type="number" step="1" /></label>
+            <label>Stirrup legs<input id="stirrupLegs" type="number" step="1" /></label>
+            <label>Stirrup spacing (in)<input id="stirrupSpacingIn" type="number" step="0.1" /></label>
+          </div>
+        </section>
+
+        <section class="input-section">
+          <h3>Prestress and Retrofit Steel</h3>
+          <div class="grid">
+            <label>Prestress area Aps (in^2)<input id="prestressAreaIn2" type="number" step="0.001" /></label>
+            <label>Prestress depth from top (in)<input id="prestressDepthIn" type="number" step="0.1" /></label>
+            <label>Prestress effective stress (psi)<input id="prestressStressPsi" type="number" step="1" /></label>
+            <label>Structural steel area (in^2)<input id="steelAreaIn2" type="number" step="0.001" /></label>
+            <label>Structural steel depth from top (in)<input id="steelDepthIn" type="number" step="0.1" /></label>
+            <label>Structural steel yield (psi)<input id="steelYieldPsi" type="number" step="1" /></label>
+          </div>
+        </section>
+
+        <section class="input-section">
+          <h3>CFRP Bottom Strips (Varying Width)</h3>
+          <label>Strip JSON (array of {id, widthIn, thicknessIn, count, depthIn, effectiveStressPsi, ultimateStressPsi})
+            <textarea id="cfrpStripsJson" rows="7"></textarea>
+          </label>
+        </section>
+
+        <section class="input-section">
+          <h3>Loads</h3>
+          <div class="grid">
+            <label>Dead load DC (kip/ft)<input id="dcKipPerFt" type="number" step="0.01" /></label>
+            <label>Dead load DW (kip/ft)<input id="dwKipPerFt" type="number" step="0.01" /></label>
+            <label>Dead negative moment factor<input id="deadNegativeFactor" type="number" step="0.01" /></label>
+            <label>Design truck<select id="designTruckCode"></select></label>
+            <label>HL-93 rear spacing (ft)<input id="designRearSpacingFt" type="number" step="0.1" /></label>
+            <label>Lane load (kip/ft)<input id="laneLoadKipPerFt" type="number" step="0.01" /></label>
+            <label>Permit lane load (kip/ft)<input id="permitLaneLoadKipPerFt" type="number" step="0.01" /></label>
+            <label>Impact factor<input id="impact" type="number" step="0.01" /></label>
+            <label>Distribution factor<input id="distributionFactor" type="number" step="0.01" /></label>
+            <label>Live negative moment factor<input id="liveNegativeFactor" type="number" step="0.01" /></label>
+          </div>
+          <label>Permit Truck Axles JSON (array of {weight, position})
+            <textarea id="permitTruckAxles" rows="6"></textarea>
+          </label>
+        </section>
+
+        <section class="input-section">
+          <h3>Deterioration (0 to 100%)</h3>
+          <div class="grid">
+            <label>Rebar loss %<input id="rebarLossPercent" type="number" step="0.1" min="0" max="100" /></label>
+            <label>Structural steel loss %<input id="steelLossPercent" type="number" step="0.1" min="0" max="100" /></label>
+            <label>Prestress loss %<input id="prestressLossPercent" type="number" step="0.1" min="0" max="100" /></label>
+            <label>CFRP loss %<input id="cfrpLossPercent" type="number" step="0.1" min="0" max="100" /></label>
+          </div>
+        </section>
+
+        <div class="actions">
+          <button type="button" id="btnDefaults">Load Example</button>
+          <button type="submit" id="rateBtn">Run Rating</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="panel results-panel">
+      <h2>Report Screen</h2>
+      <section id="output" class="report-host"></section>
+    </div>
+  </main>
+
+  <script src="../bridge-live-load/trucks.js"></script>
+  <script src="../bridge-live-load/analysis.js"></script>
+  <script src="rating-engine.js"></script>
+  <script src="app.js"></script>
+</body>
 </html>

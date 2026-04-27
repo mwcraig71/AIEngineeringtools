@@ -1,78 +1,136 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Prestressed Girder Type3 Rating</title>
-    <link rel="stylesheet" href="../_shared/strinteg-ui/colors_and_type.css" />
-    <link rel="stylesheet" href="../_shared/strinteg-ui/base.css" />
-    <link rel="stylesheet" href="../_shared/strinteg-ui/components.css" />
-  </head>
-  <body>
-    <!-- STRINTEG_STARTER_TEMPLATE_V1 -->
-    <div class="si-page">
-      <header id="si-header"></header>
-      <main class="si-main">
-        <section class="si-grid si-grid-2">
-          <article class="si-card">
-            <h2>Inputs</h2>
-            <form class="si-form" onsubmit="return false;">
-              <div class="si-form-row">
-                <label class="si-label" for="load-source">Live load basis</label>
-                <select id="load-source" class="si-select"></select>
-              </div>
-              <div class="si-form-row">
-                <label class="si-label" for="legal-truck">Truck selection</label>
-                <select id="legal-truck" class="si-select"></select>
-              </div>
-              <div class="si-form-row">
-                <label class="si-label" for="steel-pct">steelPct (%)</label>
-                <input id="steel-pct" class="si-input" type="number" min="0" max="95" step="0.5" value="8" />
-              </div>
-              <div class="si-form-row">
-                <label class="si-label" for="rebar-pct">rebarPct (%)</label>
-                <input id="rebar-pct" class="si-input" type="number" min="0" max="95" step="0.5" value="6" />
-              </div>
-              <div class="si-form-row">
-                <label class="si-label" for="prestress-pct">prestressPct (%)</label>
-                <input id="prestress-pct" class="si-input" type="number" min="0" max="95" step="0.5" value="4" />
-              </div>
-              <button id="run-eval" type="button" class="si-button">Run</button>
-            </form>
-          </article>
-          <article class="si-card">
-            <h2>Summary</h2>
-            <div id="summary-alert" class="si-alert">NC legal-load module is wired through shared app controls.</div>
-          </article>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AASHTO Type III Prestressed Girder Rating</title>
+  <link rel="stylesheet" href="../../shared/ui/rating-ui-kit.css" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <h1>AASHTO Type III Prestressed Girder Rating</h1>
+    <p class="subtitle">LRFR, LFR, and ASR for simple-span prestressed Type III girders with deterioration sensitivity.</p>
+  </header>
+
+  <main>
+    <div class="panel input-panel">
+      <h2>Input Screen</h2>
+      <section class="notes">
+        <h3>Method Notes</h3>
+        <ul>
+          <li>Simple-span demand model with truck envelope plus lane load and impact.</li>
+          <li>Flexural capacity uses effective prestress force and reduced steel areas for deterioration.</li>
+          <li>Shear capacity uses concrete plus stirrup contribution with independent stirrup loss.</li>
+          <li>Results report baseline (0% loss) and deteriorated case in one run.</li>
+        </ul>
+      </section>
+
+      <form id="ratingForm">
+        <section class="input-section">
+          <h3>Geometry (Type III Preset + Overrides)</h3>
+          <div class="grid">
+            <label>Span, ft <input id="spanFt" type="number" step="0.1" /></label>
+            <label>Depth, in <input id="depth" type="number" step="0.1" /></label>
+            <label>Top flange width, in <input id="topFlangeWidth" type="number" step="0.1" /></label>
+            <label>Top flange thickness, in <input id="topFlangeThickness" type="number" step="0.1" /></label>
+            <label>Web thickness, in <input id="webThickness" type="number" step="0.1" /></label>
+            <label>Bottom flange width, in <input id="bottomFlangeWidth" type="number" step="0.1" /></label>
+            <label>Bottom flange thickness, in <input id="bottomFlangeThickness" type="number" step="0.1" /></label>
+          </div>
+          <p class="note">Analysis model is currently limited to simple-span behavior. For continuous spans, use a dedicated continuous analysis workflow.</p>
         </section>
-        <section class="si-card">
-          <h2>Output Table</h2>
-          <div class="si-table-wrap">
-            <table class="si-table">
-              <thead><tr><th>Metric</th><th>Value</th></tr></thead>
-              <tbody id="output-table-body"></tbody>
-            </table>
+
+        <section class="input-section">
+          <h3>Materials + Prestress</h3>
+          <div class="grid">
+            <label>f'c, psi <input id="fcPsi" type="number" step="1" /></label>
+            <label>fy, psi <input id="fyPsi" type="number" step="1" /></label>
+            <label>fpu, ksi <input id="fpuKsi" type="number" step="0.1" /></label>
+            <label>Strand type
+              <select id="strandType">
+                <option value="0.500">0.500 in</option>
+                <option value="0.500S">0.500S in</option>
+                <option value="0.600">0.600 in</option>
+                <option value="0.620">0.620 in</option>
+                <option value="0.700">0.700 in</option>
+              </select>
+            </label>
+            <label>Number of strands <input id="nStrands" type="number" step="1" /></label>
+            <label>Jacking stress, ksi <input id="jackingStressKsi" type="number" step="0.1" /></label>
+            <label>Long-term prestress loss, % <input id="longTermLossPercent" type="number" step="0.1" /></label>
+            <label>dp to strand CG, in <input id="dp" type="number" step="0.1" /></label>
           </div>
         </section>
-      </main>
-      <footer id="si-footer"></footer>
-    </div>
-    <script src="../_shared/strinteg-ui/shell.js"></script>
-    <script src="../_shared/load-trucks/nc-noninterstate-fig6-147.js"></script>
-    
-    <script src="../_shared/load-trucks/rating-app-adoption.js"></script>
-    <script>
-      window.StrintegShell.mountShell({
-        title: "Prestressed Girder Type3 Rating",
-        subtitle: "NC legal load truck adoption via shared module",
-        badge: "STR-67",
-        footer: "Shared Strinteg shell in use"
-      });
 
-      window.StrintegRatingApp.mount({
-        appId: "prestressed-girder-type3-rating",
-        materialUse: {"steel":false,"rebar":true,"prestress":true}
-      });
-    </script>
-  </body>
+        <section class="input-section">
+          <h3>Mild Reinforcement</h3>
+          <div class="grid">
+            <label>Top bar size # <input id="topBarSize" type="number" step="1" /></label>
+            <label>Top bar count <input id="topBarCount" type="number" step="1" /></label>
+            <label>Top bar depth, in <input id="topBarDepth" type="number" step="0.1" /></label>
+            <label>Bottom bar size # <input id="bottomBarSize" type="number" step="1" /></label>
+            <label>Bottom bar count <input id="bottomBarCount" type="number" step="1" /></label>
+            <label>Bottom bar depth, in <input id="bottomBarDepth" type="number" step="0.1" /></label>
+            <label>Stirrup size # <input id="stirrupSize" type="number" step="1" /></label>
+            <label>Stirrup legs <input id="stirrupLegs" type="number" step="1" /></label>
+            <label>Stirrup spacing, in <input id="stirrupSpacing" type="number" step="0.1" /></label>
+          </div>
+        </section>
+
+        <section class="input-section">
+          <h3>Dead Loads (kip/ft)</h3>
+          <div class="grid">
+            <label>Girder self weight <input id="selfWeightKipPerFt" type="number" step="0.01" /></label>
+            <label>Deck/composite <input id="deckCompositeKipPerFt" type="number" step="0.01" /></label>
+            <label>Wearing surface <input id="wearingSurfaceKipPerFt" type="number" step="0.01" /></label>
+            <label>Superimposed dead <input id="superimposedKipPerFt" type="number" step="0.01" /></label>
+          </div>
+        </section>
+
+        <section class="input-section">
+          <h3>Live Loads</h3>
+          <div class="grid">
+            <label>Design truck <select id="designTruckCode"></select></label>
+            <label>HL-93 rear spacing, ft <input id="hl93RearSpacingFt" type="number" step="0.1" /></label>
+            <label>Legal truck <select id="legalTruckCode"></select></label>
+            <label>Lane load, kip/ft <input id="laneLoadKipPerFt" type="number" step="0.01" /></label>
+            <label>Permit lane load, kip/ft <input id="permitLaneLoadKipPerFt" type="number" step="0.01" /></label>
+            <label>Impact factor <input id="impact" type="number" step="0.01" /></label>
+            <label>Distribution factor <input id="distributionFactor" type="number" step="0.01" /></label>
+          </div>
+          <label>Permit truck axles JSON (array of {weight, position})
+            <textarea id="permitAxlesJson" rows="6"></textarea>
+          </label>
+        </section>
+
+        <section class="input-section">
+          <h3>Deterioration Inputs</h3>
+          <div class="grid">
+            <label>loss_rebar, % <input id="loss_rebar" type="number" step="0.1" /></label>
+            <label>loss_stirrup, % <input id="loss_stirrup" type="number" step="0.1" /></label>
+            <label>loss_strand, % <input id="loss_strand" type="number" step="0.1" /></label>
+            <label>loss_structural_steel, % <input id="loss_structural_steel" type="number" step="0.1" /></label>
+            <label>prestress_stress_reduction, % <input id="prestress_stress_reduction" type="number" step="0.1" /></label>
+          </div>
+        </section>
+
+        <div class="actions">
+          <button type="button" id="btnDefaults">Load Type III Example</button>
+          <button type="submit" id="rateBtn">Run Rating</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="panel results-panel">
+      <h2>Report Screen</h2>
+      <section id="output" class="report-host"></section>
+    </div>
+  </main>
+
+  <script src="../bridge-live-load/trucks.js"></script>
+  <script src="../bridge-live-load/analysis.js"></script>
+  <script src="rating-engine.js"></script>
+  <script src="app.js"></script>
+</body>
 </html>
