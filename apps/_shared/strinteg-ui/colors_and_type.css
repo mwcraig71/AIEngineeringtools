@@ -1,0 +1,19 @@
+:root {
+  --si-bg: #f4f6f9;
+  --si-surface: #ffffff;
+  --si-text: #132032;
+  --si-muted: #5d6b7f;
+  --si-border: #d8e0ea;
+  --si-accent: #1c6ab3;
+  --si-accent-strong: #125089;
+  --si-ok-bg: #eaf3fb;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  color: var(--si-text);
+  background: var(--si-bg);
+  font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+}
