@@ -1,12 +1,10 @@
 function generatePrestressedType3Report(payload) {
-  const input = payload.input;
   const result = payload.result;
   const meta = payload.metadata || {};
   const jsPDF = window.jspdf && window.jspdf.jsPDF;
   if (!jsPDF) throw new Error('jsPDF not loaded.');
 
   const doc = new jsPDF({ unit: 'pt', format: 'letter' });
-  const pageW = 612;
   let y = 48;
 
   function line(txt, size, dy) {
@@ -42,37 +40,26 @@ function generatePrestressedType3Report(payload) {
   line(`dp = ${tr.flexure.dpIn.toFixed(2)} in`);
   line(`jd = ${tr.flexure.jdIn.toFixed(2)} in`);
 
-  const eq = renderEquationSvg('M_n = A_{ps}f_{ps}(d_p-a/2) + A_sf_y(d-a/2)');
-  const eqEl = document.createElement('div');
-  eqEl.style.position = 'fixed';
-  eqEl.style.left = '-10000px';
-  eqEl.innerHTML = eq;
-  document.body.appendChild(eqEl);
-  doc.html(eqEl, {
-    x: 48,
-    y: y + 12,
-    width: pageW - 96,
-    callback: function () {
-      document.body.removeChild(eqEl);
-      for (let p = 0; p < 5; p++) {
-        doc.addPage();
-        doc.setFont('helvetica', 'bold');
-        doc.setFontSize(13);
-        doc.text(`Hand Calculation Page ${p + 2}`, 48, 48);
-        doc.setFont('helvetica', 'normal');
-        doc.setFontSize(10);
-        doc.text('Detailed intermediate quantities generated from trace mode.', 48, 66);
-      }
-      doc.addPage();
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(14);
-      doc.text('RATE-Style Summary', 48, 48);
-      doc.setFont('helvetica', 'normal');
-      doc.setFontSize(10);
-      doc.text(`Governing Baseline RF: ${result.sensitivity.governingBaselineRF.rf.toFixed(3)}`, 48, 68);
-      doc.text(`Governing Deteriorated RF: ${result.sensitivity.governingDeterioratedRF.rf.toFixed(3)}`, 48, 84);
-      doc.text(`Delta RF: ${result.sensitivity.deltaRF.toFixed(3)}`, 48, 100);
-      doc.save(`prestressed-type3-rating-${Date.now()}.pdf`);
-    }
-  });
+  line('Flexure equation:', 10, 14);
+  line('Mn = Aps*fps*(dp - a/2) + As*fy*(d - a/2)', 10, 18);
+
+  for (let p = 0; p < 5; p++) {
+    doc.addPage();
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(13);
+    doc.text(`Hand Calculation Page ${p + 2}`, 48, 48);
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(10);
+    doc.text('Detailed intermediate quantities generated from trace mode.', 48, 66);
+  }
+  doc.addPage();
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(14);
+  doc.text('RATE-Style Summary', 48, 48);
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(10);
+  doc.text(`Governing Baseline RF: ${result.sensitivity.governingBaselineRF.rf.toFixed(3)}`, 48, 68);
+  doc.text(`Governing Deteriorated RF: ${result.sensitivity.governingDeterioratedRF.rf.toFixed(3)}`, 48, 84);
+  doc.text(`Delta RF: ${result.sensitivity.deltaRF.toFixed(3)}`, 48, 100);
+  doc.save(`prestressed-type3-rating-${Date.now()}.pdf`);
 }

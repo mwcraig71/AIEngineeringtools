@@ -263,11 +263,15 @@
       alert('Run rating before generating report.');
       return;
     }
-    generatePrestressedType3Report({
-      input: lastRun.input,
-      result: lastRun.result,
-      metadata: collectMetadata()
-    });
+    try {
+      generatePrestressedType3Report({
+        input: lastRun.input,
+        result: lastRun.result,
+        metadata: collectMetadata()
+      });
+    } catch (err) {
+      alert('Report generation failed: ' + err.message);
+    }
   });
 
   populateSelects();
