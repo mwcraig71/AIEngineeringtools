@@ -137,6 +137,40 @@ canvas {
 .summary-box.hidden { display: none; }
 .summary-box h4 { margin-bottom: 0.5rem; color: #1a1a2e; }
 .summary-box .val { font-weight: 600; color: #4a6cf7; }
+.table-meta {
+  margin-bottom: 0.5rem;
+  font-size: 0.8rem;
+  color: #5a6a8a;
+}
+.table-scroll {
+  overflow: auto;
+  max-height: 300px;
+  border: 1px solid #dbe4f5;
+  border-radius: 6px;
+  background: #fff;
+}
+.force-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.78rem;
+}
+.force-table th,
+.force-table td {
+  padding: 0.35rem 0.45rem;
+  border-bottom: 1px solid #eef2fa;
+  text-align: right;
+  white-space: nowrap;
+}
+.force-table th:first-child,
+.force-table td:first-child {
+  text-align: left;
+}
+.force-table thead th {
+  position: sticky;
+  top: 0;
+  background: #edf2ff;
+  color: #304a8f;
+}
 
 footer {
   text-align: center;

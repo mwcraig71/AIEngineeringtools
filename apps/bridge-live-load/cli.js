@@ -15,6 +15,7 @@ loadScripts(__dirname, ['trucks.js', 'analysis.js'], context);
 
 const TRUCKS = getGlobal(context, 'TRUCKS') || {};
 const runFullAnalysis = getGlobal(context, 'runFullAnalysis');
+const runFullAnalysisWithOptions = getGlobal(context, 'runFullAnalysisWithOptions');
 
 runCli({
   toolId: TOOL_ID,
@@ -23,13 +24,14 @@ runCli({
   prepareInput: (input) => resolveTruckDefinition(input, TRUCKS),
   execute: (input) => ({
     tool: TOOL_ID,
-    result: runFullAnalysis(
+    result: (runFullAnalysisWithOptions || runFullAnalysis)(
       input.spans,
       Number(input.deadLoadW || 0),
       Number(input.wearingSurfaceW || 0),
       input.truckDef,
       Number(input.impactFactor || 0),
-      Number(input.laneLoadW || input.laneLoad || 0)
+      Number(input.laneLoadW || input.laneLoad || 0),
+      { incrementFt: Number(input.incrementFt || 1) }
     )
   })
 });

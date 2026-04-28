@@ -48,6 +48,7 @@ const simpleBeamUniformMomentShear = vm.runInContext('simpleBeamUniformMomentShe
 const simpleBeamPointLoadMomentShear = vm.runInContext('simpleBeamPointLoadMomentShear', ctx);
 const solveContinuousUniform = vm.runInContext('solveContinuousUniform', ctx);
 const runFullAnalysis = vm.runInContext('runFullAnalysis', ctx);
+const runFullAnalysisWithOptions = vm.runInContext('runFullAnalysisWithOptions', ctx);
 
 console.log('\n=== 1. Simple span uniform load hand-calc ===');
 {
@@ -100,6 +101,20 @@ console.log('\n=== 4. Variable spacing + zero-live-load isolation ===');
   const run = runFullAnalysis([40], 1.0, 0, noLiveTruck, 0, 0);
   // With zero lane/truck and w=1 dead load only, Mmax should still be wL^2/8.
   assertClose(run.maxMoment, 200, 0.5, 'Dead-load-only run matches simple hand calc');
+}
+
+console.log('\n=== 5. Increment tables for moment/shear output ===');
+{
+  const noLiveTruck = {
+    name: 'No live load control truck',
+    axles: [{ weight: 0, position: 0 }],
+    laneLoad: 0
+  };
+  const run = runFullAnalysisWithOptions([10], 1.0, 0, noLiveTruck, 0, 0, { incrementFt: 1 });
+  assert(run.forceTables && Array.isArray(run.forceTables.rows), 'Force tables are present');
+  assert(run.forceTables.rows.length === 11, '1-ft increment yields 11 stations for 10-ft span');
+  assertClose(run.forceTables.rows[0].stationFt, 0, 1e-9, 'First station is 0 ft');
+  assertClose(run.forceTables.rows[run.forceTables.rows.length - 1].stationFt, 10, 1e-9, 'Last station is span end');
 }
 
 console.log(`\nResults: ${passed} passed, ${failed} failed`);

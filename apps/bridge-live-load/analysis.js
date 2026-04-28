@@ -740,6 +740,16 @@ function runFullAnalysis(spans, deadLoadW, wearingSurfaceW, truckDef, impactFact
   const maxShear = Math.max(...combinedMaxShears);
   const minShear = Math.min(...combinedMinShears);
 
+  const incrementResult = buildIncrementTables(
+    deadResult.positions,
+    combinedMaxMoments,
+    combinedMinMoments,
+    combinedMaxShears,
+    combinedMinShears,
+    spans,
+    1
+  );
+
   return {
     positions: deadResult.positions,
     dead: deadResult,
@@ -755,6 +765,66 @@ function runFullAnalysis(spans, deadLoadW, wearingSurfaceW, truckDef, impactFact
     minMoment,
     maxShear,
     minShear,
-    spans
+    spans,
+    forceTables: incrementResult
   };
+}
+
+function runFullAnalysisWithOptions(
+  spans,
+  deadLoadW,
+  wearingSurfaceW,
+  truckDef,
+  impactFactor,
+  laneLoadW,
+  options
+) {
+  const base = runFullAnalysis(spans, deadLoadW, wearingSurfaceW, truckDef, impactFactor, laneLoadW);
+  const incrementFt = Number(options && options.incrementFt);
+  if (!Number.isFinite(incrementFt) || incrementFt <= 0) return base;
+  return {
+    ...base,
+    forceTables: buildIncrementTables(
+      base.positions,
+      base.combinedMaxMoments,
+      base.combinedMinMoments,
+      base.combinedMaxShears,
+      base.combinedMinShears,
+      base.spans,
+      incrementFt
+    )
+  };
+}
+
+function buildIncrementTables(positions, maxM, minM, maxV, minV, spans, incrementFt) {
+  const totalLength = spans.reduce((a, b) => a + b, 0);
+  const step = Math.max(0.1, Number(incrementFt) || 1);
+  const stations = [];
+  for (let x = 0; x <= totalLength + 1e-9; x += step) {
+    stations.push(Number(Math.min(x, totalLength).toFixed(6)));
+  }
+  if (stations[stations.length - 1] < totalLength) stations.push(totalLength);
+
+  let idx = 0;
+  const rows = stations.map((station) => {
+    while (idx < positions.length - 2 && positions[idx + 1] < station) idx += 1;
+    return {
+      stationFt: station,
+      maxMoment: interpAt(positions, maxM, station, idx),
+      minMoment: interpAt(positions, minM, station, idx),
+      maxShear: interpAt(positions, maxV, station, idx),
+      minShear: interpAt(positions, minV, station, idx)
+    };
+  });
+
+  return { incrementFt: step, rows };
+}
+
+function interpAt(xs, ys, x, startIndex) {
+  const i = Math.max(0, Math.min(startIndex, xs.length - 2));
+  const x0 = xs[i];
+  const x1 = xs[i + 1];
+  if (Math.abs(x1 - x0) < 1e-12) return ys[i];
+  const t = (x - x0) / (x1 - x0);
+  return ys[i] + t * (ys[i + 1] - ys[i]);
 }

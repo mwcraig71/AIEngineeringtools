@@ -111,6 +111,10 @@
           <label for="laneLoad">Lane Load (kip/ft):</label>
           <input type="number" id="laneLoad" value="0.64" min="0" step="0.01">
         </div>
+        <div class="form-row">
+          <label for="tableIncrement">Table Increment (ft):</label>
+          <input type="number" id="tableIncrement" value="1.0" min="0.1" step="0.1">
+        </div>
       </section>
 
       <div class="actions">
@@ -122,6 +126,7 @@
     <div class="panel results-panel">
       <h2>Results</h2>
       <div id="summaryBox" class="summary-box hidden"></div>
+      <div id="tableBox" class="summary-box hidden"></div>
       <div class="diagram-container">
         <h3>Moment Diagram</h3>
         <canvas id="momentCanvas" width="900" height="300"></canvas>

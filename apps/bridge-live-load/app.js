@@ -8,6 +8,7 @@
   const spanLengthsContainer = document.getElementById('spanLengthsContainer');
   const stateCodeEl = document.getElementById('stateCode');
   const truckInfoEl = document.getElementById('truckInfo');
+  const tableBoxEl = document.getElementById('tableBox');
 
   // ---- UI Setup ----
   spanTypeEl.addEventListener('change', onSpanTypeChange);
@@ -70,6 +71,7 @@
     const wearingSurface = parseFloat(document.getElementById('wearingSurface').value) || 0;
     const impactFactor = parseFloat(document.getElementById('impactFactor').value) || 0.33;
     const laneLoad = parseFloat(document.getElementById('laneLoad').value) || 0.64;
+    const incrementFt = parseFloat(document.getElementById('tableIncrement').value) || 1;
     const stateCode = stateCodeEl.value;
     const truckDef = TRUCKS[stateCode];
 
@@ -82,7 +84,15 @@
       return;
     }
 
-    const result = runFullAnalysis(spans, deadLoad, wearingSurface, truckDef, impactFactor, laneLoad);
+    const result = runFullAnalysisWithOptions(
+      spans,
+      deadLoad,
+      wearingSurface,
+      truckDef,
+      impactFactor,
+      laneLoad,
+      { incrementFt }
+    );
 
     // Draw diagrams
     drawMomentDiagram('momentCanvas', result);
@@ -108,6 +118,8 @@
       <strong>Min Shear:</strong> <span class="val">${result.minShear.toFixed(1)} kip</span><br>
       <em style="color:#6b7280;font-size:0.85em">Note: Results are unfactored (service-level). For LRFD Strength I, apply 1.25&times;DC + 1.50&times;DW + 1.75&times;(LL+IM).</em>
     `;
+
+    renderForceTables(result.forceTables);
   };
 
   window.clearResults = function () {
@@ -117,9 +129,47 @@
     });
     document.getElementById('summaryBox').classList.add('hidden');
     document.getElementById('summaryBox').innerHTML = '';
+    tableBoxEl.classList.add('hidden');
+    tableBoxEl.innerHTML = '';
   };
 
   function getSpanLengths() {
     return Array.from(document.querySelectorAll('.span-length')).map(el => parseFloat(el.value) || 60);
+  }
+
+  function renderForceTables(forceTables) {
+    if (!forceTables || !Array.isArray(forceTables.rows) || forceTables.rows.length === 0) {
+      tableBoxEl.classList.add('hidden');
+      tableBoxEl.innerHTML = '';
+      return;
+    }
+    const rowsHtml = forceTables.rows.map((row) => `
+      <tr>
+        <td>${row.stationFt.toFixed(2)}</td>
+        <td>${row.maxMoment.toFixed(2)}</td>
+        <td>${row.minMoment.toFixed(2)}</td>
+        <td>${row.maxShear.toFixed(2)}</td>
+        <td>${row.minShear.toFixed(2)}</td>
+      </tr>
+    `).join('');
+    tableBoxEl.classList.remove('hidden');
+    tableBoxEl.innerHTML = `
+      <h4>Moment and Shear Tables</h4>
+      <div class="table-meta">Span stations at ${forceTables.incrementFt.toFixed(2)} ft increments.</div>
+      <div class="table-scroll">
+        <table class="force-table">
+          <thead>
+            <tr>
+              <th>Station (ft)</th>
+              <th>Max M (kip-ft)</th>
+              <th>Min M (kip-ft)</th>
+              <th>Max V (kip)</th>
+              <th>Min V (kip)</th>
+            </tr>
+          </thead>
+          <tbody>${rowsHtml}</tbody>
+        </table>
+      </div>
+    `;
   }
 })();
