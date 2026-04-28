@@ -105,6 +105,23 @@
         </section>
 
         <section class="input-section">
+          <h3>TxDOT Cover Sheet Metadata</h3>
+          <div class="grid">
+            <label>B.LR.01 Bridge ID <input id="B_LR_01" type="text" /></label>
+            <label>B.LR.02 Structure Number <input id="B_LR_02" type="text" /></label>
+            <label>B.LR.03 County <input id="B_LR_03" type="text" /></label>
+            <label>B.LR.04 Route <input id="B_LR_04" type="text" /></label>
+            <label>B.LR.05 Feature Crossed <input id="B_LR_05" type="text" /></label>
+            <label>B.LR.06 Span Configuration <input id="B_LR_06" type="text" /></label>
+            <label>B.LR.07 Design Loading <input id="B_LR_07" type="text" /></label>
+            <label>B.C.01 Prepared By <input id="B_C_01" type="text" /></label>
+            <label>B.C.02 Prepared Date <input id="B_C_02" type="text" /></label>
+            <label>B.C.03 Checked By <input id="B_C_03" type="text" /></label>
+            <label>B.C.04 Checked Date <input id="B_C_04" type="text" /></label>
+          </div>
+        </section>
+
+        <section class="input-section">
           <h3>Deterioration Inputs</h3>
           <div class="grid">
             <label>loss_rebar, % <input id="loss_rebar" type="number" step="0.1" /></label>
@@ -118,6 +135,7 @@
         <div class="actions">
           <button type="button" id="btnDefaults">Load Type III Example</button>
           <button type="submit" id="rateBtn">Run Rating</button>
+          <button type="button" id="btnGenerateReport">Generate Report</button>
         </div>
       </form>
     </div>
@@ -130,7 +148,12 @@
 
   <script src="../bridge-live-load/trucks.js"></script>
   <script src="../bridge-live-load/analysis.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+  <script src="../../shared/library/txdot-cover-sheet-schema.js"></script>
   <script src="rating-engine.js"></script>
+  <script src="report/equations.js"></script>
+  <script src="report/pdf-report.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

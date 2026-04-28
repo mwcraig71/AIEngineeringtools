@@ -1,5 +1,5 @@
 {
-  "libraryVersion": "1.4.1",
+  "libraryVersion": "1.4.2",
   "governance": {
     "toolRoutingPolicy": "Use existing bridge engineering tools in this manifest before creating new tooling.",
     "missingToolEscalation": "If no listed tool can satisfy an engineer request, create a CTO handoff plan with scope, equations/standards, schema, UX requirements, test matrix, and acceptance criteria.",
@@ -122,7 +122,7 @@
       "cli": "node apps/prestressed-girder-type3-rating/cli.js <input.json> [--out <path>] [--format json|text|mdx] [--help]",
       "sampleInput": "/apps/prestressed-girder-type3-rating/examples/type3-sample-input.json",
       "expectedOutputFingerprint": "sha256:7229a037b089f89800dd3071b84c6ad4087b57e55dae886b478a6a0eddef6e86",
-      "notes": "Supports LRFR/LFR/ASR with baseline vs deteriorated sensitivity and explicit section-loss inputs.",
+      "notes": "Supports LRFR/LFR/ASR with baseline vs deteriorated sensitivity and explicit section-loss inputs. Includes v1 TxDOT-style report generation flow with trace payload outputs for hand-calculation pages.",
       "sectionLossCoverage": {
         "steel": "implemented",
         "rebar": "implemented",

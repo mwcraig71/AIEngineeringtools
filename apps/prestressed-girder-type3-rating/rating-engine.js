@@ -536,7 +536,36 @@ function computeScenario(input, deterioration) {
     shear,
     lrfr: computeLRFR(flexure.phiMn, shear.phiVn, dead, live),
     lfr: computeLFR(flexure.Mn, shear.Vn, dead, live),
-    asr: computeASR(section, dead, live, effectivePrestress, flexure, shear, input)
+    asr: computeASR(section, dead, live, effectivePrestress, flexure, shear, input),
+    trace: {
+      capacities: {
+        Mn: flexure.Mn,
+        phiMn: flexure.phiMn,
+        Vn: shear.Vn,
+        phiVn: shear.phiVn
+      },
+      flexure: {
+        fpsPsi: flexure.fps.fps,
+        dpIn: input.prestress.dp,
+        jdIn: input.prestress.dp - (flexure.fps.a / 2),
+        aIn: flexure.fps.a,
+        cIn: flexure.fps.c
+      },
+      prestress: {
+        originalApsIn2: effectivePrestress.originalAps,
+        effectiveApsIn2: effectivePrestress.effectiveAps,
+        fpePsi: effectivePrestress.fpe,
+        longTermLossPercent: clampPercent(input.prestress.longTermLossPercent || 0),
+        strandLossPercent: clampPercent(deterioration.loss_strand || 0),
+        stressReductionPercent: clampPercent(deterioration.prestress_stress_reduction || 0)
+      },
+      demandByTruck: {
+        designTruck: live.design.truck,
+        designTandem: live.design.tandem,
+        legal: live.legal,
+        permit: live.permit
+      }
+    }
   };
 }
 
@@ -565,7 +594,7 @@ function getGoverningRF(resultSet) {
   return min;
 }
 
-function runTypeIIIRating(input) {
+function runTypeIIIRating(input, options) {
   ensureSimpleSpanModel(input.analysisModel, 'prestressed-girder-type3-rating');
   validateUnitConsistency(input);
 
@@ -590,7 +619,7 @@ function runTypeIIIRating(input) {
   const baselineGov = getGoverningRF(baselineScenario);
   const deterioratedGov = getGoverningRF(deterioratedScenario);
 
-  return {
+  const out = {
     schemaVersion: '1.0.0',
     input,
     baseline: baselineScenario,
@@ -599,8 +628,10 @@ function runTypeIIIRating(input) {
       governingBaselineRF: baselineGov,
       governingDeterioratedRF: deterioratedGov,
       deltaRF: deterioratedGov.rf - baselineGov.rf
-    }
+    },
+    traceMode: Boolean((options && options.traceMode) || input.traceMode)
   };
+  return out;
 }
 
 function createDefaultTypeIIIInput() {

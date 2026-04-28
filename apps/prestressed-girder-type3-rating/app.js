@@ -1,6 +1,7 @@
 (function () {
   const form = document.getElementById('ratingForm');
   const outputEl = document.getElementById('output');
+  let lastRun = null;
 
   function setDefaults() {
     const d = createDefaultTypeIIIInput();
@@ -154,6 +155,17 @@
     };
   }
 
+  function collectMetadata() {
+    const out = {};
+    const ids = ['B.LR.01', 'B.LR.02', 'B.LR.03', 'B.LR.04', 'B.LR.05', 'B.LR.06', 'B.LR.07', 'B.C.01', 'B.C.02', 'B.C.03', 'B.C.04'];
+    for (let i = 0; i < ids.length; i++) {
+      const id = ids[i];
+      const el = document.getElementById(id.replace(/\./g, '_'));
+      out[id] = el ? el.value : '';
+    }
+    return out;
+  }
+
   function formatRFTable(title, rows) {
     const keys = Object.keys(rows);
     let html = `<h3>${title}</h3><table><thead><tr><th>Case</th><th>RF-M</th><th>RF-V</th><th>RF</th><th>Governs</th></tr></thead><tbody>`;
@@ -235,7 +247,8 @@
     if (!input) return;
 
     try {
-      const result = runTypeIIIRating(input);
+      const result = runTypeIIIRating(input, { traceMode: true });
+      lastRun = { input: input, result: result };
       render(result);
     } catch (err) {
       alert('Rating failed: ' + err.message);
@@ -244,6 +257,17 @@
 
   document.getElementById('btnDefaults').addEventListener('click', function () {
     setDefaults();
+  });
+  document.getElementById('btnGenerateReport').addEventListener('click', function () {
+    if (!lastRun) {
+      alert('Run rating before generating report.');
+      return;
+    }
+    generatePrestressedType3Report({
+      input: lastRun.input,
+      result: lastRun.result,
+      metadata: collectMetadata()
+    });
   });
 
   populateSelects();
