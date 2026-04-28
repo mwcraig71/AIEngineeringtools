@@ -157,12 +157,40 @@
 
   function collectMetadata() {
     const out = {};
-    const ids = ['B.LR.01', 'B.LR.02', 'B.LR.03', 'B.LR.04', 'B.LR.05', 'B.LR.06', 'B.LR.07', 'B.C.01', 'B.C.02', 'B.C.03', 'B.C.04'];
-    for (let i = 0; i < ids.length; i++) {
-      const id = ids[i];
+    const codedIds = [
+      'B.LR.01', 'B.LR.02', 'B.LR.03', 'B.LR.04', 'B.LR.05', 'B.LR.06', 'B.LR.07',
+      'B.C.01', 'B.C.02', 'B.C.03', 'B.C.04',
+      'B.W.01'
+    ];
+    for (let i = 0; i < codedIds.length; i++) {
+      const id = codedIds[i];
       const el = document.getElementById(id.replace(/\./g, '_'));
       out[id] = el ? el.value : '';
     }
+    const uncodedKeys = [
+      'bridgeNumber', 'facilityCarried', 'featureIntersected',
+      'inspector', 'inspectionCompletionDate', 'maintenanceSection',
+      'bridgeDescription', 'comments',
+      'primeFirmNameNumber', 'subFirmNameNumber', 'waNumber',
+      'controllingElement', 'loadRatingToolUsed',
+      'isDlcRating', 'isConcurrence', 'loadRatingStatement'
+    ];
+    for (let i = 0; i < uncodedKeys.length; i++) {
+      const key = uncodedKeys[i];
+      const el = document.getElementById(key);
+      out[key] = el ? el.value : '';
+    }
+    const rowsEl = document.getElementById('legalLoadRowsJson');
+    let rows = [];
+    if (rowsEl && rowsEl.value && rowsEl.value.trim().length > 0) {
+      try {
+        const parsed = JSON.parse(rowsEl.value);
+        if (Array.isArray(parsed)) rows = parsed;
+      } catch (e) {
+        rows = [];
+      }
+    }
+    out.legalLoadRows = rows;
     return out;
   }
 

@@ -106,19 +106,44 @@
 
         <section class="input-section">
           <h3>TxDOT Cover Sheet Metadata</h3>
+          <p class="note">Field labels follow the TxDOT Bridge Load Rating Cover Sheet (B.LR.*, B.C.*, B.W.*, B.EP.*).</p>
           <div class="grid">
-            <label>B.LR.01 Bridge ID <input id="B_LR_01" type="text" /></label>
-            <label>B.LR.02 Structure Number <input id="B_LR_02" type="text" /></label>
-            <label>B.LR.03 County <input id="B_LR_03" type="text" /></label>
-            <label>B.LR.04 Route <input id="B_LR_04" type="text" /></label>
-            <label>B.LR.05 Feature Crossed <input id="B_LR_05" type="text" /></label>
-            <label>B.LR.06 Span Configuration <input id="B_LR_06" type="text" /></label>
-            <label>B.LR.07 Design Loading <input id="B_LR_07" type="text" /></label>
-            <label>B.C.01 Prepared By <input id="B_C_01" type="text" /></label>
-            <label>B.C.02 Prepared Date <input id="B_C_02" type="text" /></label>
-            <label>B.C.03 Checked By <input id="B_C_03" type="text" /></label>
-            <label>B.C.04 Checked Date <input id="B_C_04" type="text" /></label>
+            <label>Bridge Number <input id="bridgeNumber" type="text" /></label>
+            <label>Facility Carried <input id="facilityCarried" type="text" /></label>
+            <label>Feature Intersected <input id="featureIntersected" type="text" /></label>
+            <label>Inspector <input id="inspector" type="text" /></label>
+            <label>Inspection Completion Date <input id="inspectionCompletionDate" type="text" placeholder="YYYY-MM-DD" /></label>
+            <label>Maint. Section <input id="maintenanceSection" type="text" /></label>
+            <label>Bridge Description <input id="bridgeDescription" type="text" /></label>
+            <label>Controlling Element <input id="controllingElement" type="text" /></label>
+            <label>Load Rating Tool Used for this Element <input id="loadRatingToolUsed" type="text" /></label>
+            <label>Prime Firm Name &amp; Number <input id="primeFirmNameNumber" type="text" /></label>
+            <label>Sub Firm Name &amp; Number <input id="subFirmNameNumber" type="text" /></label>
+            <label>WA <input id="waNumber" type="text" /></label>
+            <label>B.LR.01 Design Load (HS20) <input id="B_LR_01" type="text" /></label>
+            <label>B.LR.02 Design Method (LFD/LRFD) <input id="B_LR_02" type="text" /></label>
+            <label>B.LR.03 Load Rating Date <input id="B_LR_03" type="text" placeholder="YYYY-MM-DD" /></label>
+            <label>B.LR.04 Load Rating Method (LFR/LRFR) <input id="B_LR_04" type="text" /></label>
+            <label>B.LR.05 Inventory Load Rating Factor <input id="B_LR_05" type="text" /></label>
+            <label>B.LR.06 Operating Load Rating Factor <input id="B_LR_06" type="text" /></label>
+            <label>B.LR.07 Controlling Legal Load Rating Factor <input id="B_LR_07" type="text" /></label>
+            <label>B.C.01 Deck condition rating <input id="B_C_01" type="text" /></label>
+            <label>B.C.02 Superstructure condition rating <input id="B_C_02" type="text" /></label>
+            <label>B.C.03 Substructure condition rating <input id="B_C_03" type="text" /></label>
+            <label>B.C.04 Culvert condition rating <input id="B_C_04" type="text" /></label>
+            <label>B.W.01 Year Built <input id="B_W_01" type="text" /></label>
+            <label>DLC rating flag <input id="isDlcRating" type="text" placeholder="yes / no" /></label>
+            <label>Concurrence flag <input id="isConcurrence" type="text" placeholder="yes / no" /></label>
           </div>
+          <label>Legal Vehicles (B.EP.01 / B.EP.02) — JSON array of <code>{config, rf}</code>
+            <textarea id="legalLoadRowsJson" rows="4" placeholder='[{"config":"H 20","rf":"1.45"},{"config":"HS 20","rf":"1.30"}]'></textarea>
+          </label>
+          <label>Load Rating Statement
+            <textarea id="loadRatingStatement" rows="3"></textarea>
+          </label>
+          <label>Comments
+            <textarea id="comments" rows="2"></textarea>
+          </label>
         </section>
 
         <section class="input-section">
