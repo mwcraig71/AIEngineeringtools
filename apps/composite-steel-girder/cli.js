@@ -6,7 +6,8 @@ const {
   getGlobal,
   resolveTruckDefinition,
   runCli,
-  getCanonicalDeterioration
+  getCanonicalDeterioration,
+  buildCodeReferences
 } = require('../../shared/cli/shim-core');
 
 const TOOL_ID = 'composite-steel-girder';
@@ -66,6 +67,29 @@ runCli({
           prestress: 'not_applicable'
         }
       },
+      codeReferences: buildCodeReferences({
+        toolId: TOOL_ID,
+        enginePath: '/apps/composite-steel-girder/composite-rating-engine.js',
+        sourceFiles: [
+          '/apps/composite-steel-girder/composite-rating-engine.js',
+          '/apps/composite-steel-girder/steel-sections.js',
+          '/apps/bridge-live-load/analysis.js',
+          '/apps/bridge-live-load/trucks.js'
+        ],
+        governingCode: ['AASHTO MBE (LRFR/LFR/ASR)', 'AASHTO LRFD composite steel provisions'],
+        keyFunctions: [
+          'computeCompositeSection',
+          'computeFlexuralCapacity',
+          'computeShearCapacity',
+          'computeLiveLoadDemand',
+          'runCompositeRating'
+        ],
+        sectionLossHandling: {
+          steel: 'Mapped to reduced checkpoint flange/web dimensions.',
+          rebar: 'Accepted as canonical input; N.A. for this composite workflow.',
+          prestress: 'Accepted as canonical input; N.A. for non-prestressed member model.'
+        }
+      }),
       result: runCompositeRating(mapped)
     };
   }

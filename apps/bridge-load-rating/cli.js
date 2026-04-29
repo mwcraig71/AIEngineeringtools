@@ -6,7 +6,8 @@ const {
   getGlobal,
   resolveTruckDefinition,
   runCli,
-  getCanonicalDeterioration
+  getCanonicalDeterioration,
+  buildCodeReferences
 } = require('../../shared/cli/shim-core');
 
 const TOOL_ID = 'bridge-load-rating';
@@ -46,6 +47,29 @@ runCli({
           prestress: 'not_applicable'
         }
       },
+      codeReferences: buildCodeReferences({
+        toolId: TOOL_ID,
+        enginePath: '/apps/bridge-load-rating/rating-engine.js',
+        sourceFiles: [
+          '/apps/bridge-load-rating/rating-engine.js',
+          '/apps/bridge-live-load/analysis.js',
+          '/apps/bridge-live-load/trucks.js'
+        ],
+        governingCode: ['AASHTO MBE (LRFR/LFR/ASR)', 'AASHTO LRFD 5.5.4.2', 'AASHTO LRFD 5.7.3.3'],
+        keyFunctions: [
+          'computeGrossSection',
+          'computeEffectiveRebar',
+          'computeMn',
+          'computeVn',
+          'computeLiveLoadDemand',
+          'runLoadRating'
+        ],
+        sectionLossHandling: {
+          steel: 'Accepted as canonical input; N.A. for RC tee-beam capacity in this tool.',
+          rebar: 'Mapped to every rebar layer `lossPercent` and `stirrupLoss`.',
+          prestress: 'Accepted as canonical input; N.A. for non-prestressed member model.'
+        }
+      }),
       result: runLoadRating(mapped)
     };
   }

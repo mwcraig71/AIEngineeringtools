@@ -6,7 +6,8 @@ const {
   getGlobal,
   resolveTruckDefinition,
   runCli,
-  getCanonicalDeterioration
+  getCanonicalDeterioration,
+  buildCodeReferences
 } = require('../../shared/cli/shim-core');
 
 const TOOL_ID = 'steel-girder-rating';
@@ -66,6 +67,29 @@ runCli({
           prestress: 'not_applicable'
         }
       },
+      codeReferences: buildCodeReferences({
+        toolId: TOOL_ID,
+        enginePath: '/apps/steel-girder-rating/steel-rating-engine.js',
+        sourceFiles: [
+          '/apps/steel-girder-rating/steel-rating-engine.js',
+          '/apps/steel-girder-rating/steel-sections.js',
+          '/apps/bridge-live-load/analysis.js',
+          '/apps/bridge-live-load/trucks.js'
+        ],
+        governingCode: ['AASHTO MBE (LRFR/LFR/ASR)', 'AASHTO LRFD steel flexure/shear provisions'],
+        keyFunctions: [
+          'computeSectionProperties',
+          'computeFlexuralCapacity',
+          'computeShearCapacity',
+          'computeLiveLoadDemand',
+          'runSteelRating'
+        ],
+        sectionLossHandling: {
+          steel: 'Mapped to reduced checkpoint dimensions at rating location.',
+          rebar: 'Accepted as canonical input; N.A. for steel girder model.',
+          prestress: 'Accepted as canonical input; N.A. for non-prestressed member model.'
+        }
+      }),
       result: runSteelRating(mapped)
     };
   }

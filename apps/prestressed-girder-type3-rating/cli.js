@@ -5,7 +5,8 @@ const {
   loadScripts,
   getGlobal,
   runCli,
-  getCanonicalDeterioration
+  getCanonicalDeterioration,
+  buildCodeReferences
 } = require('../../shared/cli/shim-core');
 
 const TOOL_ID = 'prestressed-girder-type3-rating';
@@ -51,6 +52,28 @@ runCli({
           prestress: 'mapped_to_deterioration.loss_strand_and_prestress_stress_reduction'
         }
       },
+      codeReferences: buildCodeReferences({
+        toolId: TOOL_ID,
+        enginePath: '/apps/prestressed-girder-type3-rating/rating-engine.js',
+        sourceFiles: [
+          '/apps/prestressed-girder-type3-rating/rating-engine.js',
+          '/apps/bridge-live-load/analysis.js',
+          '/apps/bridge-live-load/trucks.js'
+        ],
+        governingCode: ['AASHTO MBE (LRFR/LFR/ASR)', 'AASHTO LRFD 5.5.4.2', 'AASHTO LRFD prestressed concrete provisions'],
+        keyFunctions: [
+          'computeEffectivePrestress',
+          'computeFlexuralCapacity',
+          'computeShearCapacity',
+          'computeLiveLoadDemand',
+          'runTypeIIIRating'
+        ],
+        sectionLossHandling: {
+          steel: 'Mapped to `loss_structural_steel` and applied in steel/rebar area reductions.',
+          rebar: 'Mapped to `loss_rebar` and `loss_stirrup`.',
+          prestress: 'Mapped to `loss_strand` and `prestress_stress_reduction`.'
+        }
+      }),
       result: runTypeIIIRating(mapped)
     };
   }

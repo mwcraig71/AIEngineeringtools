@@ -6,7 +6,8 @@ const {
   getGlobal,
   resolveTruckDefinition,
   runCli,
-  getCanonicalDeterioration
+  getCanonicalDeterioration,
+  buildCodeReferences
 } = require('../../shared/cli/shim-core');
 
 const TOOL_ID = 'cored-slab-rating';
@@ -44,6 +45,28 @@ runCli({
           prestress: 'mapped_to_strandLoss'
         }
       },
+      codeReferences: buildCodeReferences({
+        toolId: TOOL_ID,
+        enginePath: '/apps/cored-slab-rating/rating-engine.js',
+        sourceFiles: [
+          '/apps/cored-slab-rating/rating-engine.js',
+          '/apps/bridge-live-load/analysis.js',
+          '/apps/bridge-live-load/trucks.js'
+        ],
+        governingCode: ['AASHTO MBE (LRFR/LFR/ASR)', 'AASHTO LRFD prestressed concrete provisions'],
+        keyFunctions: [
+          'computeEffectivePrestress',
+          'computeFlexuralCapacity',
+          'computeShearCapacity',
+          'computeLiveLoadDemand',
+          'runLoadRating'
+        ],
+        sectionLossHandling: {
+          steel: 'Accepted as canonical input; N.A. for cored slab strand/rebar model.',
+          rebar: 'Mapped to `mildLoss` and `stirrupLoss`.',
+          prestress: 'Mapped to `strandLoss`.'
+        }
+      }),
       result: runLoadRating(mapped)
     };
   }

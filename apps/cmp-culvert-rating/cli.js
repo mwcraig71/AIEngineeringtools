@@ -5,7 +5,8 @@ const {
   loadScripts,
   getGlobal,
   runCli,
-  getCanonicalDeterioration
+  getCanonicalDeterioration,
+  buildCodeReferences
 } = require('../../shared/cli/shim-core');
 
 const TOOL_ID = 'cmp-culvert-rating';
@@ -61,6 +62,26 @@ runCli({
           prestress: 'mapped_to_deterioration.prestress.lossPercent'
         }
       },
+      codeReferences: buildCodeReferences({
+        toolId: TOOL_ID,
+        enginePath: '/apps/cmp-culvert-rating/rating-engine.js',
+        sourceFiles: [
+          '/apps/cmp-culvert-rating/rating-engine.js'
+        ],
+        governingCode: ['AASHTO MBE (culvert rating workflow)', 'AASHTO LRFD culvert and serviceability checks'],
+        keyFunctions: [
+          'computeRingCompression',
+          'computeRingBending',
+          'computeBuckling',
+          'computeSeamCapacity',
+          'runCMPCulvertRating'
+        ],
+        sectionLossHandling: {
+          steel: 'Mapped to uniform/crown/springline/invert loss fields.',
+          rebar: 'Mapped to `deterioration.rebar.lossPercent`.',
+          prestress: 'Mapped to `deterioration.prestress.lossPercent`.'
+        }
+      }),
       result: stableResult
     };
   }

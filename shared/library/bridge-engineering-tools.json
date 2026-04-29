@@ -23,7 +23,7 @@
       "test": "node apps/bridge-live-load/test-analysis.js",
       "cli": "node apps/bridge-live-load/cli.js <input.json> [--out <path>] [--format json|text|mdx] [--help]",
       "sampleInput": "/apps/bridge-live-load/examples/cli-sample-input.json",
-      "expectedOutputFingerprint": "sha256:bcb7ab402ed4f380e8f9619cbdc9bf14068d377bb0cc19dfb0358287fd1ef03c",
+      "expectedOutputFingerprint": "sha256:35bb3d819c6e3956db6b81f09e4834ca94ba2d29d7884ae9fea4c4d82a061302",
       "notes": "Simple and continuous-span envelopes for truck, tandem, and lane-pattern loading with AASHTO variable spacing support."
     },
     {
@@ -36,7 +36,7 @@
       "test": "node apps/bridge-load-rating/test-rating-engine.js",
       "cli": "node apps/bridge-load-rating/cli.js <input.json> [--out <path>] [--format json|text|mdx] [--help]",
       "sampleInput": "/apps/bridge-load-rating/examples/cli-sample-input.json",
-      "expectedOutputFingerprint": "sha256:d7a07fa7450007e21f050c5097ff975c33daa3b4cb4ca2dc2fef42dc286177f9",
+      "expectedOutputFingerprint": "sha256:2545bcacd7129c8699417d56d47c678c6d2d4d898bf93dd62ec334a62d5aee86",
       "notes": "RC tee-beam LRFR/LFR/ASR rating with deterioration sensitivity and detailed rebar/stirrup loss handling.",
       "sectionLossCoverage": {
         "steel": "implemented",
@@ -54,7 +54,7 @@
       "test": "node apps/cmp-culvert-rating/test-rating-engine.js",
       "cli": "node apps/cmp-culvert-rating/cli.js <input.json> [--out <path>] [--format json|text|mdx] [--help]",
       "sampleInput": "/apps/cmp-culvert-rating/examples/cli-sample-input.json",
-      "expectedOutputFingerprint": "sha256:fec371c1c9782eb0e0223333b8310af2a2816ba227a8c8a087baf20606ae90e3",
+      "expectedOutputFingerprint": "sha256:851e1916f75036476a8711e525190a4a7bbfd60b6c8ba5a251b48870770d4212",
       "notes": "Fill-height sweep for circular CMP culverts with ring compression, bending, buckling, seam, and serviceability checks plus explicit steel/rebar/prestress section-loss modeling (baseline vs deteriorated).",
       "sectionLossCoverage": {
         "steel": "implemented",
@@ -72,7 +72,7 @@
       "test": "node apps/composite-steel-girder/test-composite-engine.js",
       "cli": "node apps/composite-steel-girder/cli.js <input.json> [--out <path>] [--format json|text|mdx] [--help]",
       "sampleInput": "/apps/composite-steel-girder/examples/cli-sample-input.json",
-      "expectedOutputFingerprint": "sha256:7f816bc3caa4a8dcf79800c3edd052f12b71e710c1c3a61ec9c40bce05abc97c",
+      "expectedOutputFingerprint": "sha256:142a29ba9c3bf93f901b130d1f60818c9b972833cd4f657ccbbda3c881c7c1c5",
       "notes": "Composite section-property, strength, and rating workflow including staged loads and section-loss checks.",
       "sectionLossCoverage": {
         "steel": "implemented",
@@ -90,7 +90,7 @@
       "test": "node apps/cored-slab-rating/test-rating-engine.js",
       "cli": "node apps/cored-slab-rating/cli.js <input.json> [--out <path>] [--format json|text|mdx] [--help]",
       "sampleInput": "/apps/cored-slab-rating/examples/cli-sample-input.json",
-      "expectedOutputFingerprint": "sha256:84c47f771319b1305dfae4573b43d1ab4f5e3291ad4e8ec2c7a7d321c66ad9e9",
+      "expectedOutputFingerprint": "sha256:a66ed7f3ed4975708c3f9dd9c64b7c14f667694db3f5f266f1de59aff9e16851",
       "notes": "Prestressed cored slab rating with strand layout/debond handling and deterioration-aware flexure/shear checks.",
       "sectionLossCoverage": {
         "steel": "implemented",
@@ -121,7 +121,7 @@
       "test": "node apps/prestressed-girder-type3-rating/test-rating-engine.js",
       "cli": "node apps/prestressed-girder-type3-rating/cli.js <input.json> [--out <path>] [--format json|text|mdx] [--help]",
       "sampleInput": "/apps/prestressed-girder-type3-rating/examples/type3-sample-input.json",
-      "expectedOutputFingerprint": "sha256:7229a037b089f89800dd3071b84c6ad4087b57e55dae886b478a6a0eddef6e86",
+      "expectedOutputFingerprint": "sha256:f370a4433d9f9e3f2f2fe8b51d87d1d83bc9f7d8a6bfbd1350e0c2373dbcb7d0",
       "notes": "Supports LRFR/LFR/ASR with baseline vs deteriorated sensitivity and explicit section-loss inputs. Includes v1 TxDOT-style report generation flow with trace payload outputs for hand-calculation pages.",
       "sectionLossCoverage": {
         "steel": "implemented",
@@ -139,7 +139,7 @@
       "test": "node apps/rc-flat-slab-rating/test-rating-engine.js",
       "cli": "node apps/rc-flat-slab-rating/cli.js <input.json> [--out <path>] [--format json|text|mdx] [--help]",
       "sampleInput": "/apps/rc-flat-slab-rating/examples/cli-sample-input.json",
-      "expectedOutputFingerprint": "sha256:6e11c8b633e65567ec61ce7bcc68907dceb0a37f8cf09d531f7511435d26992a",
+      "expectedOutputFingerprint": "sha256:43cf2be7b61cdeaea9b9c69b48377a9010f1942242426aab87e11c7a7df8bdc3",
       "notes": "One-way strip equivalent RC flat slab rating with inventory/operating RFs, varying-width CFRP strip retrofit support, and explicit rebar/steel/prestress deterioration handling.",
       "sectionLossCoverage": {
         "steel": "implemented",
@@ -157,7 +157,7 @@
       "test": "node apps/steel-girder-rating/test-steel-engine.js",
       "cli": "node apps/steel-girder-rating/cli.js <input.json> [--out <path>] [--format json|text|mdx] [--help]",
       "sampleInput": "/apps/steel-girder-rating/examples/cli-sample-input.json",
-      "expectedOutputFingerprint": "sha256:0dd386aa2da5c909003fe8ae686af7302bf171d1c9d8f57a357523b64ffcd1e4",
+      "expectedOutputFingerprint": "sha256:8bd7af520afb7742cce6f8bcb814a2041db1a75835dcdb5e72814599aaf157cb",
       "notes": "Rolled-shape and plate-girder rating workflow with section-loss and limit-state checks.",
       "sectionLossCoverage": {
         "steel": "implemented",

@@ -207,11 +207,30 @@ function getCanonicalDeterioration(input) {
   };
 }
 
+function buildCodeReferences({
+  toolId,
+  enginePath,
+  sourceFiles,
+  governingCode,
+  keyFunctions,
+  sectionLossHandling
+}) {
+  return {
+    toolId: toolId || 'unknown-tool',
+    enginePath: enginePath || '',
+    sourceFiles: Array.isArray(sourceFiles) ? sourceFiles : [],
+    governingCode: Array.isArray(governingCode) ? governingCode : [],
+    keyFunctions: Array.isArray(keyFunctions) ? keyFunctions : [],
+    sectionLossHandling: sectionLossHandling || {}
+  };
+}
+
 module.exports = {
   createContext,
   loadScripts,
   getGlobal,
   resolveTruckDefinition,
   runCli,
-  getCanonicalDeterioration
+  getCanonicalDeterioration,
+  buildCodeReferences
 };

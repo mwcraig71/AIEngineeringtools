@@ -5,7 +5,8 @@ const {
   loadScripts,
   getGlobal,
   runCli,
-  getCanonicalDeterioration
+  getCanonicalDeterioration,
+  buildCodeReferences
 } = require('../../shared/cli/shim-core');
 
 const TOOL_ID = 'rc-flat-slab-rating';
@@ -52,6 +53,28 @@ runCli({
           prestress: 'mapped_to_deterioration.prestressLossPercent'
         }
       },
+      codeReferences: buildCodeReferences({
+        toolId: TOOL_ID,
+        enginePath: '/apps/rc-flat-slab-rating/rating-engine.js',
+        sourceFiles: [
+          '/apps/rc-flat-slab-rating/rating-engine.js',
+          '/apps/bridge-live-load/analysis.js',
+          '/apps/bridge-live-load/trucks.js'
+        ],
+        governingCode: ['AASHTO MBE (LRFR/LFR/ASR)', 'AASHTO LRFD reinforced concrete slab provisions'],
+        keyFunctions: [
+          'computeSectionProperties',
+          'computeFlexuralCapacity',
+          'computeShearCapacity',
+          'computeLiveLoadDemand',
+          'runRCFlatSlabRating'
+        ],
+        sectionLossHandling: {
+          steel: 'Mapped to `deterioration.steelLossPercent`.',
+          rebar: 'Mapped to `deterioration.rebarLossPercent`.',
+          prestress: 'Mapped to `deterioration.prestressLossPercent`.'
+        }
+      }),
       result: runRCFlatSlabRating(mapped)
     };
   }
